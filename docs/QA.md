@@ -11,6 +11,8 @@ Date: 2026-10-17, Europe/Riga.
 
 Tests use a temporary database, synthetic contacts and an isolated listener. No synthetic appointments or messages were submitted to the production studio.
 
+The integration suite boots `.next/standalone/server.js`, the same packaged runtime shipped in Docker. It verifies the required runtime logging module is present and the private local admin-access file is absent from the server artifact. This catches an observed tracing-exclusion error that the full development dependency tree previously masked.
+
 ## Browser checks
 
 - Actual device emulation at 320, 360, 390 and 430 CSS pixels, with viewport sizes verified using `innerWidth`.

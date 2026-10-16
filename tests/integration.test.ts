@@ -2,7 +2,7 @@ import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, type ChildProcess } from "node:child_process";
 import { randomBytes, scryptSync } from "node:crypto";
-import { mkdtempSync } from "node:fs";
+import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import net from "node:net";
@@ -18,27 +18,18 @@ const password = randomBytes(24).toString("hex");
 const salt = randomBytes(16).toString("hex");
 const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
 async function start() {
-  server = spawn(
-    process.execPath,
-    [
-      path.join(process.cwd(), "node_modules/next/dist/bin/next"),
-      "start",
-      "--port",
-      String(port),
-      "--hostname",
-      "127.0.0.1",
-    ],
-    {
-      env: {
-        ...process.env,
-        NODE_ENV: "production",
-        DATA_DIR: directory,
-        SITE_URL: origin,
-        ADMIN_PASSWORD_HASH: passwordHash,
-      },
-      stdio: ["ignore", "pipe", "pipe"],
+  server = spawn(process.execPath, [path.join(process.cwd(), ".next/standalone/server.js")], {
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      PORT: String(port),
+      HOSTNAME: "127.0.0.1",
+      DATA_DIR: directory,
+      SITE_URL: origin,
+      ADMIN_PASSWORD_HASH: passwordHash,
     },
-  );
+    stdio: ["ignore", "pipe", "pipe"],
+  });
   server.stdout?.on("data", (chunk) => {
     logs += chunk.toString();
   });
@@ -63,6 +54,17 @@ async function stop() {
   }
 }
 before(async () => {
+  assert.ok(
+    existsSync(
+      path.join(process.cwd(), ".next/standalone/node_modules/next/dist/build/output/log.js"),
+    ),
+    "Standalone artifact must include Next.js runtime logging module",
+  );
+  assert.equal(
+    existsSync(path.join(process.cwd(), ".next/standalone/ADMIN-ACCESS.txt")),
+    false,
+    "Private admin access file must never enter the server artifact",
+  );
   port = await new Promise<number>((resolve) => {
     const candidate = net.createServer();
     candidate.listen(0, "127.0.0.1", () => {

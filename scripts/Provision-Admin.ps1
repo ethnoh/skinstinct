@@ -24,8 +24,10 @@ if ($ConfigureRailway) {
 }
 if ($StartPreview) {
     $env:ADMIN_PASSWORD_HASH = $passwordHash
+    $env:HOSTNAME = '127.0.0.1'
+    $env:PORT = '3000'
     Set-Location -LiteralPath $projectRoot
-    node (Join-Path $projectRoot 'node_modules\next\dist\bin\next') start --hostname 0.0.0.0 --port 3000
+    node (Join-Path $projectRoot '.next\standalone\server.js')
 }
 $passwordHash = $null
 $credential = $null

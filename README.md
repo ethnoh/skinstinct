@@ -42,6 +42,8 @@ npm test
 
 The integration tests start an isolated production server with a temporary database and synthetic contacts. They test simultaneous booking attempts, access isolation, booking-code lookup, cancellation, admin editing, upload processing, draft/public article access, contact alternatives, restart persistence and Riga daylight saving conversions. They do not modify the live database.
 
+Tests run the packaged standalone artifact, including its runtime dependencies and copied static files. Local `ADMIN-ACCESS.txt` is private and excluded from both Git and Docker context.
+
 ## Production
 
 Railway project: `6a94610d-2e1c-4aed-b0d9-764b4efa1575` (`SKINSTINCT`).

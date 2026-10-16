@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const config: NextConfig = {
   output: "standalone",
   serverExternalPackages: ["better-sqlite3"],
-  outputFileTracingExcludes: { "*": ["./.data/**/*", "./output/**/*", "./tests/**/*"] },
   poweredByHeader: false,
   experimental: { cpus: 2 },
   images: { formats: ["image/avif", "image/webp"] },
