@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.data/
+.env
+.env.*
+!.env.example
+.railway/
+output/
+test-results/
+*.tsbuildinfo
+*.log
+WhatsApp*.jpeg
