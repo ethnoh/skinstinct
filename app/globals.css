@@ -12,7 +12,7 @@
   --line: #dddfd3;
   --gold: #b89b71;
   --white: #fffefa;
-  --serif: "Manrope", Arial, sans-serif;
+  --serif: "Cormorant Garamond", Georgia, serif;
   --sans: "Manrope", Arial, sans-serif;
   --header-surface: #faf8f3f5;
   --on-accent: #fffefa;
@@ -139,16 +139,16 @@ h2 {
 }
 h2 em,
 h1 em {
-  font-weight: inherit;
-  font-style: normal;
-  color: inherit;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--olive);
 }
 p {
   color: var(--muted);
 }
 em {
-  font-family: inherit;
-  font-style: normal;
+  font-family: var(--serif);
+  font-style: italic;
 }
 input,
 textarea,
@@ -195,7 +195,7 @@ main {
   background: var(--olive);
   color: var(--on-accent);
   border: 1px solid var(--olive);
-  border-radius: 3px;
+  border-radius: 999px;
   font-size: 15px;
   font-weight: 600;
   line-height: 1.6;
@@ -699,7 +699,13 @@ main {
   max-width: 470px;
   background: var(--peach);
 }
-.about-photo > img {
+.portrait-image-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.portrait-image-frame > img {
   object-fit: cover;
   border-radius: inherit;
   object-position: center 38%;
@@ -715,7 +721,7 @@ main {
 }
 .portrait-badge {
   position: absolute;
-  right: -25px;
+  right: 16px;
   bottom: 56px;
   background: var(--paper);
   display: flex;
@@ -1459,14 +1465,14 @@ main {
 .article-image {
   display: block;
   position: relative;
-  height: 330px;
+  height: clamp(300px, 35vw, 430px);
   overflow: hidden;
   border-radius: 3px;
   background: var(--peach);
 }
 .article-image img {
   object-fit: cover;
-  object-position: 50% 28%;
+  object-position: 50% 0%;
   transition: transform 0.7s;
 }
 .article-image:hover img {
@@ -1537,7 +1543,7 @@ main {
 }
 .instagram-card .botanical {
   bottom: -40px;
-  right: -7px;
+  right: 16px;
   width: 160px;
   z-index: -1;
   opacity: 0.18;
@@ -3349,64 +3355,10 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 500;
+  font-weight: 400;
   text-wrap: balance;
 }
-h1,
-h2,
-h3,
-h4,
-em {
-  font-style: normal;
-}
-.hero h1 {
-  font-size: clamp(44px, 4.7vw, 68px);
-  line-height: 1.16;
-  letter-spacing: -2.4px;
-}
-h2,
-.about-copy h2,
-.booking-intro h2,
-.contact-copy h2,
-.faq-section h2,
-.process-heading h2 {
-  font-size: clamp(32px, 3.3vw, 46px);
-  line-height: 1.22;
-  letter-spacing: -1.4px;
-}
-.service-card h3,
-.process-step h3,
-.article-card h3,
-.contact-form-wrap h3,
-.contact-success h3 {
-  font-size: 25px;
-  line-height: 1.35;
-  letter-spacing: -0.6px;
-}
-.page-heading h1,
-.article-detail h1 {
-  font-size: clamp(35px, 4.4vw, 60px);
-  line-height: 1.2;
-  letter-spacing: -1.8px;
-}
-.stage-heading h3,
-.booking-success h3,
-.booking-paused h3 {
-  font-size: 30px;
-  line-height: 1.3;
-  letter-spacing: -0.8px;
-}
-.quote-section blockquote {
-  font-size: clamp(26px, 3vw, 40px);
-  line-height: 1.45;
-  letter-spacing: -0.8px;
-  font-weight: 400;
-}
-.value h2 {
-  font-size: 19px;
-  line-height: 1.4;
-  letter-spacing: -0.3px;
-}
+
 .hero-description {
   max-width: 430px;
   line-height: 1.85;
@@ -3638,19 +3590,11 @@ html[data-theme="dark"] .status-cancelled {
   .brand strong {
     font-size: 22px;
   }
-  .hero h1 {
-    font-size: clamp(38px, 7.6vw, 58px);
-    line-height: 1.2;
-    letter-spacing: -1.6px;
-  }
+
   .hero h1 em {
     margin-top: 5px;
   }
-  .service-card h3,
-  .process-step h3,
-  .article-card h3 {
-    font-size: 24px;
-  }
+
   .hero-actions {
     gap: 18px;
   }
@@ -3665,12 +3609,7 @@ html[data-theme="dark"] .status-cancelled {
     padding: 18px;
     gap: 10px;
   }
-  .stage-heading h3 {
-    font-size: 26px;
-  }
-  .booking-success h3 {
-    font-size: 29px;
-  }
+
   .calendar-legend {
     font-size: 11px;
   }
@@ -3785,9 +3724,7 @@ html[data-theme="dark"] .status-cancelled {
   .theme-toggle {
     min-width: 56px;
   }
-  .hero h1 {
-    font-size: 36px;
-  }
+
   .hero .eyebrow {
     font-size: 10px;
     letter-spacing: 0.8px;
@@ -3801,8 +3738,5 @@ html[data-theme="dark"] .status-cancelled {
   }
   .booking-progress button {
     gap: 4px;
-  }
-  .stage-heading h3 {
-    font-size: 24px;
   }
 }

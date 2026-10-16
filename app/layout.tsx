@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
+import { themeBootstrap } from "@/lib/theme";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import "./motion.css";
+import "./theme.css";
 
 export const metadata: Metadata = {
   title: { default: "SKINSTINCT | Kosmetoloģija Jēkabpilī", template: "%s | SKINSTINCT" },
@@ -19,19 +22,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('skinstinct-theme')==='dark'?'dark':'light';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch(e){}`,
+            __html: themeBootstrap(),
           }}
         />
       </head>
       <body>
-        <a className="skip-link" href="#main-content">
-          {lang === "ru"
-            ? "К содержимому"
-            : lang === "en"
-              ? "Skip to content"
-              : "Uz galveno saturu"}
-        </a>
-        {children}
+        <ThemeProvider>
+          <a className="skip-link" href="#main-content">
+            {lang === "ru"
+              ? "К содержимому"
+              : lang === "en"
+                ? "Skip to content"
+                : "Uz galveno saturu"}
+          </a>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

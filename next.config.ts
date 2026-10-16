@@ -4,6 +4,7 @@ const config: NextConfig = {
   output: "standalone",
   serverExternalPackages: ["better-sqlite3"],
   poweredByHeader: false,
+  agentRules: false,
   experimental: { cpus: 2 },
   images: { formats: ["image/avif", "image/webp"] },
   async headers() {

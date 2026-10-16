@@ -1,0 +1,106 @@
+.theme-dialog {
+  width: min(360px, calc(100% - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-y: auto;
+}
+.theme-dialog::backdrop {
+  background: #10191080;
+  backdrop-filter: blur(6px);
+}
+.theme-dialog-inner {
+  position: relative;
+  padding: 32px 24px 24px;
+}
+.theme-dialog h2 {
+  font-size: 34px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  padding-right: 22px;
+  margin-bottom: 12px;
+}
+.theme-dialog p {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.theme-options {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+}
+.theme-options > button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  min-height: 50px;
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: left;
+}
+.theme-options > button > span {
+  flex: 1;
+}
+.theme-options > button[aria-pressed="true"] {
+  border-color: var(--olive);
+  background: var(--sage);
+}
+.theme-options > button:hover {
+  background: var(--surface-hover);
+}
+.sun-times {
+  display: grid;
+  gap: 4px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.sun-times > span:first-child {
+  color: var(--ink);
+}
+.about-photo {
+  border-radius: 50% 50% 4px 4px / 180px 180px 4px 4px;
+}
+.portrait-badge {
+  right: 16px;
+  max-width: calc(100% - 32px);
+}
+.portrait-badge span {
+  min-width: 0;
+}
+.portrait-badge svg {
+  flex-shrink: 0;
+}
+.hero h1 {
+  overflow-wrap: normal;
+}
+@media (max-width: 760px) {
+  .hero h1 {
+    font-size: clamp(58px, 12.5vw, 89px);
+  }
+  .hero h1 em {
+    font-size: 0.94em;
+  }
+  .portrait-badge {
+    right: 12px;
+    padding: 14px 18px;
+  }
+}
+@media (max-width: 370px) {
+  .hero h1 {
+    font-size: 56px;
+    letter-spacing: -2px;
+  }
+  .hero h1 em {
+    font-size: 0.9em;
+  }
+}

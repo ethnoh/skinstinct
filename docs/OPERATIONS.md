@@ -39,6 +39,12 @@ There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online pa
 
 ## Release checks
 
+Appearance uses Cormorant Garamond headings and Manrope navigation/body text. Keep the portrait's image clipping inside `.portrait-image-frame`; the reveal container and caption must remain unmasked. Left/right reveals calculate their travel from the available viewport margin and honor reduced-motion settings.
+
+The default theme is automatic. SunCalc calculates daily sunrise/sunset using Jekabpils city-centre coordinates (56.5, 25.86), not a studio address. Calendar dates and displayed times use Europe/Riga, including DST. The browser schedules the next solar transition and refreshes after midnight, focus and tab visibility changes. No external sunrise API or visitor geolocation is used.
+
+The theme picker supports automatic, light and dark modes. Manual overrides persist in `skinstinct-theme-mode` and take precedence until automatic mode is selected again. The first-paint script applies the same solar logic before hydration. Previous `skinstinct-theme` values belong to the earlier manual-only control and are no longer used.
+
 1. Inspect git status and preserve unrelated changes.
 2. Run typecheck, production build and isolated integration tests.
 3. Audit actual mobile viewports at 320/360/390/430px for document overflow, all three languages and both themes, open menu, booking states and fixed dock.

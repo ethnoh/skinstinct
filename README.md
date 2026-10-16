@@ -5,8 +5,9 @@ A Latvian, English and Russian cosmetology studio website for Valērija Razujeva
 ## Included
 
 - Responsive editorial design based on the supplied peach, olive and gold SKINSTINCT logo.
-- Clear Manrope typography and persistent light/dark themes, with locally stored preference.
-- Scroll reveals, gentle image parallax, reading progress and service-duration charts/counters driven by real service settings. Reduced-motion preferences are respected.
+- Cormorant Garamond display typography, readable Manrope navigation/body text, and rounded action buttons.
+- Automatic light/dark themes follow calculated sunrise/sunset in Jēkabpils, Latvia, with persistent manual light/dark overrides and an automatic option. SunCalc calculates locally without location permission or third-party requests. Timing uses Europe/Riga and respects daylight saving changes.
+- Smooth left/right scroll reveals, gentle hero-image parallax, reading progress and service-duration charts/counters driven by real service settings. Portrait frames retain their full arch and visible caption. Reduced-motion preferences are respected.
 - Self-hosted fonts, optimized WebP photography and an identity-reference portrait.
 - Appointment requests with a three-step service, date/time and contact flow.
 - Live availability, pending reservations, appointment confirmation, cancellations, visit history, private booking-code lookup and iCalendar download.

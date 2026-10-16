@@ -233,12 +233,14 @@ export function Home({
       <section className="about-section" id="par-mani">
         <div className="container about-grid">
           <div className="about-photo">
-            <Image
-              src={settings.aboutImage}
-              alt={settings.specialistName}
-              fill
-              sizes="(max-width: 760px) 100vw, 42vw"
-            />
+            <div className="portrait-image-frame">
+              <Image
+                src={settings.aboutImage}
+                alt={settings.specialistName}
+                fill
+                sizes="(max-width: 760px) 100vw, 42vw"
+              />
+            </div>
             <span className="portrait-caption">SKINSTINCT / {settings.specialistName}</span>
             <div className="portrait-badge">
               <Leaf size={25} />
