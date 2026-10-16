@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { initialArticles, initialCopy, initialServices, initialSettings } from "./content";
-import type { Article, Service, SiteSettings } from "./types";
+import type { Article, Localized, Service, SiteSettings } from "./types";
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -71,7 +71,47 @@ export function setContent(key: string, value: unknown) {
 }
 export const getSettings = () => {
   const saved = getContent<SiteSettings>("settings");
-  return { ...initialSettings, ...saved, copy: { ...initialCopy, ...saved.copy } };
+  const settings = { ...initialSettings, ...saved };
+  for (const key of Object.keys(initialSettings) as (keyof SiteSettings)[]) {
+    const value = initialSettings[key];
+    if (value && typeof value === "object" && "lv" in value) {
+      Object.assign(settings, {
+        [key]: mergeLocalized(saved[key] as Localized, value as Localized),
+      });
+    }
+  }
+  settings.copy = Object.fromEntries(
+    Object.entries({ ...initialCopy, ...saved.copy }).map(([key, value]) => [
+      key,
+      mergeLocalized(value, initialCopy[key]),
+    ]),
+  );
+  return settings;
 };
-export const getServices = () => getContent<Service[]>("services");
-export const getArticles = () => getContent<Article[]>("articles");
+
+// Extend older saved content without overwriting the owner's existing translations.
+function mergeLocalized(saved: Localized | undefined, defaults?: Localized): Localized {
+  const lv = saved?.lv ?? defaults?.lv ?? "";
+  return { lv, en: saved?.en ?? defaults?.en ?? lv, ru: saved?.ru ?? defaults?.ru ?? lv };
+}
+export const getServices = () =>
+  getContent<Service[]>("services").map((service) => {
+    const defaults = initialServices.find((item) => item.id === service.id);
+    return {
+      ...service,
+      title: mergeLocalized(service.title, defaults?.title),
+      category: mergeLocalized(service.category, defaults?.category),
+      description: mergeLocalized(service.description, defaults?.description),
+    };
+  });
+export const getArticles = () =>
+  getContent<Article[]>("articles").map((article) => {
+    const defaults = initialArticles.find((item) => item.id === article.id);
+    return {
+      ...article,
+      title: mergeLocalized(article.title, defaults?.title),
+      category: mergeLocalized(article.category, defaults?.category),
+      excerpt: mergeLocalized(article.excerpt, defaults?.excerpt),
+      body: mergeLocalized(article.body, defaults?.body),
+    };
+  });

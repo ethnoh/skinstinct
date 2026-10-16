@@ -23,8 +23,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import { api, basePath, dateLabel, errorMessage, money } from "@/lib/client";
+import { tr } from "@/lib/i18n";
 import type { Article, Lang, Service, SiteSettings } from "@/lib/types";
 import { BookingWidget } from "./booking";
+import { ScrollEffects } from "./scroll-effects";
+import { Rhythm } from "./rhythm";
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -83,6 +86,7 @@ export function Home({
       ];
   return (
     <main id="main-content">
+      <ScrollEffects lang={lang} />
       <section className="hero container">
         <div className="hero-copy">
           <div className="eyebrow">
@@ -96,11 +100,11 @@ export function Home({
           <p className="hero-description">{settings.heroDescription[lang]}</p>
           <div className="hero-actions">
             <a className="button" href="#pieraksts">
-              {ru ? "Найти время для себя" : "Atrodi laiku sev"}
+              {tr(lang, "Atrodi laiku sev", "Найти время для себя")}
               <ArrowUpRight size={19} />
             </a>
             <a className="hero-secondary" href="#pieeja">
-              {ru ? "Знакомься со SKINSTINCT" : "Iepazīsti SKINSTINCT"}
+              {tr(lang, "Iepazīsti SKINSTINCT", "Знакомься со SKINSTINCT")}
               <ArrowDown size={16} />
             </a>
           </div>
@@ -109,9 +113,10 @@ export function Home({
               <BadgeCheck size={24} />
             </span>
             <div>
-              <strong>{ru ? "В руках специалиста" : "Speciālista rokās"}</strong>
+              <strong>{tr(lang, "Speciālista rokās", "В руках специалиста")}</strong>
               <span>
-                {settings.specialistName} · {ru ? "Медицинский работник" : "Ārstniecības persona"}
+                {settings.specialistName} ·{" "}
+                {tr(lang, "Ārstniecības persona", "Медицинский работник")}
               </span>
             </div>
           </div>
@@ -121,11 +126,11 @@ export function Home({
           <div className="hero-image-wrap">
             <Image
               src={settings.heroImage}
-              alt={
-                ru
-                  ? "Бережный уход за кожей в тёплой атмосфере студии"
-                  : "Saudzīga ādas kopšana siltā studijas atmosfērā"
-              }
+              alt={tr(
+                lang,
+                "Saudzīga ādas kopšana siltā studijas atmosfērā",
+                "Бережный уход за кожей в тёплой атмосфере студии",
+              )}
               fill
               priority
               sizes="(max-width: 760px) 100vw, 55vw"
@@ -137,11 +142,17 @@ export function Home({
               <Flower2 size={30} strokeWidth={1} />
             </span>
             <span>
-              {ru ? "Твоя естественная красота" : "Tavs dabiskais skaistums"}
-              <em>{ru ? "начинается с заботы" : "sākas ar rūpēm"}</em>
+              {tr(lang, "Tavs dabiskais skaistums", "Твоя естественная красота")}
+              <em>{tr(lang, "sākas ar rūpēm", "начинается с заботы")}</em>
             </span>
           </div>
-          <div className="hero-side-note">PERSONĪGI. SAUDZĪGI. APZINĀTI.</div>
+          <div className="hero-side-note">
+            {lang === "en"
+              ? "PERSONAL. GENTLE. THOUGHTFUL."
+              : lang === "ru"
+                ? "ЛИЧНО. БЕРЕЖНО. ОСОЗНАННО."
+                : "PERSONĪGI. SAUDZĪGI. APZINĀTI."}
+          </div>
         </div>
       </section>
       <section className="philosophy-strip" id="pieeja">
@@ -161,7 +172,7 @@ export function Home({
         <div className="section-top">
           <div>
             <span className="eyebrow">
-              01 / {ru ? "ПРОДУМАННЫЙ УХОД" : "PĀRDOMĀTA ĀDAS KOPŠANA"}
+              01 / {tr(lang, "PĀRDOMĀTA ĀDAS KOPŠANA", "ПРОДУМАННЫЙ УХОД")}
             </span>
             <h2>
               {settings.copy.servicesTitle[lang]}
@@ -211,11 +222,14 @@ export function Home({
         </div>
         <p className="services-note">
           <Sparkles size={15} />
-          {ru
-            ? "Не знаешь, с чего начать? Первая встреча поможет понять твою кожу."
-            : "Nezini, ar ko sākt? Iepazīšanās vizīte palīdzēs saprast tavas ādas vajadzības."}
+          {tr(
+            lang,
+            "Nezini, ar ko sākt? Iepazīšanās vizīte palīdzēs saprast tavas ādas vajadzības.",
+            "Не знаешь, с чего начать? Первая встреча поможет понять твою кожу.",
+          )}
         </p>
       </section>
+      <Rhythm lang={lang} services={services} settings={settings} />
       <section className="about-section" id="par-mani">
         <div className="container about-grid">
           <div className="about-photo">
@@ -229,13 +243,13 @@ export function Home({
             <div className="portrait-badge">
               <Leaf size={25} />
               <span>
-                {ru ? "С заботой" : "Ar rūpēm"}
-                <em>{ru ? "о тебе" : "par tevi"}</em>
+                {tr(lang, "Ar rūpēm", "С заботой")}
+                <em>{tr(lang, "par tevi", "о тебе")}</em>
               </span>
             </div>
           </div>
           <div className="about-copy">
-            <span className="eyebrow">02 / {ru ? "ТВОЙ СПЕЦИАЛИСТ" : "TAVA SPECIĀLISTE"}</span>
+            <span className="eyebrow">02 / {tr(lang, "TAVA SPECIĀLISTE", "ТВОЙ СПЕЦИАЛИСТ")}</span>
             <h2>
               {settings.aboutTitle[lang].split("\n").map((line, i) => (
                 <span key={i}>{i === 1 ? <em>{line}</em> : line}</span>
@@ -251,13 +265,13 @@ export function Home({
               <div>
                 <strong>{settings.specialistTitle[lang]}</strong>
                 <small>
-                  {ru ? "Реестр медицинских работников" : "Ārstniecības personu reģistrs"} · Nr.{" "}
+                  {tr(lang, "Ārstniecības personu reģistrs", "Реестр медицинских работников")} · Nr.{" "}
                   {settings.registration}
                 </small>
               </div>
             </div>
             <a className="text-link" href="#pieraksts">
-              {ru ? "Давай познакомимся" : "Iepazīsimies klātienē"}
+              {tr(lang, "Iepazīsimies klātienē", "Давай познакомимся")}
               <ArrowUpRight size={19} />
             </a>
           </div>
@@ -267,13 +281,19 @@ export function Home({
       <section className="quote-section container">
         <Flower2 size={35} strokeWidth={1} />
         <blockquote>{settings.copy.quote[lang]}</blockquote>
-        <span className="eyebrow">SKINSTINCT FILOZOFIJA</span>
+        <span className="eyebrow">
+          {lang === "en"
+            ? "THE SKINSTINCT PHILOSOPHY"
+            : lang === "ru"
+              ? "ФИЛОСОФИЯ SKINSTINCT"
+              : "SKINSTINCT FILOZOFIJA"}
+        </span>
       </section>
       <section className="process-section">
         <div className="container">
           <div className="process-heading">
             <span className="eyebrow">
-              {ru ? "СПОКОЙНО. ПОНЯТНО. ЛИЧНО." : "MIERPILNI. SAPROTAMI. PERSONĪGI."}
+              {tr(lang, "MIERPILNI. SAPROTAMI. PERSONĪGI.", "СПОКОЙНО. ПОНЯТНО. ЛИЧНО.")}
             </span>
             <h2>{settings.copy.processTitle[lang]}</h2>
           </div>
@@ -307,7 +327,7 @@ export function Home({
       </section>
       <section className="booking-section section container" id="pieraksts">
         <div className="booking-intro">
-          <span className="eyebrow">03 / {ru ? "ТВОЁ ВРЕМЯ ДЛЯ СЕБЯ" : "TAVS LAIKS SEV"}</span>
+          <span className="eyebrow">03 / {tr(lang, "TAVS LAIKS SEV", "ТВОЁ ВРЕМЯ ДЛЯ СЕБЯ")}</span>
           <h2>
             {settings.copy.bookingTitle[lang]} <em>{settings.copy.bookingAccent[lang]}</em>
           </h2>
@@ -315,23 +335,23 @@ export function Home({
           <div className="booking-intro-points">
             <span>
               <CalendarCheck size={19} />
-              {ru ? "Актуальные свободные часы" : "Aktuāli pieejamie laiki"}
+              {tr(lang, "Aktuāli pieejamie laiki", "Актуальные свободные часы")}
             </span>
             <span>
               <ShieldCheck size={19} />
-              {ru ? "Без предоплаты онлайн" : "Bez tiešsaistes priekšapmaksas"}
+              {tr(lang, "Bez tiešsaistes priekšapmaksas", "Без предоплаты онлайн")}
             </span>
             <span>
               <Heart size={19} />
-              {ru ? "Личное подтверждение визита" : "Personīgs vizītes apstiprinājums"}
+              {tr(lang, "Personīgs vizītes apstiprinājums", "Личное подтверждение визита")}
             </span>
           </div>
           <div className="booking-help">
             <img src={settings.logoImage} width={64} height={64} alt="" />
             <div>
-              <span>{ru ? "Есть вопросы? Я рядом." : "Ir jautājumi? Esmu tepat."}</span>
+              <span>{tr(lang, "Ir jautājumi? Esmu tepat.", "Есть вопросы? Я рядом.")}</span>
               <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
-                {ru ? "Напиши мне в Instagram" : "Uzraksti man Instagram"}
+                {tr(lang, "Uzraksti man Instagram", "Напиши мне в Instagram")}
                 <ArrowUpRight size={15} />
               </a>
             </div>
@@ -347,7 +367,7 @@ export function Home({
       </section>
       <section className="faq-section container">
         <div>
-          <span className="eyebrow">{ru ? "НЕМНОГО ЯСНОСТИ" : "NEDAUDZ SKAIDRĪBAS"}</span>
+          <span className="eyebrow">{tr(lang, "NEDAUDZ SKAIDRĪBAS", "НЕМНОГО ЯСНОСТИ")}</span>
           <h2>{settings.copy.faqTitle[lang]}</h2>
         </div>
         <div className="faq-list">
@@ -372,26 +392,41 @@ export function Home({
                     : `Я создаю студию в Екабпилсе. Точный адрес и детали встречи сообщу при подтверждении визита. Следи за новостями в Instagram.`,
                 ],
               ]
-            : [
-                [
-                  "Ko izvēlēties pirmajai vizītei?",
-                  "Sāc ar iepazīšanās vizīti. Pārrunāsim tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
-                ],
-                [
-                  "Kā tiek apstiprināts pieraksts?",
-                  "Pēc pieteikuma izvēlētais laiks tiek rezervēts sistēmā. Es sazināšos pa norādīto tālruni vai e-pastu, lai apstiprinātu tikšanos un precizētu detaļas.",
-                ],
-                [
-                  "Kā apskatīt vai atcelt pierakstu?",
-                  `Sadaļā «Mani pieraksti» redzēsi šajā pārlūkā veiktos pierakstus. No citas ierīces vari izmantot pieraksta kodu un savu kontaktu. Atcelšana vietnē pieejama vismaz ${settings.cancellationHours} h pirms vizītes. Vēlāk uzraksti man Instagram.`,
-                ],
-                [
-                  "Kur atrodas studija?",
-                  settings.address
-                    ? `Studija atrodas: ${settings.address}, ${settings.city}.`
-                    : `Šobrīd veidoju studiju Jēkabpilī. Precīzu adresi un tikšanās detaļas paziņošu, apstiprinot vizīti. Seko jaunumiem Instagram.`,
-                ],
-              ]
+            : lang === "en"
+              ? [
+                  [settings.copy.faq1Question.en, settings.copy.faq1Answer.en],
+                  [settings.copy.faq2Question.en, settings.copy.faq2Answer.en],
+                  [
+                    "How can I view or cancel an appointment?",
+                    `My appointments shows visits booked in this browser. On another device, use your booking code and the contact you provided. Online cancellation is available until ${settings.cancellationHours} h before your visit. After that, message me on Instagram.`,
+                  ],
+                  [
+                    "Where is the studio?",
+                    settings.address
+                      ? `The studio is at ${settings.address}, ${settings.city}.`
+                      : "I'm creating the studio in Jēkabpils. I'll share the exact address and meeting details when confirming your visit. Follow the updates on Instagram.",
+                  ],
+                ]
+              : [
+                  [
+                    "Ko izvēlēties pirmajai vizītei?",
+                    "Sāc ar iepazīšanās vizīti. Pārrunāsim tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
+                  ],
+                  [
+                    "Kā tiek apstiprināts pieraksts?",
+                    "Pēc pieteikuma izvēlētais laiks tiek rezervēts sistēmā. Es sazināšos pa norādīto tālruni vai e-pastu, lai apstiprinātu tikšanos un precizētu detaļas.",
+                  ],
+                  [
+                    "Kā apskatīt vai atcelt pierakstu?",
+                    `Sadaļā «Mani pieraksti» redzēsi šajā pārlūkā veiktos pierakstus. No citas ierīces vari izmantot pieraksta kodu un savu kontaktu. Atcelšana vietnē pieejama vismaz ${settings.cancellationHours} h pirms vizītes. Vēlāk uzraksti man Instagram.`,
+                  ],
+                  [
+                    "Kur atrodas studija?",
+                    settings.address
+                      ? `Studija atrodas: ${settings.address}, ${settings.city}.`
+                      : `Šobrīd veidoju studiju Jēkabpilī. Precīzu adresi un tikšanās detaļas paziņošu, apstiprinot vizīti. Seko jaunumiem Instagram.`,
+                  ],
+                ]
           ).map(([question, answer], i) => (
             <details key={question}>
               <summary>
@@ -408,14 +443,14 @@ export function Home({
           <div className="section-top">
             <div>
               <span className="eyebrow">
-                04 / {ru ? "ЗАМЕТКИ SKINSTINCT" : "SKINSTINCT PIERAKSTI"}
+                04 / {tr(lang, "SKINSTINCT PIERAKSTI", "ЗАМЕТКИ SKINSTINCT")}
               </span>
               <h2>
                 {settings.copy.journalTitle[lang]} <em>{settings.copy.journalAccent[lang]}</em>
               </h2>
             </div>
             <Link className="text-link" href={`${base}/articles`}>
-              {ru ? "Открыть журнал" : "Atvērt dienasgrāmatu"}
+              {tr(lang, "Atvērt dienasgrāmatu", "Открыть журнал")}
               <ArrowUpRight size={18} />
             </Link>
           </div>
@@ -436,18 +471,22 @@ export function Home({
               <div>
                 <span className="eyebrow">@VR_SKINSTINCT</span>
                 <h3>
-                  {ru
-                    ? "Студия рождается.\nБудь частью истории."
-                    : "Studija top.\nEsi daļa no stāsta."}
+                  {tr(
+                    lang,
+                    "Studija top.\nEsi daļa no stāsta.",
+                    "Студия рождается.\nБудь частью истории.",
+                  )}
                 </h3>
                 <p>
-                  {ru
-                    ? "Знакомство, ценности и маленькие моменты заботы в Instagram."
-                    : "Iepazīšanās, vērtības un mazie rūpju mirkļi Instagram."}
+                  {tr(
+                    lang,
+                    "Iepazīšanās, vērtības un mazie rūpju mirkļi Instagram.",
+                    "Знакомство, ценности и маленькие моменты заботы в Instagram.",
+                  )}
                 </p>
               </div>
               <span className="text-link">
-                {ru ? "Встретимся там" : "Tiekamies tur"}
+                {tr(lang, "Tiekamies tur", "Встретимся там")}
                 <ArrowUpRight size={18} />
               </span>
               <Botanical />
@@ -516,7 +555,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
   return (
     <section className="contact-section section container" id="kontakti">
       <div className="contact-copy">
-        <span className="eyebrow">{ru ? "НАЧНЁМ С РАЗГОВОРА" : "SĀKSIM AR SARUNU"}</span>
+        <span className="eyebrow">{tr(lang, "SĀKSIM AR SARUNU", "НАЧНЁМ С РАЗГОВОРА")}</span>
         <h2>
           {settings.copy.contactTitle[lang]} <em>{settings.copy.contactAccent[lang]}</em>
         </h2>
@@ -524,12 +563,16 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
         <div className="contact-detail">
           <MapPin size={20} />
           <div>
-            <strong>{settings.city}, Latvija</strong>
+            <strong>
+              {settings.city}, {lang === "en" ? "Latvia" : lang === "ru" ? "Латвия" : "Latvija"}
+            </strong>
             <span>
               {settings.address ||
-                (ru
-                  ? "Адрес уточним при подтверждении визита"
-                  : "Adresi precizēsim, apstiprinot vizīti")}
+                tr(
+                  lang,
+                  "Adresi precizēsim, apstiprinot vizīti",
+                  "Адрес уточним при подтверждении визита",
+                )}
             </span>
           </div>
         </div>
@@ -550,30 +593,32 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             <span className="success-icon">
               <Check size={30} />
             </span>
-            <h3>{ru ? "Спасибо за доверие." : "Paldies par uzticēšanos."}</h3>
+            <h3>{tr(lang, "Paldies par uzticēšanos.", "Спасибо за доверие.")}</h3>
             <p>
-              {ru
-                ? "Твоё сообщение сохранено. Я свяжусь с тобой по указанному контакту."
-                : "Tava ziņa ir saglabāta. Es sazināšos ar tevi, izmantojot norādīto kontaktu."}
+              {tr(
+                lang,
+                "Tava ziņa ir saglabāta. Es sazināšos ar tevi, izmantojot norādīto kontaktu.",
+                "Твоё сообщение сохранено. Я свяжусь с тобой по указанному контакту.",
+              )}
             </p>
           </div>
         ) : (
           <form className="form" onSubmit={submit}>
             <h3>{settings.copy.contactFormTitle[lang]}</h3>
             <label>
-              {ru ? "Твоё имя" : "Tavs vārds"} *
+              {tr(lang, "Tavs vārds", "Твоё имя")} *
               <input
                 name="name"
                 required
                 minLength={2}
                 maxLength={100}
                 autoComplete="given-name"
-                placeholder={ru ? "Как тебя зовут?" : "Kā tevi sauc?"}
+                placeholder={tr(lang, "Kā tevi sauc?", "Как тебя зовут?")}
               />
             </label>
             <div className="form-row">
               <label>
-                {ru ? "Телефон" : "Tālrunis"}
+                {tr(lang, "Tālrunis", "Телефон")}
                 <input
                   type="tel"
                   autoComplete="tel"
@@ -586,7 +631,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
                 />
               </label>
               <label>
-                {ru ? "Эл. почта" : "E-pasts"}
+                {tr(lang, "E-pasts", "Эл. почта")}
                 <input
                   type="email"
                   autoComplete="email"
@@ -600,25 +645,31 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
               </label>
             </div>
             <p className="field-hint">
-              {ru
-                ? "Нужен хотя бы один способ связи: телефон или почта."
-                : "Nepieciešams vismaz viens kontakts: tālrunis vai e-pasts."}
+              {tr(
+                lang,
+                "Nepieciešams vismaz viens kontakts: tālrunis vai e-pasts.",
+                "Нужен хотя бы один способ связи: телефон или почта.",
+              )}
             </p>
             <label>
-              {ru ? "Что тебя интересует?" : "Kas tevi interesē?"}
+              {tr(lang, "Kas tevi interesē?", "Что тебя интересует?")}
               <textarea
                 name="message"
                 rows={3}
                 maxLength={2000}
-                placeholder={
-                  ru ? "Расскажи, о чём хочешь спросить" : "Pastāsti, ko vēlies pajautāt"
-                }
+                placeholder={tr(
+                  lang,
+                  "Pastāsti, ko vēlies pajautāt",
+                  "Расскажи, о чём хочешь спросить",
+                )}
               />
             </label>
             <p className="field-hint">
-              {ru
-                ? "Не отправляй медицинские документы и конфиденциальные сведения о здоровье."
-                : "Nesūti medicīniskos dokumentus vai sensitīvu informāciju par veselību."}
+              {tr(
+                lang,
+                "Nesūti medicīniskos dokumentus vai sensitīvu informāciju par veselību.",
+                "Не отправляй медицинские документы и конфиденциальные сведения о здоровье.",
+              )}
             </p>
             <label className="honeypot" aria-hidden>
               Website
@@ -627,11 +678,11 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             <label className="checkbox-label">
               <input name="consent" type="checkbox" required />
               <span>
-                {ru ? "Я ознакомился с " : "Esmu iepazinies ar "}
+                {tr(lang, "Esmu iepazinies ar ", "Я ознакомился с ")}
                 <Link href={`${basePath(lang)}/privacy`} target="_blank">
-                  {ru ? "политикой конфиденциальности" : "privātuma politiku"}
+                  {tr(lang, "privātuma politiku", "политикой конфиденциальности")}
                 </Link>
-                {ru ? " и прошу связаться со мной." : " un lūdzu sazināties ar mani."}
+                {tr(lang, " un lūdzu sazināties ar mani.", " и прошу связаться со мной.")}
               </span>
             </label>
             {error && (
@@ -642,12 +693,8 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             <button className="button" disabled={pending}>
               {pending ? <LoaderCircle size={18} className="spin" /> : <ArrowUpRight size={18} />}{" "}
               {pending
-                ? ru
-                  ? "Отправляем..."
-                  : "Sūtām..."
-                : ru
-                  ? "Отправить сообщение"
-                  : "Nosūtīt ziņu"}
+                ? tr(lang, "Sūtām...", "Отправляем...")
+                : tr(lang, "Nosūtīt ziņu", "Отправить сообщение")}
             </button>
           </form>
         )}

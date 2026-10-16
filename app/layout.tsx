@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
+import "./motion.css";
 
 export const metadata: Metadata = {
   title: { default: "SKINSTINCT | Kosmetoloģija Jēkabpilī", template: "%s | SKINSTINCT" },
@@ -11,12 +12,24 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#faf8f3" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const lang = (await headers()).get("x-site-lang") === "ru" ? "ru" : "lv";
+  const requested = (await headers()).get("x-site-lang");
+  const lang = requested === "ru" || requested === "en" ? requested : "lv";
   return (
-    <html lang={lang}>
+    <html lang={lang} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('skinstinct-theme')==='dark'?'dark':'light';document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <a className="skip-link" href="#main-content">
-          {lang === "ru" ? "К содержимому" : "Uz galveno saturu"}
+          {lang === "ru"
+            ? "К содержимому"
+            : lang === "en"
+              ? "Skip to content"
+              : "Uz galveno saturu"}
         </a>
         {children}
       </body>

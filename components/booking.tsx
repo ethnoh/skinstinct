@@ -17,6 +17,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { api, basePath, dateLabel, errorMessage, localeCode, money } from "@/lib/client";
+import { tr } from "@/lib/i18n";
 import type { Booking, Lang, Service, SiteSettings } from "@/lib/types";
 
 type Slots = { time: string; available: boolean }[];
@@ -156,7 +157,7 @@ export function BookingWidget({
     return (
       <div className="booking-paused">
         <Leaf size={32} />
-        <h3>{ru ? "Скоро увидимся" : "Drīz tiksimies"}</h3>
+        <h3>{tr(lang, "Drīz tiksimies", "Скоро увидимся")}</h3>
         <p>{settings.bookingNotice[lang]}</p>
         <a className="button" href={settings.instagram} target="_blank" rel="noopener noreferrer">
           Instagram
@@ -171,13 +172,15 @@ export function BookingWidget({
           <CalendarCheck size={35} />
         </span>
         <span className="eyebrow">
-          {ru ? "ЗАЯВКА НА ВИЗИТ СОХРАНЕНА" : "VIZĪTES PIETEIKUMS SAGLABĀTS"}
+          {tr(lang, "VIZĪTES PIETEIKUMS SAGLABĀTS", "ЗАЯВКА НА ВИЗИТ СОХРАНЕНА")}
         </span>
-        <h3>{ru ? "Время для себя\nуже в планах." : "Laiks sev\njau ieplānots."}</h3>
+        <h3>{tr(lang, "Laiks sev\njau ieplānots.", "Время для себя\nуже в планах.")}</h3>
         <p>
-          {ru
-            ? "Я свяжусь с тобой, чтобы подтвердить визит. Выбранное время уже зарезервировано."
-            : "Es sazināšos ar tevi, lai apstiprinātu vizīti. Izvēlētais laiks jau rezervēts."}
+          {tr(
+            lang,
+            "Es sazināšos ar tevi, lai apstiprinātu vizīti. Izvēlētais laiks jau rezervēts.",
+            "Я свяжусь с тобой, чтобы подтвердить визит. Выбранное время уже зарезервировано.",
+          )}
         </p>
         <div className="success-details">
           <strong>{result.booking.service_title}</strong>
@@ -186,14 +189,16 @@ export function BookingWidget({
           </span>
         </div>
         <div className="booking-code">
-          <span>{ru ? "Твой код записи. Сохрани его:" : "Tavs pieraksta kods. Saglabā to:"}</span>
+          <span>
+            {tr(lang, "Tavs pieraksta kods. Saglabā to:", "Твой код записи. Сохрани его:")}
+          </span>
           <button
             onClick={async () => {
               try {
                 await navigator.clipboard.writeText(result.code);
                 setCopied(true);
               } catch {
-                setError(ru ? "Выдели код и скопируй его вручную." : "Iezīmē un nokopē kodu.");
+                setError(tr(lang, "Iezīmē un nokopē kodu.", "Выдели код и скопируй его вручную."));
               }
             }}
           >
@@ -202,18 +207,20 @@ export function BookingWidget({
           </button>
         </div>
         <p className="small muted">
-          {ru
-            ? "Для входа с другого устройства понадобятся этот код и указанный контакт. Письма и SMS пока не отправляются автоматически."
-            : "Piekļuvei no citas ierīces vajadzēs šo kodu un norādīto kontaktu. E-pasti un SMS šobrīd netiek sūtīti automātiski."}
+          {tr(
+            lang,
+            "Piekļuvei no citas ierīces vajadzēs šo kodu un norādīto kontaktu. E-pasti un SMS šobrīd netiek sūtīti automātiski.",
+            "Для входа с другого устройства понадобятся этот код и указанный контакт. Письма и SMS пока не отправляются автоматически.",
+          )}
         </p>
         <div className="success-actions">
           <Link className="button" href={`${basePath(lang)}/account`}>
-            {ru ? "Мои записи" : "Mani pieraksti"}
+            {tr(lang, "Mani pieraksti", "Мои записи")}
             <ArrowRight size={18} />
           </Link>
           <a className="button button-outline" href={`/api/calendar?id=${result.booking.id}`}>
             <CalendarDays size={17} />
-            {ru ? "В календарь" : "Kalendārā"}
+            {tr(lang, "Kalendārā", "В календарь")}
           </a>
         </div>
         {error && <p className="form-error">{error}</p>}
@@ -227,9 +234,9 @@ export function BookingWidget({
     <div className="booking-widget">
       <div className="booking-progress">
         {[
-          ru ? "Услуга" : "Pakalpojums",
-          ru ? "Дата и время" : "Datums un laiks",
-          ru ? "Твои данные" : "Tavi dati",
+          tr(lang, "Pakalpojums", "Услуга"),
+          tr(lang, "Datums un laiks", "Дата и время"),
+          tr(lang, "Tavi dati", "Твои данные"),
         ].map((title, i) => (
           <button
             key={title}
@@ -249,12 +256,16 @@ export function BookingWidget({
         {step === 1 && (
           <>
             <div className="stage-heading">
-              <span className="eyebrow">01 / {ru ? "ТВОЙ ПЕРВЫЙ ШАГ" : "TAVS PIRMAIS SOLIS"}</span>
-              <h3>{ru ? "С чего начнём?" : "Ar ko sāksim?"}</h3>
+              <span className="eyebrow">
+                01 / {tr(lang, "TAVS PIRMAIS SOLIS", "ТВОЙ ПЕРВЫЙ ШАГ")}
+              </span>
+              <h3>{tr(lang, "Ar ko sāksim?", "С чего начнём?")}</h3>
               <p>
-                {ru
-                  ? "Выбери подходящую услугу. Если сомневаешься, начни с первой встречи."
-                  : "Izvēlies sev piemērotāko. Ja šaubies, sāc ar iepazīšanās vizīti."}
+                {tr(
+                  lang,
+                  "Izvēlies sev piemērotāko. Ja šaubies, sāc ar iepazīšanās vizīti.",
+                  "Выбери подходящую услугу. Если сомневаешься, начни с первой встречи.",
+                )}
               </p>
             </div>
             <div className="service-options">
@@ -284,7 +295,7 @@ export function BookingWidget({
               {settings.bookingNotice[lang]}
             </p>
             <button className="button booking-next" onClick={() => setStep(2)} disabled={!service}>
-              {ru ? "Выбрать время" : "Izvēlēties laiku"}
+              {tr(lang, "Izvēlēties laiku", "Выбрать время")}
               <ArrowRight size={18} />
             </button>
           </>
@@ -292,8 +303,8 @@ export function BookingWidget({
         {step === 2 && (
           <>
             <div className="stage-heading">
-              <span className="eyebrow">02 / {ru ? "ВРЕМЯ ДЛЯ ТЕБЯ" : "LAIKS TEV"}</span>
-              <h3>{ru ? "Найди свой момент." : "Atrodi savu mirkli."}</h3>
+              <span className="eyebrow">02 / {tr(lang, "LAIKS TEV", "ВРЕМЯ ДЛЯ ТЕБЯ")}</span>
+              <h3>{tr(lang, "Atrodi savu mirkli.", "Найди свой момент.")}</h3>
               <p>
                 {service?.title[lang]} · {service?.duration} min · Europe/Riga
               </p>
@@ -303,7 +314,7 @@ export function BookingWidget({
                 className="icon-button"
                 onClick={() => changeMonth(-1)}
                 disabled={month <= initialToday.slice(0, 7)}
-                aria-label={ru ? "Предыдущий месяц" : "Iepriekšējais mēnesis"}
+                aria-label={tr(lang, "Iepriekšējais mēnesis", "Предыдущий месяц")}
               >
                 <ChevronLeft size={20} />
               </button>
@@ -317,19 +328,21 @@ export function BookingWidget({
                 className="icon-button"
                 onClick={() => changeMonth(1)}
                 disabled={month >= maxMonth.toISOString().slice(0, 7)}
-                aria-label={ru ? "Следующий месяц" : "Nākamais mēnesis"}
+                aria-label={tr(lang, "Nākamais mēnesis", "Следующий месяц")}
               >
                 <ChevronRight size={20} />
               </button>
             </div>
             <div
               className={`calendar-grid ${loading ? "is-loading" : ""}`}
-              aria-label={ru ? "Выбор даты" : "Datuma izvēle"}
+              aria-label={tr(lang, "Datuma izvēle", "Выбор даты")}
               aria-busy={loading}
             >
               {(ru
                 ? ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-                : ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"]
+                : lang === "en"
+                  ? ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+                  : ["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"]
               ).map((d) => (
                 <span className="weekday" key={d}>
                   {d}
@@ -347,7 +360,7 @@ export function BookingWidget({
                     type="button"
                     className={`calendar-day ${key === date ? "selected" : ""} ${available ? "available" : "unavailable"}`}
                     disabled={!available || loading}
-                    aria-label={`${dateLabel(key, lang)}, ${available ? (ru ? "есть время" : "ir brīvi laiki") : ru ? "нет свободного времени" : "nav brīvu laiku"}`}
+                    aria-label={`${dateLabel(key, lang)}, ${available ? tr(lang, "ir brīvi laiki", "есть время") : tr(lang, "nav brīvu laiku", "нет свободного времени")}`}
                     aria-pressed={key === date}
                     onClick={() => {
                       setDate(key);
@@ -363,11 +376,11 @@ export function BookingWidget({
             <div className="calendar-legend">
               <span>
                 <i />
-                {ru ? "Есть свободное время" : "Ir brīvi laiki"}
+                {tr(lang, "Ir brīvi laiki", "Есть свободное время")}
               </span>
               <span>
                 <i />
-                {ru ? "Занято / нет приёма" : "Aizņemts / nav pieņemšanas"}
+                {tr(lang, "Aizņemts / nav pieņemšanas", "Занято / нет приёма")}
               </span>
             </div>
             {date && (
@@ -376,7 +389,7 @@ export function BookingWidget({
                 {slotsLoading ? (
                   <p className="loading-line">
                     <LoaderCircle className="spin" size={17} />
-                    {ru ? "Загружаем время..." : "Ielādējam laikus..."}
+                    {tr(lang, "Ielādējam laikus...", "Загружаем время...")}
                   </p>
                 ) : (
                   <div className="time-slots">
@@ -394,9 +407,11 @@ export function BookingWidget({
                       ))
                     ) : (
                       <p>
-                        {ru
-                          ? "Свободного времени уже нет. Выбери другую дату."
-                          : "Brīvu laiku vairs nav. Izvēlies citu datumu."}
+                        {tr(
+                          lang,
+                          "Brīvu laiku vairs nav. Izvēlies citu datumu.",
+                          "Свободного времени уже нет. Выбери другую дату.",
+                        )}
                       </p>
                     )}
                   </div>
@@ -406,7 +421,7 @@ export function BookingWidget({
             <div className="stage-actions">
               <button className="text-button" onClick={() => setStep(1)}>
                 <ArrowLeft size={16} />
-                {ru ? "Назад" : "Atpakaļ"}
+                {tr(lang, "Atpakaļ", "Назад")}
               </button>
               <button
                 className="button"
@@ -416,7 +431,7 @@ export function BookingWidget({
                   setError("");
                 }}
               >
-                {ru ? "Продолжить" : "Turpināt"}
+                {tr(lang, "Turpināt", "Продолжить")}
                 <ArrowRight size={17} />
               </button>
             </div>
@@ -425,8 +440,8 @@ export function BookingWidget({
         {step === 3 && (
           <>
             <div className="stage-heading">
-              <span className="eyebrow">03 / {ru ? "ПОЧТИ ГОТОВО" : "GANDRĪZ GATAVS"}</span>
-              <h3>{ru ? "Как с тобой связаться?" : "Kā ar tevi sazināties?"}</h3>
+              <span className="eyebrow">03 / {tr(lang, "GANDRĪZ GATAVS", "ПОЧТИ ГОТОВО")}</span>
+              <h3>{tr(lang, "Kā ar tevi sazināties?", "Как с тобой связаться?")}</h3>
             </div>
             <div className="booking-summary">
               <CalendarDays size={21} />
@@ -442,7 +457,7 @@ export function BookingWidget({
             </div>
             <form onSubmit={submit} className="form">
               <label>
-                {ru ? "Твоё имя" : "Tavs vārds"}
+                {tr(lang, "Tavs vārds", "Твоё имя")}
                 <span aria-hidden> *</span>
                 <input
                   name="name"
@@ -450,12 +465,12 @@ export function BookingWidget({
                   required
                   minLength={2}
                   maxLength={100}
-                  placeholder={ru ? "Как к тебе обращаться?" : "Kā tevi uzrunāt?"}
+                  placeholder={tr(lang, "Kā tevi uzrunāt?", "Как к тебе обращаться?")}
                 />
               </label>
               <div className="form-row">
                 <label>
-                  {ru ? "Телефон" : "Tālrunis"}
+                  {tr(lang, "Tālrunis", "Телефон")}
                   <input
                     type="tel"
                     name="phone"
@@ -468,7 +483,7 @@ export function BookingWidget({
                   />
                 </label>
                 <label>
-                  {ru ? "Эл. почта" : "E-pasts"}
+                  {tr(lang, "E-pasts", "Эл. почта")}
                   <input
                     type="email"
                     name="email"
@@ -482,9 +497,11 @@ export function BookingWidget({
                 </label>
               </div>
               <p className="field-hint">
-                {ru
-                  ? "Укажи телефон или почту. Можно оба."
-                  : "Norādi tālruni vai e-pastu. Vari norādīt abus."}
+                {tr(
+                  lang,
+                  "Norādi tālruni vai e-pastu. Vari norādīt abus.",
+                  "Укажи телефон или почту. Можно оба.",
+                )}
               </p>
               <label className="honeypot" aria-hidden>
                 Website
@@ -493,35 +510,35 @@ export function BookingWidget({
               <label className="checkbox-label">
                 <input type="checkbox" name="consent" required />
                 <span>
-                  {ru ? "Я ознакомился с " : "Esmu iepazinies ar "}
+                  {tr(lang, "Esmu iepazinies ar ", "Я ознакомился с ")}
                   <Link href={`${basePath(lang)}/privacy`} target="_blank">
-                    {ru ? "политикой конфиденциальности" : "privātuma politiku"}
+                    {tr(lang, "privātuma politiku", "политикой конфиденциальности")}
                   </Link>
-                  {ru
-                    ? " и прошу связаться со мной по поводу записи."
-                    : " un lūdzu sazināties ar mani par pierakstu."}
+                  {tr(
+                    lang,
+                    " un lūdzu sazināties ar mani par pierakstu.",
+                    " и прошу связаться со мной по поводу записи.",
+                  )}
                 </span>
               </label>
               <div className="stage-actions">
                 <button className="text-button" type="button" onClick={() => setStep(2)}>
                   <ArrowLeft size={16} />
-                  {ru ? "Назад" : "Atpakaļ"}
+                  {tr(lang, "Atpakaļ", "Назад")}
                 </button>
                 <button className="button" type="submit" disabled={sending}>
                   {sending ? <LoaderCircle size={18} className="spin" /> : <Check size={18} />}{" "}
                   {sending
-                    ? ru
-                      ? "Сохраняем..."
-                      : "Saglabājam..."
-                    : ru
-                      ? "Записаться"
-                      : "Pieteikt vizīti"}
+                    ? tr(lang, "Saglabājam...", "Сохраняем...")
+                    : tr(lang, "Pieteikt vizīti", "Записаться")}
                 </button>
               </div>
               <p className="small muted">
-                {ru
-                  ? "Без предоплаты онлайн. Студия подтвердит визит лично."
-                  : "Bez tiešsaistes priekšapmaksas. Vizīti apstiprinās studija personīgi."}
+                {tr(
+                  lang,
+                  "Bez tiešsaistes priekšapmaksas. Vizīti apstiprinās studija personīgi.",
+                  "Без предоплаты онлайн. Студия подтвердит визит лично.",
+                )}
               </p>
             </form>
           </>

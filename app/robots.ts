@@ -4,7 +4,11 @@ export const dynamic = "force-dynamic";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/admin", "/account", "/ru/account", "/api/"] },
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/account", "/en/account", "/ru/account", "/api/"],
+      },
       {
         userAgent: [
           "GPTBot",
@@ -15,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
           "Google-Extended",
         ],
         allow: "/",
-        disallow: ["/admin", "/account", "/ru/account", "/api/"],
+        disallow: ["/admin", "/account", "/en/account", "/ru/account", "/api/"],
       },
     ],
     sitemap: `${siteUrl()}/sitemap.xml`,

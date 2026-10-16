@@ -2,12 +2,12 @@
 
 ## Routes
 
-- `/`, `/ru`: public Latvian and Russian site.
-- `/articles`, `/ru/articles`: published journal.
-- `/articles/:slug`, `/ru/articles/:slug`: published articles only.
-- `/account`, `/ru/account`: private browser-bound booking history and code lookup.
-- `/privacy`, `/ru/privacy`: privacy and essential-cookie information.
-- `/admin`: password-protected owner workspace.
+- `/`, `/en`, `/ru`: public site, Latvian by default, English second and Russian third.
+- `/articles`, `/en/articles`, `/ru/articles`: published journal.
+- `/articles/:slug`, `/en/articles/:slug`, `/ru/articles/:slug`: published articles only.
+- `/account`, `/en/account`, `/ru/account`: private browser-bound booking history and code lookup.
+- `/privacy`, `/en/privacy`, `/ru/privacy`: privacy and essential-cookie information.
+- `/admin`: password-protected owner workspace with a Latvian-only interface and LV/EN/RU content editors.
 - `/sitemap.xml`, `/robots.txt`, `/llms.txt`: discovery metadata, excluding private routes.
 - `/api/health`: readiness and database connectivity check.
 
@@ -41,7 +41,7 @@ There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online pa
 
 1. Inspect git status and preserve unrelated changes.
 2. Run typecheck, production build and isolated integration tests.
-3. Audit actual mobile viewports at 320/360/390/430px for document overflow, both languages, open menu, booking states and fixed dock.
+3. Audit actual mobile viewports at 320/360/390/430px for document overflow, all three languages and both themes, open menu, booking states and fixed dock.
 4. Push to GitHub main.
 5. Verify Railway terminal success, matching commit and public HTTPS response.
 6. Repeat mobile overflow and key-page checks on production. Never use synthetic production bookings that could hide real client data.

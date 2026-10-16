@@ -55,24 +55,24 @@ type Tab =
   | "services"
   | "articles"
   | "settings";
-const emptyText = (): Localized => ({ lv: "", ru: "" });
+const emptyText = (): Localized => ({ lv: "", en: "", ru: "" });
 const time = (n: number) =>
   `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
 const labels = {
-  pending: "Ожидает",
-  confirmed: "Подтверждена",
-  cancelled: "Отменена",
-  completed: "Завершена",
+  pending: "Gaida apstiprinājumu",
+  confirmed: "Apstiprināts",
+  cancelled: "Atcelts",
+  completed: "Pabeigts",
 };
 const tabs: { id: Tab; label: string; icon: typeof Leaf }[] = [
-  { id: "overview", label: "Обзор", icon: LayoutDashboard },
-  { id: "calendar", label: "Календарь", icon: CalendarDays },
-  { id: "bookings", label: "Записи", icon: UsersRound },
-  { id: "inquiries", label: "Обращения", icon: Inbox },
-  { id: "content", label: "Тексты и фото", icon: ImagePlus },
-  { id: "services", label: "Услуги", icon: SlidersHorizontal },
-  { id: "articles", label: "Статьи", icon: FileText },
-  { id: "settings", label: "Настройки", icon: Settings2 },
+  { id: "overview", label: "Pārskats", icon: LayoutDashboard },
+  { id: "calendar", label: "Kalendārs", icon: CalendarDays },
+  { id: "bookings", label: "Pieraksti", icon: UsersRound },
+  { id: "inquiries", label: "Ziņas", icon: Inbox },
+  { id: "content", label: "Teksti un attēli", icon: ImagePlus },
+  { id: "services", label: "Pakalpojumi", icon: SlidersHorizontal },
+  { id: "articles", label: "Raksti", icon: FileText },
+  { id: "settings", label: "Iestatījumi", icon: Settings2 },
 ];
 
 export function AdminLogin() {
@@ -87,7 +87,7 @@ export function AdminLogin() {
       await api("/api/auth/login", { password: new FormData(event.currentTarget).get("password") });
       window.location.reload();
     } catch (e) {
-      setError(errorMessage(e, "ru"));
+      setError(errorMessage(e, "lv"));
       setPending(false);
     }
   }
@@ -99,11 +99,11 @@ export function AdminLogin() {
         </Link>
         <span className="eyebrow">SKINSTINCT / ADMIN</span>
         <h1>
-          Твоё пространство
+          {"Tava studijas"}
           <br />
-          <em>для заботы.</em>
+          <em>{"vadības telpa."}</em>
         </h1>
-        <p>Управляй студией, записями и историями.</p>
+        <p>{"Pārvaldi studiju, pierakstus un rakstus."}</p>
         <form className="form" onSubmit={submit}>
           <input
             type="text"
@@ -115,7 +115,7 @@ export function AdminLogin() {
             tabIndex={-1}
           />
           <label>
-            Пароль администратора
+            {"Administratora parole"}
             <input
               name="password"
               type="password"
@@ -131,13 +131,13 @@ export function AdminLogin() {
             </p>
           )}
           <button className="button" disabled={pending}>
-            {pending ? <LoaderCircle className="spin" size={18} /> : <ShieldCheck size={18} />}Войти
-            в студию
+            {pending ? <LoaderCircle className="spin" size={18} /> : <ShieldCheck size={18} />}
+            {"Pieslēgties"}
           </button>
         </form>
         <Link className="back-link" href="/">
           <ArrowLeft size={15} />
-          Вернуться на сайт
+          {"Atgriezties vietnē"}
         </Link>
       </div>
     </main>
@@ -159,7 +159,7 @@ function LField({
     <fieldset className="localized-field">
       <legend>{label}</legend>
       <div className="localized-grid">
-        {(["lv", "ru"] as const).map((lang) => (
+        {(["lv", "en", "ru"] as const).map((lang) => (
           <label key={lang}>
             <span className="lang-label">{lang.toUpperCase()}</span>
             {large ? (
@@ -206,8 +206,8 @@ function Upload({
     } catch (e) {
       setError(
         e instanceof Error && e.message === "INVALID_DATA"
-          ? "Проверь данные. Для публикации заполни заголовки и текст на обоих языках; проверь цены, длительность и контакты."
-          : errorMessage(e, "ru"),
+          ? "Pārbaudi datus. Publicēšanai aizpildi virsrakstus un tekstu visās trīs valodās. Pārbaudi cenas, ilgumu un kontaktinformāciju."
+          : errorMessage(e, "lv"),
       );
     } finally {
       setPending(false);
@@ -220,7 +220,7 @@ function Upload({
         <img src={value} alt={label} />
         <label className="button button-outline button-small">
           {pending ? <LoaderCircle size={16} className="spin" /> : <ImagePlus size={16} />}{" "}
-          {pending ? "Загружаем..." : "Заменить фото"}
+          {pending ? "Augšupielādē..." : "Mainīt attēlu"}
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,image/avif"
@@ -231,7 +231,7 @@ function Upload({
             }}
           />
         </label>
-        <span>JPG, PNG, WebP, AVIF · до 8 МБ</span>
+        <span>{"JPG, PNG, WebP, AVIF - līdz 8 MB"}</span>
       </div>
       {error && <p className="form-error">{error}</p>}
     </div>
@@ -266,9 +266,9 @@ export function Admin() {
     return data;
   }
   useEffect(() => {
-    load(true).catch((e) => setError(errorMessage(e, "ru")));
+    load(true).catch((e) => setError(errorMessage(e, "lv")));
   }, []);
-  async function act(action: () => Promise<unknown>, success = "Сохранено") {
+  async function act(action: () => Promise<unknown>, success = "Saglabāts") {
     if (pending) return;
     setPending(true);
     setMessage("");
@@ -280,8 +280,8 @@ export function Admin() {
     } catch (e) {
       setError(
         e instanceof Error && e.message === "INVALID_DATA"
-          ? "Проверь данные. Для публикации заполни заголовки и текст на обоих языках; проверь цены, длительность и контакты."
-          : errorMessage(e, "ru"),
+          ? "Pārbaudi datus. Publicēšanai aizpildi virsrakstus un tekstu visās trīs valodās. Pārbaudi cenas, ilgumu un kontaktinformāciju."
+          : errorMessage(e, "lv"),
       );
     } finally {
       setPending(false);
@@ -334,17 +334,17 @@ export function Admin() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Когда</th>
-              <th>Клиент</th>
-              <th>Услуга</th>
-              <th>Статус</th>
+              <th>{"Datums un laiks"}</th>
+              <th>{"Klients"}</th>
+              <th>{"Pakalpojums"}</th>
+              <th>{"Statuss"}</th>
             </tr>
           </thead>
           <tbody>
             {items.map((b) => (
               <tr key={b.id}>
                 <td>
-                  <strong>{dateLabel(b.date, "ru")}</strong>
+                  <strong>{dateLabel(b.date, "lv")}</strong>
                   <span>
                     {time(b.start_min)} - {time(b.end_min)}
                   </span>
@@ -357,7 +357,7 @@ export function Admin() {
                 <td>{b.service_title}</td>
                 <td>
                   <select
-                    aria-label={`Статус записи ${b.name}`}
+                    aria-label={`Pieraksta statuss: ${b.name}`}
                     className={`status-select status-${b.status}`}
                     value={b.status}
                     disabled={pending}
@@ -366,13 +366,13 @@ export function Admin() {
                       if (
                         next === "cancelled" &&
                         !window.confirm(
-                          "Отменить запись клиента? Время станет доступно для новых заявок.",
+                          "Atcelt klienta pierakstu? Šis laiks kļūs pieejams jauniem pieteikumiem.",
                         )
                       )
                         return;
                       act(
                         () => api("/api/admin/booking", { id: b.id, status: next }),
-                        "Статус записи обновлён",
+                        "Pieraksta statuss atjaunināts",
                       );
                     }}
                   >
@@ -391,7 +391,7 @@ export function Admin() {
     ) : (
       <div className="admin-empty">
         <CalendarDays size={28} />
-        <p>Записей пока нет.</p>
+        <p>{"Pierakstu vēl nav."}</p>
       </div>
     );
   }
@@ -401,10 +401,10 @@ export function Admin() {
         <Link href="/" className="admin-brand">
           <img src="/images/skinstinct-logo.webp" width={44} height={44} alt="" />
           <span>
-            SKINSTINCT<small>ПРОСТРАНСТВО СТУДИИ</small>
+            SKINSTINCT<small>{"STUDIJAS VADĪBA"}</small>
           </span>
         </Link>
-        <nav aria-label="Управление студией">
+        <nav aria-label="Studijas administrācija">
           {tabs.map((t) => (
             <button
               className={tab === t.id ? "active" : ""}
@@ -424,12 +424,12 @@ export function Admin() {
         </nav>
         <div className="admin-sidebar-bottom">
           <Link href="/" target="_blank">
-            Посмотреть сайт
+            {"Apskatīt vietni"}
             <ExternalLink size={15} />
           </Link>
           <button onClick={logout}>
             <LogOut size={16} />
-            Выйти
+            {"Iziet"}
           </button>
         </div>
       </aside>
@@ -441,12 +441,12 @@ export function Admin() {
           </div>
           <button
             className="button button-outline button-small"
-            aria-label="Обновить данные студии"
-            onClick={() => act(() => load(), "Обновлено")}
+            aria-label="Atjaunināt studijas datus"
+            onClick={() => act(() => load(), "Atjaunināts")}
             disabled={pending}
           >
             <RefreshCw size={15} className={pending ? "spin" : ""} />
-            <span>Обновить</span>
+            <span>{"Atjaunināt"}</span>
           </button>
         </header>
         <div className="admin-body">
@@ -464,7 +464,7 @@ export function Admin() {
           {!state || !settings ? (
             <div className="admin-loading">
               <LoaderCircle size={25} className="spin" />
-              <p>Открываем студию...</p>
+              <p>{"Ielādē studiju..."}</p>
             </div>
           ) : (
             <>
@@ -474,23 +474,23 @@ export function Admin() {
                     <div>
                       <span className="eyebrow">RŪPES, KAS PALIEK.</span>
                       <h2>
-                        Добро пожаловать,
+                        {"Sveicināta,"}
                         <br />
                         <em>{settings.specialistName.split(" ")[0]}.</em>
                       </h2>
-                      <p>Всё, что нужно для спокойной работы студии.</p>
+                      <p>{"Viss nepieciešamais mierīgai studijas ikdienai."}</p>
                     </div>
                     <Leaf size={70} strokeWidth={0.7} />
                   </div>
                   <div className="admin-stats">
                     {[
-                      ["Ближайшие визиты", upcoming.length],
+                      ["Tuvākās vizītes", upcoming.length],
                       [
-                        "Ждут подтверждения",
+                        "Gaida apstiprinājumu",
                         bookings.filter((b) => b.status === "pending" && b.date >= today).length,
                       ],
-                      ["Новые обращения", state.inquiries.filter((i) => i.status === "new").length],
-                      ["Опубликовано статей", state.articles.filter((a) => a.published).length],
+                      ["Jaunas ziņas", state.inquiries.filter((i) => i.status === "new").length],
+                      ["Publicēti raksti", state.articles.filter((a) => a.published).length],
                     ].map(([label, n]) => (
                       <div className="stat-card" key={label}>
                         <span>{label}</span>
@@ -500,32 +500,35 @@ export function Admin() {
                   </div>
                   <section className="admin-panel">
                     <div className="admin-panel-heading">
-                      <h2>Ближайшие встречи</h2>
+                      <h2>{"Tuvākās tikšanās"}</h2>
                       <button className="text-button" onClick={() => selectTab("bookings")}>
-                        Все записи
+                        {"Visi pieraksti"}
                         <ArrowUpRight size={15} />
                       </button>
                     </div>
                     {bookingRows(upcoming.slice(0, 6))}
                   </section>
                   <section className="admin-panel launch-checklist">
-                    <h2>Перед первым приёмом</h2>
+                    <h2>{"Pirms pirmās vizītes"}</h2>
                     <p>
-                      Начальное расписание: пн-пт, 10:00-18:00. Это шаблон, проверь его в
-                      настройках. Заявки занимают время в календаре, а подтверждаешь их ты.
+                      {
+                        "Sākotnējais darba laiks: pirmdiena-piektdiena, 10:00-18:00. Tas ir paraugs, pārbaudi to iestatījumos. Pieteikumi rezervē laiku kalendārā, bet tos apstiprini tu."
+                      }
                     </p>
                     <div>
                       {[
-                        !!settings.address ? "Точный адрес добавлен" : "Добавь точный адрес студии",
+                        !!settings.address
+                          ? "Studijas adrese pievienota"
+                          : "Pievieno precīzu studijas adresi",
                         !!(settings.phone || settings.email)
-                          ? "Контакт для связи добавлен"
-                          : "Добавь рабочий телефон или почту",
+                          ? "Kontaktinformācija pievienota"
+                          : "Pievieno darba tālruni vai e-pastu",
                         !!settings.legalRegistration
-                          ? "Реквизиты добавлены"
-                          : "Заполни юридическое название, номер и адрес",
+                          ? "Rekvizīti pievienoti"
+                          : "Aizpildi juridisko nosaukumu, numuru un adresi",
                         state.services.every((s) => !s.active || s.price !== null)
-                          ? "Цены заполнены"
-                          : "Укажи цены и проверь длительность услуг",
+                          ? "Cenas norādītas"
+                          : "Norādi cenas un pārbaudi pakalpojumu ilgumu",
                       ].map((text) => (
                         <span key={text}>
                           <ShieldCheck size={16} />
@@ -534,7 +537,7 @@ export function Admin() {
                       ))}
                     </div>
                     <button className="text-link" onClick={() => selectTab("settings")}>
-                      Перейти к настройкам
+                      {"Atvērt iestatījumus"}
                       <ArrowUpRight size={15} />
                     </button>
                   </section>
@@ -544,23 +547,23 @@ export function Admin() {
                 <section className="admin-panel">
                   <div className="admin-filters">
                     <input
-                      placeholder="Найти по имени или контакту"
-                      aria-label="Поиск записи"
+                      placeholder="Meklēt pēc vārda vai kontaktinformācijas"
+                      aria-label="Meklēt pierakstu"
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                     />
                     <input
                       type="date"
-                      aria-label="Дата записи"
+                      aria-label="Pieraksta datums"
                       value={dateFilter}
                       onChange={(e) => setDateFilter(e.target.value)}
                     />
                     <select
-                      aria-label="Фильтр статуса"
+                      aria-label="Statusa filtrs"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value)}
                     >
-                      <option value="">Все статусы</option>
+                      <option value="">{"Visi statusi"}</option>
                       {Object.entries(labels).map(([value, label]) => (
                         <option key={value} value={value}>
                           {label}
@@ -569,8 +572,9 @@ export function Admin() {
                     </select>
                   </div>
                   <p className="admin-hint">
-                    Все часы указаны по Europe/Riga. Статус «Ожидает» уже резервирует время. Отмена
-                    освобождает его.
+                    {
+                      "Visi laiki norādīti Europe/Riga laika joslā. Statuss “Gaida apstiprinājumu” jau rezervē laiku. Atcelšana to atbrīvo."
+                    }
                   </p>
                   {bookingRows(filtered)}
                 </section>
@@ -581,7 +585,7 @@ export function Admin() {
                     <div className="admin-calendar-header">
                       <button
                         className="icon-button"
-                        aria-label="Предыдущий месяц"
+                        aria-label="Iepriekšējais mēnesis"
                         onClick={() => {
                           const d = new Date(`${month}-01T12:00:00Z`);
                           d.setUTCMonth(d.getUTCMonth() - 1);
@@ -591,14 +595,14 @@ export function Admin() {
                         <ChevronLeft />
                       </button>
                       <h2>
-                        {new Intl.DateTimeFormat("ru-RU", {
+                        {new Intl.DateTimeFormat("lv-LV", {
                           month: "long",
                           year: "numeric",
                         }).format(new Date(`${month}-01T12:00:00Z`))}
                       </h2>
                       <button
                         className="icon-button"
-                        aria-label="Следующий месяц"
+                        aria-label="Nākamais mēnesis"
                         onClick={() => {
                           const d = new Date(`${month}-01T12:00:00Z`);
                           d.setUTCMonth(d.getUTCMonth() + 1);
@@ -609,7 +613,7 @@ export function Admin() {
                       </button>
                     </div>
                     <div className="admin-calendar">
-                      {["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => (
+                      {["Pr", "Ot", "Tr", "Ce", "Pk", "Se", "Sv"].map((day) => (
                         <span className="weekday" key={day}>
                           {day}
                         </span>
@@ -643,10 +647,10 @@ export function Admin() {
                               <strong>{i + 1}</strong>
                               {count > 0 && (
                                 <span>
-                                  {count} {count === 1 ? "визит" : "визита"}
+                                  {count} {count === 1 ? "vizīte" : "vizītes"}
                                 </span>
                               )}
-                              {blocked && <small>Блок</small>}
+                              {blocked && <small>{"Bloķēts"}</small>}
                             </button>
                           );
                         },
@@ -655,15 +659,16 @@ export function Admin() {
                   </section>
                   {selectedDay && (
                     <section className="admin-panel">
-                      <h2>{dateLabel(selectedDay, "ru")}</h2>
+                      <h2>{dateLabel(selectedDay, "lv")}</h2>
                       {bookingRows(bookings.filter((b) => b.date === selectedDay))}
                     </section>
                   )}
                   <section className="admin-panel">
-                    <h2>Закрыть время для записи</h2>
+                    <h2>{"Slēgt laiku pierakstiem"}</h2>
                     <p className="admin-hint">
-                      Отпуск, выходной или перерыв. Уже существующие визиты сохраняются, при
-                      необходимости отмени их отдельно.
+                      {
+                        "Atvaļinājums, brīvdiena vai pārtraukums. Esošās vizītes saglabājas. Ja nepieciešams, atcel tās atsevišķi."
+                      }
                     </p>
                     <form
                       className="form block-form"
@@ -678,12 +683,12 @@ export function Admin() {
                               end: f.get("end"),
                               note: f.get("note"),
                             }),
-                          "Время закрыто для новых записей",
+                          "Laiks slēgts jauniem pierakstiem",
                         );
                       }}
                     >
                       <label>
-                        Дата
+                        {"Datums"}
                         <input
                           type="date"
                           name="date"
@@ -692,18 +697,19 @@ export function Admin() {
                         />
                       </label>
                       <label>
-                        С<input type="time" name="start" required defaultValue="00:00" />
+                        {"No"}
+                        <input type="time" name="start" required defaultValue="00:00" />
                       </label>
                       <label>
-                        До
+                        {"Līdz"}
                         <input type="time" name="end" required defaultValue="23:59" />
                       </label>
                       <label>
-                        Причина для тебя
-                        <input name="note" maxLength={200} placeholder="Выходной / перерыв" />
+                        {"Piezīme sev"}
+                        <input name="note" maxLength={200} placeholder="Brīvdiena / pārtraukums" />
                       </label>
                       <button className="button button-small" disabled={pending}>
-                        Закрыть время
+                        {"Slēgt laiku"}
                       </button>
                     </form>
                     <div className="blocks-list">
@@ -712,16 +718,16 @@ export function Admin() {
                           <CalendarDays size={17} />
                           <span>
                             <strong>
-                              {dateLabel(b.date, "ru")} · {time(b.start_min)} - {time(b.end_min)}
+                              {dateLabel(b.date, "lv")} · {time(b.start_min)} - {time(b.end_min)}
                             </strong>
-                            <small>{b.note || "Закрытое время"}</small>
+                            <small>{b.note || "Slēgtais laiks"}</small>
                           </span>
                           <button
                             className="icon-button"
-                            aria-label="Убрать блокировку"
+                            aria-label="Noņemt bloķējumu"
                             onClick={() => {
-                              if (window.confirm("Сделать это время снова доступным для записи?"))
-                                act(() => api("/api/admin/unblock", { id: b.id }), "Время открыто");
+                              if (window.confirm("Atkal padarīt šo laiku pieejamu pierakstiem?"))
+                                act(() => api("/api/admin/unblock", { id: b.id }), "Laiks atvērts");
                             }}
                           >
                             <Trash2 size={17} />
@@ -734,10 +740,11 @@ export function Admin() {
               )}
               {tab === "inquiries" && (
                 <section className="admin-panel">
-                  <h2>Сообщения с сайта</h2>
+                  <h2>{"Ziņas no vietnes"}</h2>
                   <p className="admin-hint">
-                    Новые обращения сохраняются здесь. Автоматические письма и SMS пока не
-                    отправляются.
+                    {
+                      "Jaunās ziņas saglabājas šeit. Automātiski e-pasti un SMS pagaidām netiek sūtīti."
+                    }
                   </p>
                   {state.inquiries.length ? (
                     <div className="inquiry-list">
@@ -746,7 +753,7 @@ export function Admin() {
                           <div>
                             <strong>{i.name}</strong>
                             <time>
-                              {new Intl.DateTimeFormat("ru-RU", {
+                              {new Intl.DateTimeFormat("lv-LV", {
                                 timeZone: "Europe/Riga",
                                 dateStyle: "medium",
                                 timeStyle: "short",
@@ -759,22 +766,24 @@ export function Admin() {
                             )}
                             {i.email && <a href={`mailto:${i.email}`}>{i.email}</a>}
                           </div>
-                          <p style={{ whiteSpace: "pre-wrap" }}>{i.message || "Без сообщения"}</p>
+                          <p style={{ whiteSpace: "pre-wrap" }}>
+                            {i.message || "Bez ziņas teksta"}
+                          </p>
                           <select
-                            aria-label={`Статус обращения ${i.name}`}
+                            aria-label={`Ziņas statuss: ${i.name}`}
                             value={i.status}
                             disabled={pending}
                             onChange={(e) =>
                               act(
                                 () =>
                                   api("/api/admin/inquiry", { id: i.id, status: e.target.value }),
-                                "Обращение обновлено",
+                                "Ziņas statuss atjaunināts",
                               )
                             }
                           >
-                            <option value="new">Новое</option>
-                            <option value="contacted">Связались</option>
-                            <option value="closed">Закрыто</option>
+                            <option value="new">{"Jauna"}</option>
+                            <option value="contacted">{"Sazinājāmies"}</option>
+                            <option value="closed">{"Slēgta"}</option>
                           </select>
                         </article>
                       ))}
@@ -782,7 +791,7 @@ export function Admin() {
                   ) : (
                     <div className="admin-empty">
                       <Inbox size={30} />
-                      <p>Пока никто не написал. Форма на сайте уже работает.</p>
+                      <p>{"Ziņu vēl nav. Kontaktforma vietnē jau darbojas."}</p>
                     </div>
                   )}
                 </section>
@@ -790,80 +799,82 @@ export function Admin() {
               {tab === "content" && (
                 <div className="admin-editor">
                   <section className="admin-panel">
-                    <h2>Первый экран</h2>
+                    <h2>{"Sākuma ekrāns"}</h2>
                     <Upload
-                      label="Логотип в шапке и подвале"
+                      label="Logotips galvenē un kājenē"
                       value={settings.logoImage}
                       onChange={(v) => updateSetting("logoImage", v)}
                     />
                     <p className="admin-hint">
-                      Редактируй обе языковые версии. Изменения появятся на сайте после сохранения.
+                      {
+                        "Rediģē visas trīs valodu versijas. Izmaiņas vietnē parādīsies pēc saglabāšanas."
+                      }
                     </p>
                     <div className="form">
                       <LField
-                        label="Надпись над заголовком"
+                        label="Teksts virs virsraksta"
                         value={settings.heroEyebrow}
                         onChange={(v) => updateSetting("heroEyebrow", v)}
                       />
                       <LField
-                        label="Главный заголовок"
+                        label="Galvenais virsraksts"
                         value={settings.heroTitle}
                         onChange={(v) => updateSetting("heroTitle", v)}
                       />
                       <LField
-                        label="Акцент курсивом"
+                        label="Virsraksta otrā rinda"
                         value={settings.heroAccent}
                         onChange={(v) => updateSetting("heroAccent", v)}
                       />
                       <LField
-                        label="Описание"
+                        label="Apraksts"
                         value={settings.heroDescription}
                         large
                         onChange={(v) => updateSetting("heroDescription", v)}
                       />
                       <Upload
-                        label="Фото первого экрана"
+                        label="Sākuma ekrāna attēls"
                         value={settings.heroImage}
                         onChange={(v) => updateSetting("heroImage", v)}
                       />
                     </div>
                   </section>
                   <section className="admin-panel">
-                    <h2>Специалист</h2>
+                    <h2>{"Speciāliste"}</h2>
                     <div className="form">
                       <label>
-                        Имя и фамилия
+                        {"Vārds un uzvārds"}
                         <input
                           value={settings.specialistName}
                           onChange={(e) => updateSetting("specialistName", e.target.value)}
                         />
                       </label>
                       <label>
-                        Регистрационный номер
+                        {"Reģistrācijas numurs"}
                         <input
                           value={settings.registration}
                           onChange={(e) => updateSetting("registration", e.target.value)}
                         />
                       </label>
                       <LField
-                        label="Специальность"
+                        label="Specialitāte"
                         value={settings.specialistTitle}
                         onChange={(v) => updateSetting("specialistTitle", v)}
                       />
                       <LField
-                        label="Заголовок блока. Перенос строки допустим."
+                        label="Sadaļas virsraksts. Drīkst izmantot rindas pārnesumu."
                         value={settings.aboutTitle}
                         large
                         onChange={(v) => updateSetting("aboutTitle", v)}
                       />
                       <LField
-                        label="О себе. Абзацы разделяй пустой строкой."
+                        label="Par sevi. Atdali rindkopas ar tukšu rindu."
                         value={settings.aboutBody}
                         large
                         onChange={(v) => updateSetting("aboutBody", v)}
                       />
                       <Upload
-                        label="Портрет специалиста"
+                        label="Speciālistes portrets"
                         value={settings.aboutImage}
                         onChange={(v) => updateSetting("aboutImage", v)}
                       />
@@ -871,7 +882,7 @@ export function Admin() {
                   </section>
                   {settings.copy && (
                     <section className="admin-panel">
-                      <h2>Остальные тексты страницы</h2>
+                      <h2>{"Pārējie lapas teksti"}</h2>
                       <div className="form">
                         {Object.entries(settings.copy).map(([key, value]) => (
                           <LField
@@ -892,10 +903,10 @@ export function Admin() {
                       onClick={() => save("settings", settings)}
                     >
                       <Save size={17} />
-                      {pending ? "Сохраняем..." : "Сохранить тексты и фото"}
+                      {pending ? "Saglabā..." : "Saglabāt tekstus un attēlus"}
                     </button>
                     <Link href="/" target="_blank" className="text-link">
-                      Открыть сайт
+                      {"Atvērt vietni"}
                       <ExternalLink size={15} />
                     </Link>
                   </div>
@@ -904,22 +915,23 @@ export function Admin() {
               {tab === "services" && (
                 <div className="admin-editor">
                   <p className="admin-hint">
-                    Пустая цена означает «По согласованию». Длительность и перерыв в настройках
-                    влияют на свободное время в календаре.
+                    {
+                      "Tukša cena nozīmē “Pēc vienošanās”. Pakalpojuma ilgums un pārtraukums iestatījumos ietekmē brīvos laikus kalendārā."
+                    }
                   </p>
                   {services.map((s, i) => (
                     <section className="admin-panel" key={s.id}>
                       <div className="admin-panel-heading">
                         <h2>
-                          {String(i + 1).padStart(2, "0")}. {s.title.lv || "Новая услуга"}
+                          {String(i + 1).padStart(2, "0")}. {s.title.lv || "Jauns pakalpojums"}
                         </h2>
                         <button
                           className="icon-button"
-                          aria-label="Удалить услугу"
+                          aria-label="Dzēst pakalpojumu"
                           onClick={() => {
                             if (
                               window.confirm(
-                                "Убрать услугу с сайта? Существующие записи сохранятся.",
+                                "Noņemt pakalpojumu no vietnes? Esošie pieraksti saglabāsies.",
                               )
                             )
                               setServices((v) => v.filter((x) => x.id !== s.id));
@@ -935,27 +947,27 @@ export function Admin() {
                             checked={s.active}
                             onChange={(e) => updateService(s.id, { active: e.target.checked })}
                           />
-                          <span>Услуга доступна на сайте и в записи</span>
+                          <span>{"Pakalpojums redzams vietnē un pieraksta formā"}</span>
                         </label>
                         <LField
-                          label="Название"
+                          label="Nosaukums"
                           value={s.title}
                           onChange={(v) => updateService(s.id, { title: v })}
                         />
                         <LField
-                          label="Метка категории"
+                          label="Kategorijas apzīmējums"
                           value={s.category}
                           onChange={(v) => updateService(s.id, { category: v })}
                         />
                         <LField
-                          label="Описание"
+                          label="Apraksts"
                           value={s.description}
                           large
                           onChange={(v) => updateService(s.id, { description: v })}
                         />
                         <div className="form-row">
                           <label>
-                            Длительность, мин
+                            {"Ilgums, min"}
                             <input
                               type="number"
                               min={15}
@@ -968,7 +980,7 @@ export function Admin() {
                             />
                           </label>
                           <label>
-                            Цена, EUR
+                            {"Cena, EUR"}
                             <input
                               type="number"
                               min={0}
@@ -979,12 +991,12 @@ export function Admin() {
                                   price: e.target.value === "" ? null : Number(e.target.value),
                                 })
                               }
-                              placeholder="По согласованию"
+                              placeholder="Pēc vienošanās"
                             />
                           </label>
                         </div>
                         <Upload
-                          label="Фото услуги"
+                          label="Pakalpojuma attēls"
                           value={s.image}
                           onChange={(v) => updateService(s.id, { image: v })}
                         />
@@ -1010,7 +1022,7 @@ export function Admin() {
                     }
                   >
                     <Plus size={17} />
-                    Добавить услугу
+                    {"Pievienot pakalpojumu"}
                   </button>
                   <div className="admin-savebar">
                     <button
@@ -1019,7 +1031,7 @@ export function Admin() {
                       onClick={() => save("services", services)}
                     >
                       <Save size={17} />
-                      Сохранить услуги
+                      {"Saglabāt pakalpojumus"}
                     </button>
                   </div>
                 </div>
@@ -1028,10 +1040,10 @@ export function Admin() {
                 <div className="article-editor-layout">
                   <section className="admin-panel article-picker">
                     <div className="admin-panel-heading">
-                      <h2>Дневник</h2>
+                      <h2>{"Dienasgrāmata"}</h2>
                       <button
                         className="icon-button"
-                        aria-label="Новая статья"
+                        aria-label="Jauns raksts"
                         onClick={() => {
                           const id = crypto.randomUUID();
                           setArticles((v) => [
@@ -1042,7 +1054,11 @@ export function Admin() {
                               title: emptyText(),
                               excerpt: emptyText(),
                               body: emptyText(),
-                              category: { lv: "STUDIJAS JAUNUMI", ru: "НОВОСТИ СТУДИИ" },
+                              category: {
+                                lv: "STUDIJAS JAUNUMI",
+                                en: "STUDIO NEWS",
+                                ru: "НОВОСТИ СТУДИИ",
+                              },
                               image: "/images/treatment.webp",
                               published: false,
                               createdAt: new Date().toISOString(),
@@ -1062,8 +1078,8 @@ export function Admin() {
                       >
                         <img src={a.image} alt="" />
                         <span>
-                          <strong>{a.title.lv || a.title.ru || "Новая статья"}</strong>
-                          <small>{a.published ? "Опубликована" : "Черновик"}</small>
+                          <strong>{a.title.lv || a.title.ru || "Jauns raksts"}</strong>
+                          <small>{a.published ? "Publicēts" : "Melnraksts"}</small>
                         </span>
                       </button>
                     ))}
@@ -1073,21 +1089,21 @@ export function Admin() {
                       onClick={() => save("articles", articles)}
                     >
                       <Save size={15} />
-                      Сохранить все статьи
+                      {"Saglabāt visus rakstus"}
                     </button>
                   </section>
                   <section className="admin-panel">
                     {article ? (
                       <>
                         <div className="admin-panel-heading">
-                          <h2>Редактор статьи</h2>
+                          <h2>{"Raksta redaktors"}</h2>
                           <button
                             className="icon-button"
-                            aria-label="Удалить статью"
+                            aria-label="Dzēst rakstu"
                             onClick={() => {
                               if (
                                 window.confirm(
-                                  "Удалить статью? Изменение вступит в силу после сохранения.",
+                                  "Dzēst rakstu? Izmaiņas stāsies spēkā pēc saglabāšanas.",
                                 )
                               ) {
                                 setArticles((v) => v.filter((a) => a.id !== articleId));
@@ -1105,15 +1121,15 @@ export function Admin() {
                               checked={article.published}
                               onChange={(e) => updateArticle({ published: e.target.checked })}
                             />
-                            <span>Опубликовать на сайте</span>
+                            <span>{"Publicēt vietnē"}</span>
                           </label>
                           <LField
-                            label="Название статьи"
+                            label="Raksta nosaukums"
                             value={article.title}
                             onChange={(v) => updateArticle({ title: v })}
                           />
                           <label>
-                            Адрес статьи. Латинские буквы, цифры и дефисы.
+                            {"Raksta adrese. Latīņu burti, cipari un defises."}
                             <input
                               value={article.slug}
                               pattern="[a-z0-9-]+"
@@ -1125,30 +1141,29 @@ export function Admin() {
                             />
                           </label>
                           <LField
-                            label="Категория"
+                            label="Kategorija"
                             value={article.category}
                             onChange={(v) => updateArticle({ category: v })}
                           />
                           <LField
-                            label="Короткое описание в списке"
+                            label="Īss apraksts rakstu sarakstam"
                             value={article.excerpt}
                             large
                             onChange={(v) => updateArticle({ excerpt: v })}
                           />
                           <Upload
-                            label="Обложка статьи"
+                            label="Raksta vāka attēls"
                             value={article.image}
                             onChange={(v) => updateArticle({ image: v })}
                           />
                           <LField
-                            label="Текст. Используй ## перед подзаголовком, пустую строку между абзацами."
+                            label="Teksts. Apakšvirsrakstam izmanto ##, rindkopas atdali ar tukšu rindu."
                             value={article.body}
                             large
                             onChange={(v) => updateArticle({ body: v })}
                           />
                           <p className="admin-hint">
-                            Текст отображается безопасно. HTML и сторонние скрипты не
-                            поддерживаются.
+                            {"Teksts tiek attēlots droši. HTML un ārēji skripti netiek atbalstīti."}
                           </p>
                           <button
                             className="button"
@@ -1156,7 +1171,7 @@ export function Admin() {
                             onClick={() => save("articles", articles)}
                           >
                             <Save size={17} />
-                            Сохранить статьи
+                            {"Saglabāt rakstus"}
                           </button>
                           {article.published && (
                             <Link
@@ -1164,7 +1179,7 @@ export function Admin() {
                               href={`/articles/${article.slug}`}
                               target="_blank"
                             >
-                              Открыть опубликованную статью
+                              {"Atvērt publicēto rakstu"}
                               <ExternalLink size={15} />
                             </Link>
                           )}
@@ -1173,7 +1188,7 @@ export function Admin() {
                     ) : (
                       <div className="admin-empty">
                         <FileText size={30} />
-                        <p>Выбери статью слева или нажми +, чтобы создать новую.</p>
+                        <p>{"Izvēlies rakstu sarakstā vai nospied +, lai izveidotu jaunu."}</p>
                       </div>
                     )}
                   </section>
@@ -1182,7 +1197,7 @@ export function Admin() {
               {tab === "settings" && (
                 <div className="admin-editor">
                   <section className="admin-panel">
-                    <h2>Режим записи</h2>
+                    <h2>{"Pieraksta iestatījumi"}</h2>
                     <div className="form">
                       <label className="checkbox-label">
                         <input
@@ -1190,17 +1205,17 @@ export function Admin() {
                           checked={settings.bookingEnabled}
                           onChange={(e) => updateSetting("bookingEnabled", e.target.checked)}
                         />
-                        <span>Принимать предварительные заявки на визит</span>
+                        <span>{"Pieņemt vizīšu pieteikumus"}</span>
                       </label>
                       <LField
-                        label="Сообщение клиенту перед записью"
+                        label="Paziņojums klientam pirms pieraksta"
                         value={settings.bookingNotice}
                         large
                         onChange={(v) => updateSetting("bookingNotice", v)}
                       />
                       <div className="form-row">
                         <label>
-                          Перерыв между визитами, мин
+                          {"Pārtraukums starp vizītēm, min"}
                           <input
                             type="number"
                             min={0}
@@ -1210,7 +1225,7 @@ export function Admin() {
                           />
                         </label>
                         <label>
-                          Отмена клиентом не позднее, ч
+                          {"Atcelšanas termiņš pirms vizītes, h"}
                           <input
                             type="number"
                             min={0}
@@ -1223,16 +1238,18 @@ export function Admin() {
                         </label>
                       </div>
                       <p className="admin-hint">
-                        Запись на 90 дней вперёд, не менее чем за 1 час. Шаг начала визита: 30
-                        минут. Часовой пояс: Europe/Riga.
+                        {
+                          "Pieraksts pieejams 90 dienām uz priekšu, vismaz 1 stundu iepriekš. Vizīšu sākuma solis: 30 minūtes. Laika josla: Europe/Riga."
+                        }
                       </p>
                     </div>
                   </section>
                   <section className="admin-panel">
-                    <h2>Недельное расписание</h2>
+                    <h2>{"Nedēļas darba laiks"}</h2>
                     <p className="admin-hint">
-                      Закрытые дни не отображаются как доступные для записи. Для отдельных выходных
-                      используй блокировки в календаре.
+                      {
+                        "Slēgtās dienas netiek rādītas kā pieejamas pierakstam. Atsevišķām brīvdienām izmanto laika bloķēšanu kalendārā."
+                      }
                     </p>
                     <div className="schedule-editor">
                       {settings.schedule.map((day, i) => (
@@ -1250,11 +1267,11 @@ export function Admin() {
                                 )
                               }
                             />
-                            {["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"][i]}
+                            {["Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se"][i]}
                           </label>
                           <input
                             type="time"
-                            aria-label={`Начало ${i}`}
+                            aria-label={`Darba sākums: ${i}`}
                             value={day.start}
                             disabled={!day.enabled}
                             onChange={(e) =>
@@ -1266,10 +1283,10 @@ export function Admin() {
                               )
                             }
                           />
-                          <span>до</span>
+                          <span>{"līdz"}</span>
                           <input
                             type="time"
-                            aria-label={`Конец ${i}`}
+                            aria-label={`Darba beigas: ${i}`}
                             value={day.end}
                             disabled={!day.enabled}
                             onChange={(e) =>
@@ -1286,19 +1303,19 @@ export function Admin() {
                     </div>
                   </section>
                   <section className="admin-panel">
-                    <h2>Контакты и реквизиты</h2>
+                    <h2>{"Kontakti un rekvizīti"}</h2>
                     <div className="form">
                       {(
                         [
-                          ["city", "Город"],
-                          ["address", "Адрес студии"],
-                          ["phone", "Телефон"],
-                          ["email", "Электронная почта"],
-                          ["instagram", "Ссылка на Instagram"],
-                          ["legalName", "Юридическое название / оператор данных"],
-                          ["legalRegistration", "Регистрационный номер компании"],
-                          ["legalAddress", "Юридический адрес"],
-                          ["privacyEmail", "Почта для вопросов о данных"],
+                          ["city", "Pilsēta"],
+                          ["address", "Studijas adrese"],
+                          ["phone", "Tālrunis"],
+                          ["email", "E-pasts"],
+                          ["instagram", "Instagram saite"],
+                          ["legalName", "Juridiskais nosaukums / datu pārzinis"],
+                          ["legalRegistration", "Uzņēmuma reģistrācijas numurs"],
+                          ["legalAddress", "Juridiskā adrese"],
+                          ["privacyEmail", "E-pasts jautājumiem par datiem"],
                         ] as [keyof SiteSettings, string][]
                       ).map(([key, label]) => (
                         <label key={key}>
@@ -1310,24 +1327,25 @@ export function Admin() {
                         </label>
                       ))}
                       <p className="admin-hint">
-                        Реквизиты автоматически отображаются в политике конфиденциальности. Пустые
-                        контакты не показываются на сайте.
+                        {
+                          "Rekvizīti automātiski tiek attēloti privātuma politikā. Tukši kontakti vietnē netiek rādīti."
+                        }
                       </p>
                     </div>
                   </section>
                   <section className="admin-panel">
-                    <h2>Поиск и индексация</h2>
+                    <h2>{"Meklēšana un indeksācija"}</h2>
                     <div className="form">
                       <LField
-                        label="Описание сайта для поисковых систем"
+                        label="Vietnes apraksts meklētājiem"
                         value={settings.seoDescription}
                         large
                         onChange={(v) => updateSetting("seoDescription", v)}
                       />
                       <p className="admin-hint">
-                        Заголовки, canonical, hreflang, Open Graph и структурированные данные
-                        формируются автоматически. Публикация не гарантирует позицию или сроки
-                        индексации.
+                        {
+                          "Virsraksti, canonical, hreflang, Open Graph un strukturētie dati tiek veidoti automātiski. Publicēšana negarantē pozīciju vai indeksācijas termiņu."
+                        }
                       </p>
                       <div className="admin-link-row">
                         <a href="/sitemap.xml" target="_blank">
@@ -1352,14 +1370,15 @@ export function Admin() {
                       onClick={() => save("settings", settings)}
                     >
                       <Save size={17} />
-                      Сохранить настройки
+                      {"Saglabāt iestatījumus"}
                     </button>
                   </div>
                   <section className="admin-panel">
-                    <h2>Безопасность</h2>
+                    <h2>{"Drošība"}</h2>
                     <p className="admin-hint">
-                      Смена пароля завершит остальные администраторские сеансы. Новый пароль: не
-                      менее 12 символов.
+                      {
+                        "Paroles maiņa beigs pārējās administratora sesijas. Jaunajai parolei jābūt vismaz 12 rakstzīmēm."
+                      }
                     </p>
                     <form
                       className="form"
@@ -1368,7 +1387,7 @@ export function Admin() {
                         const form = e.currentTarget;
                         const data = new FormData(form);
                         if (data.get("password") !== data.get("repeat")) {
-                          setError("Пароли не совпадают.");
+                          setError("Paroles nesakrīt.");
                           return;
                         }
                         act(async () => {
@@ -1377,11 +1396,11 @@ export function Admin() {
                             password: data.get("password"),
                           });
                           form.reset();
-                        }, "Пароль изменён. Сохрани его в своём менеджере паролей.");
+                        }, "Parole mainīta. Saglabā to savā paroļu pārvaldniekā.");
                       }}
                     >
                       <label>
-                        Текущий пароль
+                        {"Pašreizējā parole"}
                         <input
                           type="password"
                           name="current"
@@ -1391,7 +1410,7 @@ export function Admin() {
                       </label>
                       <div className="form-row">
                         <label>
-                          Новый пароль
+                          {"Jaunā parole"}
                           <input
                             type="password"
                             name="password"
@@ -1402,7 +1421,7 @@ export function Admin() {
                           />
                         </label>
                         <label>
-                          Повтори пароль
+                          {"Atkārto paroli"}
                           <input
                             type="password"
                             name="repeat"
@@ -1415,7 +1434,7 @@ export function Admin() {
                       </div>
                       <button className="button button-outline" disabled={pending}>
                         <ShieldCheck size={16} />
-                        Изменить пароль
+                        {"Mainīt paroli"}
                       </button>
                     </form>
                   </section>
@@ -1429,33 +1448,40 @@ export function Admin() {
   );
 }
 const copyLabels: Record<string, string> = {
-  servicesTitle: "Услуги: первая строка заголовка",
-  servicesAccent: "Услуги: акцент",
-  servicesIntro: "Услуги: вступление",
-  quote: "Философия: цитата",
-  processTitle: "Как проходит визит: заголовок",
-  bookingTitle: "Запись: заголовок",
-  bookingAccent: "Запись: акцент",
-  bookingIntro: "Запись: описание",
-  faqTitle: "Вопросы: заголовок",
-  journalTitle: "Журнал: заголовок",
-  journalAccent: "Журнал: акцент",
-  contactTitle: "Контакты: заголовок",
-  contactAccent: "Контакты: акцент",
-  contactIntro: "Контакты: описание",
-  contactFormTitle: "Контакты: заголовок формы",
-  footerDescription: "Описание в подвале",
+  rhythmEyebrow: "Vizītes ritms: sadaļas apzīmējums",
+  rhythmTitle: "Vizītes ritms: virsraksts",
+  rhythmIntro: "Vizītes ritms: ievads",
+  rhythmServices: "Vizītes ritms: pakalpojumu skaita apzīmējums",
+  rhythmDuration: "Vizītes ritms: ilguma apzīmējums",
+  rhythmChartTitle: "Vizītes ritms: diagrammas virsraksts",
+  rhythmChartNote: "Vizītes ritms: diagrammas paskaidrojums",
+  servicesTitle: "Pakalpojumi: virsraksta pirmā rinda",
+  servicesAccent: "Pakalpojumi: otrā rinda",
+  servicesIntro: "Pakalpojumi: ievads",
+  quote: "Pieeja: citāts",
+  processTitle: "Vizītes norise: virsraksts",
+  bookingTitle: "Pieraksts: virsraksts",
+  bookingAccent: "Pieraksts: otrā rinda",
+  bookingIntro: "Pieraksts: apraksts",
+  faqTitle: "Jautājumi: virsraksts",
+  journalTitle: "Dienasgrāmata: virsraksts",
+  journalAccent: "Dienasgrāmata: otrā rinda",
+  contactTitle: "Kontakti: virsraksts",
+  contactAccent: "Kontakti: otrā rinda",
+  contactIntro: "Kontakti: apraksts",
+  contactFormTitle: "Kontakti: formas virsraksts",
+  footerDescription: "Kājenes apraksts",
 };
 
 function copyLabel(key: string) {
   if (copyLabels[key]) return copyLabels[key];
   const value = key.match(/^value([1-3])(Title|Text)$/);
   if (value)
-    return `Наш подход: ценность ${value[1]}, ${value[2] === "Title" ? "название" : "описание"}`;
+    return `Mūsu pieeja: vērtība ${value[1]}, ${value[2] === "Title" ? "nosaukums" : "apraksts"}`;
   const process = key.match(/^process([1-3])(Title|Text)$/);
   if (process)
-    return `Шаг визита ${process[1]}: ${process[2] === "Title" ? "название" : "описание"}`;
+    return `Vizītes solis ${process[1]}: ${process[2] === "Title" ? "nosaukums" : "apraksts"}`;
   const faq = key.match(/^faq([1-4])(Question|Answer)$/);
-  if (faq) return `Частые вопросы ${faq[1]}: ${faq[2] === "Question" ? "вопрос" : "ответ"}`;
-  return "Текст страницы";
+  if (faq) return `Biežie jautājumi ${faq[1]}: ${faq[2] === "Question" ? "jautājums" : "atbilde"}`;
+  return "Lapas teksts";
 }

@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { getArticles, getServices, getSettings } from "@/lib/db";
 import { today } from "@/lib/booking";
 import { basePath } from "@/lib/client";
+import { tr } from "@/lib/i18n";
 import { safeJson, siteUrl } from "@/lib/seo";
 import type { Lang } from "@/lib/types";
 import { CookieNotice, Footer, Header, MobileBooking } from "@/components/chrome";
@@ -17,13 +18,12 @@ export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug?: string[] }> };
 function resolve(slug: string[] = []) {
   const parts = [...slug];
-  const lang: Lang = parts[0] === "ru" ? (parts.shift(), "ru") : "lv";
+  const lang: Lang = parts[0] === "ru" || parts[0] === "en" ? (parts.shift() as Lang) : "lv";
   return { lang, parts };
 }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, parts } = resolve((await params).slug);
   const s = getSettings();
-  const ru = lang === "ru";
   const article =
     parts[0] === "articles" && parts[1]
       ? getArticles().find((a) => a.slug === parts[1] && a.published)
@@ -31,20 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = article
     ? article.title[lang]
     : parts[0] === "account"
-      ? ru
-        ? "Мои записи"
-        : "Mani pieraksti"
+      ? tr(lang, "Mani pieraksti", "Мои записи")
       : parts[0] === "privacy"
-        ? ru
-          ? "Конфиденциальность"
-          : "Privātuma politika"
+        ? tr(lang, "Privātuma politika", "Конфиденциальность")
         : parts[0] === "articles"
-          ? ru
-            ? "Журнал студии"
-            : "Studijas dienasgrāmata"
-          : ru
-            ? "Косметология в Екабпилсе"
-            : "Kosmetoloģija Jēkabpilī";
+          ? tr(lang, "Studijas dienasgrāmata", "Журнал студии")
+          : tr(lang, "Kosmetoloģija Jēkabpilī", "Косметология в Екабпилсе");
   const suffix = parts.length ? `/${parts.join("/")}` : "";
   const canonical = `${siteUrl()}${basePath(lang)}${suffix}`;
   const description = article?.excerpt[lang] || s.seoDescription[lang];
@@ -55,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical,
       languages: {
         lv: `${siteUrl()}${suffix}`,
+        en: `${siteUrl()}/en${suffix}`,
         ru: `${siteUrl()}/ru${suffix}`,
         "x-default": `${siteUrl()}${suffix}`,
       },
@@ -66,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: canonical,
       siteName: "SKINSTINCT",
-      locale: ru ? "ru_LV" : "lv_LV",
+      locale: tr(lang, "lv_LV", "ru_LV"),
       type: article ? "article" : "website",
       images: [
         {
@@ -108,7 +101,6 @@ function ArticleBody({ text }: { text: string }) {
 }
 export default async function Page({ params }: Props) {
   const { lang, parts } = resolve((await params).slug);
-  const ru = lang === "ru";
   const s = getSettings();
   const services = getServices();
   const articles = getArticles().filter((a) => a.published);
@@ -145,7 +137,7 @@ export default async function Page({ params }: Props) {
       employee: { "@type": "Person", name: s.specialistName, jobTitle: s.specialistTitle[lang] },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
-        name: ru ? "Услуги" : "Pakalpojumi",
+        name: tr(lang, "Pakalpojumi", "Услуги"),
         itemListElement: services
           .filter((v) => v.active)
           .map((v) => ({
@@ -167,16 +159,18 @@ export default async function Page({ params }: Props) {
       <main id="main-content" className="container inner-page">
         <div className="page-heading">
           <span className="eyebrow">
-            SKINSTINCT / {ru ? "ЖУРНАЛ СТУДИИ" : "STUDIJAS DIENASGRĀMATA"}
+            SKINSTINCT / {tr(lang, "STUDIJAS DIENASGRĀMATA", "ЖУРНАЛ СТУДИИ")}
           </span>
           <h1>
-            {ru ? "Рядом с твоей " : "Tuvāk tavai "}
-            <em>{ru ? "кожей." : "ādai."}</em>
+            {tr(lang, "Tuvāk tavai ", "Рядом с твоей ")}
+            <em>{tr(lang, "ādai.", "кожей.")}</em>
           </h1>
           <p>
-            {ru
-              ? "Мои заметки, ценности и новости студии. Для осознанной заботы о себе."
-              : "Mani pieraksti, vērtības un studijas jaunumi. Apzinātām rūpēm par sevi."}
+            {tr(
+              lang,
+              "Mani pieraksti, vērtības un studijas jaunumi. Apzinātām rūpēm par sevi.",
+              "Мои заметки, ценности и новости студии. Для осознанной заботы о себе.",
+            )}
           </p>
         </div>
         <div className="articles-list">
@@ -185,7 +179,7 @@ export default async function Page({ params }: Props) {
           ))}
         </div>
         {!articles.length && (
-          <p>{ru ? "Первые заметки скоро появятся." : "Pirmie pieraksti drīzumā."}</p>
+          <p>{tr(lang, "Pirmie pieraksti drīzumā.", "Первые заметки скоро появятся.")}</p>
         )}
       </main>
     );
@@ -213,14 +207,14 @@ export default async function Page({ params }: Props) {
         <article className="article-detail">
           <Link className="back-link" href={`${base}/articles`}>
             <ArrowLeft size={16} />
-            {ru ? "Журнал студии" : "Studijas dienasgrāmata"}
+            {tr(lang, "Studijas dienasgrāmata", "Журнал студии")}
           </Link>
           <span className="eyebrow">{article.category[lang]}</span>
           <h1>{article.title[lang]}</h1>
           <div className="article-meta">
             <span className="eyebrow">{s.specialistName}</span>
             <time dateTime={article.createdAt}>
-              {new Intl.DateTimeFormat(ru ? "ru-RU" : "lv-LV", {
+              {new Intl.DateTimeFormat(tr(lang, "lv-LV", "ru-RU"), {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -239,7 +233,7 @@ export default async function Page({ params }: Props) {
           <ArticleBody text={article.body[lang]} />
           <div className="article-cta">
             <Link href={`${base}/#pieraksts`} className="button">
-              {ru ? "Время для себя" : "Laiks sev"}
+              {tr(lang, "Laiks sev", "Время для себя")}
               <ArrowUpRight size={18} />
             </Link>
           </div>

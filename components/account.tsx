@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Clock3, LoaderCircle, Search } from "lucide-react";
 import { api, basePath, dateLabel, errorMessage } from "@/lib/client";
+import { tr } from "@/lib/i18n";
 import type { Booking, Lang, SiteSettings } from "@/lib/types";
 
 type Visit = Booking & { canCancel: boolean };
@@ -51,9 +52,11 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
   async function cancel(id: string) {
     if (
       !window.confirm(
-        ru
-          ? "Отменить этот визит? Время станет доступно другим клиентам."
-          : "Atcelt šo vizīti? Laiks kļūs pieejams citiem klientiem.",
+        tr(
+          lang,
+          "Atcelt šo vizīti? Laiks kļūs pieejams citiem klientiem.",
+          "Отменить этот визит? Время станет доступно другим клиентам.",
+        ),
       )
     )
       return;
@@ -77,24 +80,33 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
         cancelled: "Отменена",
         completed: "Завершена",
       }
-    : {
-        pending: "Gaida apstiprinājumu",
-        confirmed: "Apstiprināts",
-        cancelled: "Atcelts",
-        completed: "Pabeigts",
-      };
+    : lang === "en"
+      ? {
+          pending: "Awaiting confirmation",
+          confirmed: "Confirmed",
+          cancelled: "Cancelled",
+          completed: "Completed",
+        }
+      : {
+          pending: "Gaida apstiprinājumu",
+          confirmed: "Apstiprināts",
+          cancelled: "Atcelts",
+          completed: "Pabeigts",
+        };
   return (
     <main className="container inner-page" id="main-content">
       <div className="page-heading">
-        <span className="eyebrow">SKINSTINCT / {ru ? "ТВОЁ ПРОСТРАНСТВО" : "TAVA VIETA"}</span>
+        <span className="eyebrow">SKINSTINCT / {tr(lang, "TAVA VIETA", "ТВОЁ ПРОСТРАНСТВО")}</span>
         <h1>
-          {ru ? "Мои " : "Mani "}
-          <em>{ru ? "записи." : "pieraksti."}</em>
+          {tr(lang, "Mani ", "Мои ")}
+          <em>{tr(lang, "pieraksti.", "записи.")}</em>
         </h1>
         <p>
-          {ru
-            ? "Твои маленькие моменты заботы в одном месте. Здесь видны записи, сделанные в этом браузере."
-            : "Tavi mazie rūpju mirkļi vienuviet. Šeit redzami šajā pārlūkā veiktie pieraksti."}
+          {tr(
+            lang,
+            "Tavi mazie rūpju mirkļi vienuviet. Šeit redzami šajā pārlūkā veiktie pieraksti.",
+            "Твои маленькие моменты заботы в одном месте. Здесь видны записи, сделанные в этом браузере.",
+          )}
         </p>
       </div>
       <div className="account-grid">
@@ -102,7 +114,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           {loading ? (
             <p className="loading-line">
               <LoaderCircle className="spin" size={18} />
-              {ru ? "Загружаем записи..." : "Ielādējam pierakstus..."}
+              {tr(lang, "Ielādējam pierakstus...", "Загружаем записи...")}
             </p>
           ) : bookings.length ? (
             <div className="booking-list">
@@ -124,14 +136,16 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                   <p>
                     {settings.address
                       ? `${settings.address}, ${settings.city}`
-                      : ru
-                        ? "Адрес уточним при подтверждении"
-                        : "Adresi precizēsim, apstiprinot vizīti"}
+                      : tr(
+                          lang,
+                          "Adresi precizēsim, apstiprinot vizīti",
+                          "Адрес уточним при подтверждении",
+                        )}
                   </p>
                   <div className="visit-actions">
                     {!lookup && b.status !== "cancelled" && (
                       <a className="text-button" href={`/api/calendar?id=${b.id}`}>
-                        {ru ? "Добавить в календарь" : "Pievienot kalendāram"}
+                        {tr(lang, "Pievienot kalendāram", "Добавить в календарь")}
                       </a>
                     )}
                     {b.canCancel && (
@@ -140,7 +154,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                         disabled={pending}
                         onClick={() => cancel(b.id)}
                       >
-                        {ru ? "Отменить визит" : "Atcelt vizīti"}
+                        {tr(lang, "Atcelt vizīti", "Отменить визит")}
                       </button>
                     )}
                     {!b.canCancel && ["pending", "confirmed"].includes(b.status) && (
@@ -150,7 +164,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {ru ? "Связаться со студией" : "Sazināties ar studiju"}
+                        {tr(lang, "Sazināties ar studiju", "Связаться со студией")}
                       </a>
                     )}
                   </div>
@@ -160,14 +174,16 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           ) : (
             <div className="empty-state">
               <CalendarDays size={35} strokeWidth={1} />
-              <h2>{ru ? "Твоё время ещё впереди." : "Tavs laiks vēl priekšā."}</h2>
+              <h2>{tr(lang, "Tavs laiks vēl priekšā.", "Твоё время ещё впереди.")}</h2>
               <p>
-                {ru
-                  ? "В этом браузере пока нет записей. Найди удобный момент для себя."
-                  : "Šajā pārlūkā vēl nav pierakstu. Atrodi sev ērtu mirkli."}
+                {tr(
+                  lang,
+                  "Šajā pārlūkā vēl nav pierakstu. Atrodi sev ērtu mirkli.",
+                  "В этом браузере пока нет записей. Найди удобный момент для себя.",
+                )}
               </p>
               <Link className="button" href={`${basePath(lang)}/#pieraksts`}>
-                {ru ? "Выбрать время" : "Izvēlēties laiku"}
+                {tr(lang, "Izvēlēties laiku", "Выбрать время")}
                 <ArrowRight size={17} />
               </Link>
             </div>
@@ -175,20 +191,26 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           <p className="account-notice">
             {ru
               ? `Отмена на сайте доступна за ${settings.cancellationHours} ч до визита. Если планы изменились позже, напиши в Instagram.`
-              : `Atcelšana vietnē pieejama ${settings.cancellationHours} h pirms vizītes. Ja plāni mainās vēlāk, uzraksti Instagram.`}
+              : lang === "en"
+                ? `Online cancellation is available until ${settings.cancellationHours} h before your visit. If your plans change later, message us on Instagram.`
+                : `Atcelšana vietnē pieejama ${settings.cancellationHours} h pirms vizītes. Ja plāni mainās vēlāk, uzraksti Instagram.`}
           </p>
         </div>
         <div className="account-lookup">
           <Search size={23} strokeWidth={1.3} />
-          <h2>{ru ? "Записывалась\nс другого устройства?" : "Pierakstījies\nno citas ierīces?"}</h2>
+          <h2>
+            {tr(lang, "Pierakstījies\nno citas ierīces?", "Записывалась\nс другого устройства?")}
+          </h2>
           <p>
-            {ru
-              ? "Введи код, который появился после записи, и телефон или почту, указанные при оформлении. Поиск только по телефону или почте недоступен для защиты твоих данных."
-              : "Ievadi pēc pieraksta saņemto kodu un tālruni vai e-pastu, ko norādīji piesakoties. Lai sargātu tavus datus, meklēšana tikai pēc kontakta nav pieejama."}
+            {tr(
+              lang,
+              "Ievadi pēc pieraksta saņemto kodu un tālruni vai e-pastu, ko norādīji piesakoties. Lai sargātu tavus datus, meklēšana tikai pēc kontakta nav pieejama.",
+              "Введи код, который появился после записи, и телефон или почту, указанные при оформлении. Поиск только по телефону или почте недоступен для защиты твоих данных.",
+            )}
           </p>
           <form onSubmit={search} className="form">
             <label>
-              {ru ? "Код записи" : "Pieraksta kods"}
+              {tr(lang, "Pieraksta kods", "Код записи")}
               <input
                 name="code"
                 required
@@ -199,25 +221,27 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
               />
             </label>
             <label>
-              {ru ? "Твой телефон или почта" : "Tavs tālrunis vai e-pasts"}
+              {tr(lang, "Tavs tālrunis vai e-pasts", "Твой телефон или почта")}
               <input
                 name="contact"
                 required
                 minLength={3}
                 maxLength={200}
                 autoComplete="off"
-                placeholder={ru ? "Контакт из записи" : "Pierakstā norādītais kontakts"}
+                placeholder={tr(lang, "Pierakstā norādītais kontakts", "Контакт из записи")}
               />
             </label>
             <button className="button" disabled={pending}>
               {pending ? <LoaderCircle size={17} className="spin" /> : <Search size={17} />}{" "}
-              {ru ? "Найти запись" : "Atrast pierakstu"}
+              {tr(lang, "Atrast pierakstu", "Найти запись")}
             </button>
           </form>
           <p className="account-notice">
-            {ru
-              ? "Потеряла код? Напиши студии в Instagram."
-              : "Pazaudēji kodu? Uzraksti studijai Instagram."}
+            {tr(
+              lang,
+              "Pazaudēji kodu? Uzraksti studijai Instagram.",
+              "Потеряла код? Напиши студии в Instagram.",
+            )}
           </p>
         </div>
       </div>

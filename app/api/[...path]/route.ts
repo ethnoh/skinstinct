@@ -204,7 +204,7 @@ export async function POST(request: NextRequest, context: Context) {
           serviceId: z.string().max(80),
           date: dateSchema,
           time: timeSchema,
-          lang: z.enum(["lv", "ru"]).default("lv"),
+          lang: z.enum(["lv", "en", "ru"]).default("lv"),
         })
         .parse(body);
       if (!validHorizon(input.date)) throw new HttpError(400, "INVALID_DATE");

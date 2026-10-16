@@ -10,6 +10,9 @@
 - Do not seed or replace a live database. Initial content is inserted only when missing.
 - The studio is in Jekabpils, not Riga. Public source is https://www.instagram.com/vr_skinstinct/ . Do not invent prices, contact details, reviews or clinical results.
 - Keep pending requests visibly distinct from personally confirmed appointments. Do not imply Google Calendar, email or SMS integration exists.
-- Test document scrollWidth equals clientWidth at actual viewport widths 320, 360, 390 and 430 CSS pixels, including Russian, booking steps and mobile navigation. A desktop window resize may stop at 500px; use actual device emulation.
+- Public languages are Latvian by default, English second and Russian third. Admin interface is Latvian only; content editors support LV/EN/RU. Preserve older saved translations when extending content.
+- Light/dark theme is stored locally. Keep both palettes readable, including inputs, cookies and booking states.
+- Scroll effects use progressive enhancement and honor reduced-motion preferences. Counters and duration charts derive from active services; never invent clinical results or customer counts.
+- Test document scrollWidth equals clientWidth at actual viewport widths 320, 360, 390 and 430 CSS pixels, including all three languages, both themes, booking steps and mobile navigation. A desktop window resize may stop at 500px; use actual device emulation.
 - Run typecheck, production build and the isolated integration suite for meaningful changes. Never run tests against production customer data.
 - Do not use em or en dashes in generated copy.

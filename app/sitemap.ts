@@ -11,11 +11,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .filter((a) => a.published)
       .map((a) => `/articles/${a.slug}`),
   ].flatMap((p) =>
-    ["", "/ru"].map((prefix) => ({
+    ["", "/en", "/ru"].map((prefix) => ({
       url: `${siteUrl()}${prefix}${p}`,
       changeFrequency: "weekly" as const,
       priority: p === "" ? 1 : p.startsWith("/articles/") ? 0.7 : 0.5,
-      alternates: { languages: { lv: `${siteUrl()}${p}`, ru: `${siteUrl()}/ru${p}` } },
+      alternates: {
+        languages: { lv: `${siteUrl()}${p}`, en: `${siteUrl()}/en${p}`, ru: `${siteUrl()}/ru${p}` },
+      },
     })),
   );
 }

@@ -4,7 +4,11 @@ export function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(
     "x-site-lang",
-    /^\/(?:ru|admin)(?:\/|$)/.test(request.nextUrl.pathname) ? "ru" : "lv",
+    /^\/ru(?:\/|$)/.test(request.nextUrl.pathname)
+      ? "ru"
+      : /^\/en(?:\/|$)/.test(request.nextUrl.pathname)
+        ? "en"
+        : "lv",
   );
   return NextResponse.next({ request: { headers: requestHeaders } });
 }

@@ -1,4 +1,4 @@
-export type Lang = "lv" | "ru";
+export type Lang = "lv" | "en" | "ru";
 export type Localized = Record<Lang, string>;
 export type Service = {
   id: string;

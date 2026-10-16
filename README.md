@@ -1,15 +1,17 @@
 # SKINSTINCT
 
-A bilingual Latvian/Russian cosmetology studio website for Valērija Razujeva in Jēkabpils. Built with Next.js, React, TypeScript and SQLite. GitHub `main` is the source of truth and triggers Railway deployment.
+A Latvian, English and Russian cosmetology studio website for Valērija Razujeva in Jēkabpils. Latvian is the default language. Built with Next.js, React, TypeScript and SQLite. GitHub `main` is the source of truth and triggers Railway deployment.
 
 ## Included
 
 - Responsive editorial design based on the supplied peach, olive and gold SKINSTINCT logo.
+- Clear Manrope typography and persistent light/dark themes, with locally stored preference.
+- Scroll reveals, gentle image parallax, reading progress and service-duration charts/counters driven by real service settings. Reduced-motion preferences are respected.
 - Self-hosted fonts, optimized WebP photography and an identity-reference portrait.
 - Appointment requests with a three-step service, date/time and contact flow.
 - Live availability, pending reservations, appointment confirmation, cancellations, visit history, private booking-code lookup and iCalendar download.
 - Server-side overlap checks inside SQLite immediate transactions, including configurable service duration and buffers.
-- Private admin for appointments, opening hours, time blocks, messages, bilingual content, images, services, prices, article drafts/publication and password changes.
+- Latvian-only admin for appointments, opening hours, time blocks, messages, content in all three languages, images, services, prices, article drafts/publication and password changes.
 - Contact forms requiring a name and at least one valid phone/email.
 - Server rendering, canonical URLs, language alternatives, social cards, structured data, dynamic sitemap, robots and `llms.txt`.
 - Privacy notice, essential-cookie notice and settings. No advertising or analytics integrations.
@@ -58,12 +60,12 @@ The public preview is https://skinstinct-production.up.railway.app . The Railway
 
 Runtime configuration:
 
-| Variable | Purpose |
-| --- | --- |
-| `SITE_URL` | Public canonical HTTPS origin, without trailing slash. Falls back to Railway public domain. |
-| `DATA_DIR` | Persistent database/upload directory, default `.data` locally and `/data` in Docker. |
-| `ADMIN_PASSWORD_HASH` | Initial `salt:scrypt-64-byte-hex` password hash. Never commit a value. |
-| `PORT` | HTTP listener port supplied by Railway. |
+| Variable              | Purpose                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `SITE_URL`            | Public canonical HTTPS origin, without trailing slash. Falls back to Railway public domain. |
+| `DATA_DIR`            | Persistent database/upload directory, default `.data` locally and `/data` in Docker.        |
+| `ADMIN_PASSWORD_HASH` | Initial `salt:scrypt-64-byte-hex` password hash. Never commit a value.                      |
+| `PORT`                | HTTP listener port supplied by Railway.                                                     |
 
 `scripts/Provision-Admin.ps1 -ConfigureRailway` configures the initial hash through stdin without printing the password. The script targets only the exact SKINSTINCT service. A password changed inside the app takes precedence and is stored as a salted scrypt hash in the persistent database.
 
@@ -72,7 +74,7 @@ Runtime configuration:
 1. Confirm actual opening hours, service duration and price in the admin.
 2. Add the exact studio address and business phone/email.
 3. Confirm legal data-controller name, company registration and legal address in Settings. The privacy policy uses these fields.
-4. Review the generated portrait and all Latvian/Russian copy with the owner.
+4. Review the generated portrait and all Latvian/English/Russian copy with the owner.
 5. Keep requests in pending status until the studio personally confirms them.
 6. Set up and verify persistent-volume backups in the Railway dashboard before customer use. The application does not claim that a backup policy has been configured.
 

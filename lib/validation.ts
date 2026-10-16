@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const text = (max = 500) => z.string().trim().max(max);
-export const localized = z.object({ lv: text(25000), ru: text(25000) });
+export const localized = z.object({ lv: text(25000), en: text(25000), ru: text(25000) });
 export const imagePath = z
   .string()
   .max(300)
@@ -41,7 +41,7 @@ export const serviceSchema = z
     active: z.boolean(),
     image: imagePath,
   })
-  .refine((v) => !v.active || (v.title.lv.length >= 2 && v.title.ru.length >= 2));
+  .refine((v) => !v.active || Object.values(v.title).every((title) => title.length >= 2));
 export const articleSchema = z
   .object({
     id: text(80).min(1),
@@ -57,10 +57,8 @@ export const articleSchema = z
   .refine(
     (v) =>
       !v.published ||
-      (v.title.lv.length >= 2 &&
-        v.title.ru.length >= 2 &&
-        v.body.lv.length > 0 &&
-        v.body.ru.length > 0),
+      (Object.values(v.title).every((title) => title.length >= 2) &&
+        Object.values(v.body).every((body) => body.length > 0)),
   );
 export const settingsSchema = z.object({
   logoImage: imagePath,

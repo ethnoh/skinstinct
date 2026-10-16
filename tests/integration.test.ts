@@ -8,6 +8,7 @@ import path from "node:path";
 import net from "node:net";
 import { once } from "node:events";
 import { startDate } from "../lib/booking";
+import Database from "better-sqlite3";
 
 let server: ChildProcess;
 let origin = "";
@@ -111,12 +112,32 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     const russian = await (await fetch(`${origin}/ru`)).text();
     assert.ok(russian.includes('<html lang="ru"'));
     assert.ok(russian.includes("Твоя кожа."));
+    const english = await (await fetch(`${origin}/en`)).text();
+    assert.ok(english.includes('<html lang="en"'));
+    assert.ok(english.includes("Your skin."));
+    assert.ok(english.includes("Getting to know your skin"));
+    const englishMarkup = english.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+    assert.ok(englishMarkup.includes("How can I view or cancel an appointment?"));
+    assert.ok(!englishMarkup.includes("Kā apskatīt vai atcelt pierakstu?"));
+    assert.ok(english.includes('hrefLang="en"') || english.includes('hrefLang="en"'.toLowerCase()));
+    const adminLogin = await (await fetch(`${origin}/admin`)).text();
+    assert.ok(adminLogin.includes('<html lang="lv"'));
+    assert.ok(adminLogin.includes("Administratora parole"));
+    assert.ok(!adminLogin.includes("Пароль администратора"));
+    const sitemap = await (await fetch(`${origin}/sitemap.xml`)).text();
+    assert.ok(sitemap.includes("/en/articles/iepazisti-skinstinct"));
+    assert.ok(sitemap.includes('hreflang="en"'));
+    assert.ok(!sitemap.includes("/account"));
     for (const route of [
       "/robots.txt",
       "/sitemap.xml",
       "/llms.txt",
       "/privacy",
       "/ru/privacy",
+      "/en/privacy",
+      "/en/articles",
+      "/en/articles/iepazisti-skinstinct",
+      "/en/account",
       "/images/valerija.webp",
     ])
       assert.equal((await fetch(`${origin}${route}`)).status, 200, route);
@@ -152,7 +173,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       serviceId: "consultation",
       date,
       time,
-      lang: "lv",
+      lang: "en",
     };
     assert.equal((await post("/api/bookings", { ...data, phone: "" })).status, 400);
     const responses = await Promise.all([post("/api/bookings", data), post("/api/bookings", data)]);
@@ -161,6 +182,8 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     customer = cookieOf(winner, "sk_client");
     assert.ok(customer);
     const result = await winner.json();
+    assert.equal(result.booking.lang, "en");
+    assert.equal(result.booking.service_title, "Getting to know your skin");
     code = result.code;
     bookingId = result.booking.id;
     assert.ok(!("code_hash" in result.booking));
@@ -215,13 +238,14 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       assert.ok(!JSON.stringify(state).includes(passwordHash));
       const edited = {
         ...state.settings,
-        heroTitle: { lv: "QA content update", ru: "QA translation" },
+        heroTitle: { lv: "QA content update", en: "QA English update", ru: "QA translation" },
       };
       assert.equal(
         (await post("/api/admin/content", { type: "settings", data: edited }, admin)).status,
         200,
       );
       assert.ok((await (await fetch(origin)).text()).includes("QA content update"));
+      assert.ok((await (await fetch(`${origin}/en`)).text()).includes("QA English update"));
       assert.equal(
         (await post("/api/admin/content", { type: "settings", data: state.settings }, admin))
           .status,
@@ -268,8 +292,12 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         ...state.articles[0],
         id: "qa-article",
         slug: "qa-article",
-        title: { lv: "QA article", ru: "QA статья" },
-        body: { lv: "## Heading\nA safe paragraph.", ru: "Текст" },
+        title: { lv: "QA article", en: "QA English article", ru: "QA статья" },
+        body: {
+          lv: "## Heading\nA safe paragraph.",
+          en: "## English heading\nEnglish article body.",
+          ru: "Текст",
+        },
         published: false,
       };
       assert.equal(
@@ -283,6 +311,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         200,
       );
       assert.equal((await fetch(`${origin}/articles/qa-article`)).status, 404);
+      assert.equal((await fetch(`${origin}/en/articles/qa-article`)).status, 404);
       assert.equal(
         (
           await post(
@@ -294,6 +323,11 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         200,
       );
       assert.equal((await fetch(`${origin}/articles/qa-article`)).status, 200);
+      assert.ok(
+        (await (await fetch(`${origin}/en/articles/qa-article`)).text()).includes(
+          "English article body.",
+        ),
+      );
       assert.equal(
         (await post("/api/admin/content", { type: "articles", data: state.articles }, admin))
           .status,
@@ -339,6 +373,33 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     assert.equal(state.bookings[0].status, "cancelled");
     assert.equal((await post("/api/auth/logout", {}, admin)).status, 200);
     assert.equal((await fetch(`${origin}/api/admin`, { headers: { Cookie: admin } })).status, 401);
+  });
+  await t.test("older bilingual content gains English without losing owner edits", async () => {
+    const connection = new Database(path.join(directory, "skinstinct.db"));
+    for (const key of ["settings", "services", "articles"]) {
+      const row = connection.prepare("SELECT value FROM content WHERE key=?").get(key) as {
+        value: string;
+      };
+      const saved = JSON.parse(row.value, (name, value) => (name === "en" ? undefined : value));
+      if (key === "settings") {
+        saved.heroTitle.lv = "Owner's Latvian headline";
+        saved.heroTitle.ru = "Owner's Russian headline";
+      }
+      connection.prepare("UPDATE content SET value=? WHERE key=?").run(JSON.stringify(saved), key);
+    }
+    connection.close();
+    assert.ok((await (await fetch(origin)).text()).includes("Owner&#x27;s Latvian headline"));
+    assert.ok(
+      (await (await fetch(`${origin}/ru`)).text()).includes("Owner&#x27;s Russian headline"),
+    );
+    const english = await (await fetch(`${origin}/en`)).text();
+    assert.ok(english.includes("Your skin."));
+    assert.ok(english.includes("Getting to know your skin"));
+    assert.ok(
+      (await (await fetch(`${origin}/en/articles/iepazisti-skinstinct`)).text()).includes(
+        "A place to be heard",
+      ),
+    );
   });
 });
 test("Europe/Riga calendar conversion respects daylight saving changes", () => {

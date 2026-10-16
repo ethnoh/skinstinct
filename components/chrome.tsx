@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ThemeToggle } from "./theme-toggle";
+import { DocumentLanguage } from "./document-language";
 import {
   ArrowUpRight,
   CalendarDays,
@@ -13,29 +16,39 @@ import {
   X,
 } from "lucide-react";
 import { basePath } from "@/lib/client";
+import { tr } from "@/lib/i18n";
 import type { Lang, SiteSettings } from "@/lib/types";
 
 export function Brand({
   footer = false,
   logo = "/images/skinstinct-logo.webp",
+  lang = "lv",
 }: {
   footer?: boolean;
   logo?: string;
+  lang?: Lang;
 }) {
   return (
     <span className={`brand ${footer ? "brand-footer" : ""}`}>
       <img src={logo} width={68} height={68} alt="SKINSTINCT" />
       <span>
         <strong>SKINSTINCT</strong>
-        <small>KOSMETOLOĢIJAS STUDIJA</small>
+        <small>
+          {lang === "en"
+            ? "SKINCARE STUDIO"
+            : lang === "ru"
+              ? "СТУДИЯ КОСМЕТОЛОГИИ"
+              : "KOSMETOLOĢIJAS STUDIJA"}
+        </small>
       </span>
     </span>
   );
 }
 export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const localPath = pathname.replace(/^\/(en|ru)(?=\/|$)/, "");
   const base = basePath(lang);
-  const ru = lang === "ru";
   useEffect(() => {
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
@@ -45,53 +58,66 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
   }, []);
   return (
     <>
+      <DocumentLanguage lang={lang} />
       <div className="announcement">
-        <span>Rūpes, kas paliek.</span>
+        <span>
+          {lang === "en"
+            ? "Care that stays with you."
+            : lang === "ru"
+              ? "Забота, которая остаётся."
+              : "Rūpes, kas paliek."}
+        </span>
         <span>
           <span className="tiny-dot" />
-          {settings.city}, Latvija
+          {settings.city}, {lang === "en" ? "Latvia" : lang === "ru" ? "Латвия" : "Latvija"}
         </span>
       </div>
       <header className="site-header">
         <div className="container header-inner">
           <Link href={base || "/"} aria-label="SKINSTINCT" onClick={() => setOpen(false)}>
-            <Brand logo={settings.logoImage} />
+            <Brand logo={settings.logoImage} lang={lang} />
           </Link>
           <nav
             className="desktop-nav"
-            aria-label={ru ? "Основная навигация" : "Galvenā navigācija"}
+            aria-label={tr(lang, "Galvenā navigācija", "Основная навигация")}
           >
-            <Link href={`${base}/#pieeja`}>{ru ? "Наш подход" : "Mūsu pieeja"}</Link>
-            <Link href={`${base}/#pakalpojumi`}>{ru ? "Услуги" : "Pakalpojumi"}</Link>
-            <Link href={`${base}/#par-mani`}>{ru ? "Обо мне" : "Par mani"}</Link>
-            <Link href={`${base}/articles`}>{ru ? "Журнал" : "Dienasgrāmata"}</Link>
+            <Link href={`${base}/#pieeja`}>{tr(lang, "Mūsu pieeja", "Наш подход")}</Link>
+            <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
+            <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
+            <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>
           </nav>
           <div className="header-actions">
-            <div className="language-switch" aria-label={ru ? "Язык" : "Valoda"}>
-              <Link href="/" lang="lv" aria-current={!ru ? "page" : undefined}>
-                LV
-              </Link>
-              <span>/</span>
-              <Link href="/ru" lang="ru" aria-current={ru ? "page" : undefined}>
-                RU
-              </Link>
+            <div className="language-switch" aria-label={tr(lang, "Valoda", "Язык")}>
+              {(["lv", "en", "ru"] as const).map((language) => (
+                <Link
+                  key={language}
+                  href={`${basePath(language)}${localPath || "/"}`}
+                  hrefLang={language}
+                  lang={language}
+                  aria-current={lang === language ? "page" : undefined}
+                  aria-label={{ lv: "Latviešu", en: "English", ru: "Русский" }[language]}
+                >
+                  {language.toUpperCase()}
+                </Link>
+              ))}
             </div>
+            <ThemeToggle lang={lang} />
             <Link
               className="account-link"
               href={`${base}/account`}
-              aria-label={ru ? "Мои записи" : "Mani pieraksti"}
+              aria-label={tr(lang, "Mani pieraksti", "Мои записи")}
             >
               <UserRound size={19} />
             </Link>
             <Link href={`${base}/#pieraksts`} className="button button-small header-book">
-              {ru ? "Записаться" : "Pieteikt vizīti"}
+              {tr(lang, "Pieteikt vizīti", "Записаться")}
               <ArrowUpRight size={16} />
             </Link>
             <button
               className="icon-button menu-toggle"
               aria-expanded={open}
               aria-controls="mobile-menu"
-              aria-label={ru ? "Меню" : "Izvēlne"}
+              aria-label={tr(lang, "Izvēlne", "Меню")}
               onClick={() => setOpen(!open)}
             >
               {open ? <X /> : <Menu />}
@@ -101,14 +127,14 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <nav
               id="mobile-menu"
               className="mobile-menu"
-              aria-label={ru ? "Мобильное меню" : "Mobilā izvēlne"}
+              aria-label={tr(lang, "Mobilā izvēlne", "Мобильное меню")}
             >
               {[
-                ["pieeja", ru ? "Наш подход" : "Mūsu pieeja"],
-                ["pakalpojumi", ru ? "Услуги" : "Pakalpojumi"],
-                ["par-mani", ru ? "Обо мне" : "Par mani"],
-                ["pieraksts", ru ? "Записаться" : "Pieteikt vizīti"],
-                ["kontakti", ru ? "Контакты" : "Kontakti"],
+                ["pieeja", tr(lang, "Mūsu pieeja", "Наш подход")],
+                ["pakalpojumi", tr(lang, "Pakalpojumi", "Услуги")],
+                ["par-mani", tr(lang, "Par mani", "Обо мне")],
+                ["pieraksts", tr(lang, "Pieteikt vizīti", "Записаться")],
+                ["kontakti", tr(lang, "Kontakti", "Контакты")],
               ].map(([id, text]) => (
                 <Link key={id} href={`${base}/#${id}`} onClick={() => setOpen(false)}>
                   {text}
@@ -116,10 +142,10 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
                 </Link>
               ))}
               <Link href={`${base}/articles`} onClick={() => setOpen(false)}>
-                {ru ? "Журнал" : "Dienasgrāmata"}
+                {tr(lang, "Dienasgrāmata", "Журнал")}
               </Link>
               <Link href={`${base}/account`} onClick={() => setOpen(false)}>
-                {ru ? "Мои записи" : "Mani pieraksti"}
+                {tr(lang, "Mani pieraksti", "Мои записи")}
               </Link>
             </nav>
           )}
@@ -129,7 +155,6 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
   );
 }
 export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings }) {
-  const ru = lang === "ru";
   const base = basePath(lang);
   return (
     <footer className="site-footer">
@@ -137,18 +162,20 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
         <div className="footer-top">
           <div>
             <Link href={base || "/"}>
-              <Brand footer logo={settings.logoImage} />
+              <Brand footer logo={settings.logoImage} lang={lang} />
             </Link>
             <p>{settings.copy.footerDescription[lang]}</p>
           </div>
           <div className="footer-links">
-            <Link href={`${base}/#pakalpojumi`}>{ru ? "Услуги" : "Pakalpojumi"}</Link>
-            <Link href={`${base}/#par-mani`}>{ru ? "Обо мне" : "Par mani"}</Link>
-            <Link href={`${base}/articles`}>{ru ? "Журнал" : "Dienasgrāmata"}</Link>
-            <Link href={`${base}/account`}>{ru ? "Мои записи" : "Mani pieraksti"}</Link>
+            <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
+            <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
+            <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>
+            <Link href={`${base}/account`}>{tr(lang, "Mani pieraksti", "Мои записи")}</Link>
           </div>
           <div className="footer-contact">
-            <span className="eyebrow">{settings.city}, LATVIJA</span>
+            <span className="eyebrow">
+              {settings.city}, {lang === "en" ? "LATVIA" : lang === "ru" ? "ЛАТВИЯ" : "LATVIJA"}
+            </span>
             <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
               <Instagram size={18} /> @vr_skinstinct <ArrowUpRight size={16} />
             </a>
@@ -156,17 +183,25 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
               <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
             )}
             {settings.email && <a href={`mailto:${settings.email}`}>{settings.email}</a>}
-            <span className="footer-signature">Rūpes, kas paliek.</span>
+            <span className="footer-signature">
+              {lang === "en"
+                ? "Care that stays with you."
+                : lang === "ru"
+                  ? "Забота, которая остаётся."
+                  : "Rūpes, kas paliek."}
+            </span>
           </div>
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} SKINSTINCT</span>
           <div>
-            <Link href={`${base}/privacy`}>{ru ? "Конфиденциальность" : "Privātuma politika"}</Link>
+            <Link href={`${base}/privacy`}>
+              {tr(lang, "Privātuma politika", "Конфиденциальность")}
+            </Link>
             <button onClick={() => window.dispatchEvent(new Event("cookie-settings"))}>
-              {ru ? "Настройки cookies" : "Sīkdatņu iestatījumi"}
+              {tr(lang, "Sīkdatņu iestatījumi", "Настройки cookies")}
             </button>
-            <Link href="/admin">{ru ? "Администратор" : "Administrācija"}</Link>
+            <Link href="/admin">{tr(lang, "Administrācija", "Администратор")}</Link>
           </div>
           <a href="https://b41.ai" target="_blank" rel="noopener noreferrer" className="made-by">
             Made with care by <strong>B41</strong>
@@ -180,7 +215,6 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
 export function CookieNotice({ lang }: { lang: Lang }) {
   const [visible, setVisible] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
-  const ru = lang === "ru";
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("skinstinct-privacy") || "null");
@@ -205,23 +239,25 @@ export function CookieNotice({ lang }: { lang: Lang }) {
   return (
     <>
       {visible && (
-        <aside className="cookie-notice" aria-label={ru ? "Файлы cookies" : "Sīkdatnes"}>
+        <aside className="cookie-notice" aria-label={tr(lang, "Sīkdatnes", "Файлы cookies")}>
           <span className="cookie-leaf">
             <Leaf size={24} />
           </span>
           <div>
-            <strong>{ru ? "Забота и о твоих данных" : "Ar rūpēm arī par taviem datiem"}</strong>
+            <strong>{tr(lang, "Ar rūpēm arī par taviem datiem", "Забота и о твоих данных")}</strong>
             <p>
-              {ru
-                ? "Используем только необходимые файлы cookies для записи и входа. Без рекламных трекеров."
-                : "Izmantojam tikai pierakstam un ieejai nepieciešamās sīkdatnes. Bez reklāmas izsekotājiem."}
+              {tr(
+                lang,
+                "Izmantojam tikai pierakstam un ieejai nepieciešamās sīkdatnes. Bez reklāmas izsekotājiem.",
+                "Используем только необходимые файлы cookies для записи и входа. Без рекламных трекеров.",
+              )}
             </p>
             <div className="cookie-actions">
               <button className="text-button" onClick={() => dialog.current?.showModal()}>
-                {ru ? "Подробнее" : "Uzzināt vairāk"}
+                {tr(lang, "Uzzināt vairāk", "Подробнее")}
               </button>
               <button className="button button-small" onClick={save}>
-                {ru ? "Понятно" : "Sapratu"}
+                {tr(lang, "Sapratu", "Понятно")}
                 <span aria-hidden>✓</span>
               </button>
             </div>
@@ -231,36 +267,40 @@ export function CookieNotice({ lang }: { lang: Lang }) {
       <dialog ref={dialog} className="cookie-dialog">
         <button
           className="icon-button dialog-close"
-          aria-label={ru ? "Закрыть" : "Aizvērt"}
+          aria-label={tr(lang, "Aizvērt", "Закрыть")}
           onClick={() => dialog.current?.close()}
         >
           <X />
         </button>
         <ShieldCheck size={30} />
-        <h2>{ru ? "Твои настройки приватности" : "Tavi privātuma iestatījumi"}</h2>
+        <h2>{tr(lang, "Tavi privātuma iestatījumi", "Твои настройки приватности")}</h2>
         <p>
-          {ru
-            ? "Необходимые cookies сохраняют безопасный доступ к твоим записям и вход администратора. Их срок: до 12 месяцев для записи и 12 часов для администратора."
-            : "Nepieciešamās sīkdatnes nodrošina drošu piekļuvi taviem pierakstiem un administratora ieejai. Glabāšanas laiks: līdz 12 mēnešiem pierakstiem un 12 stundas administratoram."}
+          {tr(
+            lang,
+            "Nepieciešamās sīkdatnes nodrošina drošu piekļuvi taviem pierakstiem un administratora ieejai. Glabāšanas laiks: līdz 12 mēnešiem pierakstiem un 12 stundas administratoram.",
+            "Необходимые cookies сохраняют безопасный доступ к твоим записям и вход администратора. Их срок: до 12 месяцев для записи и 12 часов для администратора.",
+          )}
         </p>
         <div className="cookie-category">
-          <span>{ru ? "Необходимые" : "Nepieciešamās"}</span>
-          <strong>{ru ? "Всегда включены" : "Vienmēr aktīvas"}</strong>
+          <span>{tr(lang, "Nepieciešamās", "Необходимые")}</span>
+          <strong>{tr(lang, "Vienmēr aktīvas", "Всегда включены")}</strong>
         </div>
         <div className="cookie-category">
-          <span>{ru ? "Аналитика и реклама" : "Analītika un reklāma"}</span>
-          <strong>{ru ? "Не используются" : "Netiek izmantotas"}</strong>
+          <span>{tr(lang, "Analītika un reklāma", "Аналитика и реклама")}</span>
+          <strong>{tr(lang, "Netiek izmantotas", "Не используются")}</strong>
         </div>
         <p>
-          {ru
-            ? "Выбор сохраняется в браузере на 12 месяцев. Google Calendar пока не подключён. Шрифты и фотографии загружаются с нашего сайта."
-            : "Izvēle tiek glabāta pārlūkā 12 mēnešus. Google Calendar šobrīd nav pieslēgts. Fonti un fotogrāfijas tiek ielādēti no mūsu vietnes."}
+          {tr(
+            lang,
+            "Izvēle tiek glabāta pārlūkā 12 mēnešus. Google Calendar šobrīd nav pieslēgts. Fonti un fotogrāfijas tiek ielādēti no mūsu vietnes.",
+            "Выбор сохраняется в браузере на 12 месяцев. Google Calendar пока не подключён. Шрифты и фотографии загружаются с нашего сайта.",
+          )}
         </p>
         <Link href={`${basePath(lang)}/privacy`}>
-          {ru ? "Политика конфиденциальности" : "Privātuma politika"}
+          {tr(lang, "Privātuma politika", "Политика конфиденциальности")}
         </Link>
         <button className="button" onClick={save}>
-          {ru ? "Сохранить и закрыть" : "Saglabāt un aizvērt"}
+          {tr(lang, "Saglabāt un aizvērt", "Сохранить и закрыть")}
         </button>
       </dialog>
     </>
@@ -270,7 +310,7 @@ export function MobileBooking({ lang }: { lang: Lang }) {
   return (
     <Link className="mobile-booking" href={`${basePath(lang)}/#pieraksts`}>
       <CalendarDays size={19} />
-      {lang === "lv" ? "Pieteikt vizīti" : "Записаться на визит"}
+      {tr(lang, "Pieteikt vizīti", "Записаться на визит")}
       <ArrowUpRight size={18} />
     </Link>
   );
