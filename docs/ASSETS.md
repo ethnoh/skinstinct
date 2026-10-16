@@ -4,7 +4,8 @@ All generated images used the built-in image generation tool. Optimized copies l
 
 | Asset | Use |
 | --- | --- |
-| public/images/valerija.webp | Reference-based portrait of the studio owner. |
+| public/images/valerija-v2.webp | Final portrait refined against the additional detailed facial reference. |
+| public/images/valerija.webp | Retained first portrait variant. |
 | public/images/hero.webp | Illustrative skincare editorial image, not an actual client result. |
 | public/images/treatment.webp | Illustrative skincare still life. |
 | public/images/ritual.webp | Alternate crop of the generated still life. |
@@ -14,6 +15,8 @@ All generated images used the built-in image generation tool. Optimized copies l
 ## Portrait prompt
 
 Identity-preserving professional cosmetologist portrait for SKINSTINCT. Use the supplied black-hat portrait as primary facial identity reference and the white-tunic portrait as clothing/profession reference. Same woman, age and recognizable facial features, brunette softly waved shoulder-length hair, white short-sleeve cosmetologist tunic, small glass cosmetic bowl and fan brush held naturally at waist height. Vertical half-body composition, warm off-white plaster backdrop, soft natural window light, subtle botanical shadows, muted sage/olive and dusty peach. Real skin texture and polished European editorial photography. No hat, gloves, necklace, text, logo or watermark.
+
+Final refinement: preserve that composition, clothes, hands, bowl, brush and studio. Use the additional high-detail local facial photograph as the primary identity reference. Preserve the actual blue-grey eyes, facial proportions, eyebrow and lip shape, age, natural chestnut hair and facial marks. No de-aging or generic beauty-face substitution. The original local face photograph remains ignored and is not published.
 
 ## Hero prompt
 

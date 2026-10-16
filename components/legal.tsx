@@ -2,28 +2,108 @@ import Link from "next/link";
 import type { Lang, SiteSettings } from "@/lib/types";
 import { basePath } from "@/lib/client";
 
-export function Privacy({lang,settings:s}:{lang:Lang;settings:SiteSettings}) {
-  const ru=lang==="ru";
-  const sections=ru?[
-    ["Кто обрабатывает данные",`${s.legalName || "SKINSTINCT"}, ${s.city}, Латвия.${s.legalRegistration?` Регистрационный номер: ${s.legalRegistration}.`:""}${s.legalAddress?` Юридический адрес: ${s.legalAddress}.`:""} По вопросам данных можно обратиться ${s.privacyEmail||s.email?`по почте ${s.privacyEmail||s.email}`:"в официальный Instagram @vr_skinstinct"}. Медицинский специалист: ${s.specialistName}, регистрационный номер ${s.registration}.`],
-    ["Какие данные и зачем", "При записи или обращении мы сохраняем имя, телефон и/или электронную почту, выбранную услугу, дату и время, статус записи и текст сообщения, если ты его добавишь. Эти данные нужны, чтобы обработать запрос, организовать визит и связаться с тобой. Не отправляй через сайт медицинские документы и сведения о здоровье."],
-    ["Основание обработки", "Обрабатываем данные для действий по твоему запросу до оказания услуги и организации записи (статья 6(1)(b) GDPR). Необходимые средства защиты сайта и ограничения частоты запросов применяются на основе законного интереса к безопасности (статья 6(1)(f)). Отдельного согласия на рекламу мы не запрашиваем и не используем эти формы для рекламных рассылок."],
-    ["Срок хранения", "Данные записи хранятся до 12 месяцев после даты визита. Обращения через контактную форму хранятся до 6 месяцев. После этого они автоматически удаляются при очередной обработке запроса сайтом. Администраторские сеансы действуют 12 часов. Для защиты от злоупотреблений временный хеш сетевого адреса хранится до 30 минут. Данные, требуемые по закону для оказания услуг или учёта, при необходимости оформляются отдельно от этого сайта."],
-    ["Кому доступны данные", "К записям и сообщениям имеет доступ уполномоченный администратор SKINSTINCT. Технический хостинг предоставляет Railway. Изображения и шрифты размещены на самом сайте. Google Calendar, автоматическая отправка почты и SMS пока не подключены. Мы не передаём данные рекламным платформам. При добавлении других обработчиков эта политика будет обновлена."],
-    ["Хостинг и передача данных", "Сайт использует инфраструктуру Railway. Техническая обработка и поддержка хостинга могут затрагивать поставщиков вне ЕЭЗ и регулируются договорными условиями провайдера и применимыми механизмами защиты данных. При переходе по внешним ссылкам на Instagram или B41 действуют политики соответствующих сайтов."],
-    ["Твои права", "Ты можешь запросить доступ, исправление, удаление, ограничение обработки или перенос своих данных, а также возразить против обработки на основании законного интереса. Напиши нам по контакту, указанному выше. Для защиты твоей приватности мы можем попросить подтвердить, что запись принадлежит тебе. Можно подать жалобу в Datu valsts inspekcija (dvi.gov.lv). Автоматических решений, имеющих юридические последствия, и профилирования на сайте нет."],
-    ["Cookies и локальное хранилище", "Cookie sk_client обеспечивает доступ к твоим записям в этом браузере и действует до 12 месяцев. Cookie sk_admin используется только для входа администратора и действует 12 часов. Оба защищены HttpOnly и SameSite, а при HTTPS также Secure. Выбор в уведомлении о cookies хранится локально в браузере 12 месяцев. Аналитические и рекламные cookies не используются. Удаление cookies уберёт доступ к записям в этом браузере; восстановить отдельную запись можно по её коду и своему контакту."],
-    ["Изменения и связь", "Актуальная версия политики опубликована на этой странице. Если изменятся способы обработки, интеграции или контакты, информация будет обновлена. Для вопросов о записи или данных воспользуйся официальным Instagram студии или указанным выше контактом."],
-  ]:[
-    ["Kas apstrādā datus",`${s.legalName || "SKINSTINCT"}, ${s.city}, Latvija.${s.legalRegistration?` Reģistrācijas numurs: ${s.legalRegistration}.`:""}${s.legalAddress?` Juridiskā adrese: ${s.legalAddress}.`:""} Par datiem sazinies ${s.privacyEmail||s.email?`pa e-pastu ${s.privacyEmail||s.email}`:"oficiālajā Instagram profilā @vr_skinstinct"}. Speciāliste: ${s.specialistName}, ārstniecības personas reģistrācijas numurs ${s.registration}.`],
-    ["Kādus datus un kāpēc", "Piesakoties vizītei vai nosūtot ziņu, saglabājam vārdu, tālruni un/vai e-pastu, izvēlēto pakalpojumu, datumu, laiku, pieraksta statusu un ziņas tekstu, ja to pievieno. Dati nepieciešami, lai apstrādātu tavu pieprasījumu, organizētu vizīti un sazinātos ar tevi. Nesūti medicīniskos dokumentus vai sensitīvas ziņas par veselību."],
-    ["Apstrādes pamats", "Datus apstrādājam, lai pēc tava pieprasījuma veiktu darbības pirms pakalpojuma sniegšanas un organizētu pierakstu (VDAR 6. panta 1. punkta b) apakšpunkts). Vietnes drošībai un pieprasījumu biežuma ierobežošanai izmantojam leģitīmo interesi par drošu vietnes darbību (6. panta 1. punkta f) apakšpunkts). Šīs formas netiek izmantotas reklāmas sūtījumiem."],
-    ["Glabāšanas ilgums", "Pieraksta dati tiek glabāti līdz 12 mēnešiem pēc vizītes datuma. Kontaktformas ziņas glabājam līdz 6 mēnešiem. Pēc šī termiņa tie automātiski tiek dzēsti nākamajā vietnes pieprasījuma apstrādē. Administratora sesijas ilgst 12 stundas. Ļaunprātīgas lietošanas novēršanai tīkla adreses īslaicīgs hešs tiek glabāts līdz 30 minūtēm. Pakalpojuma sniegšanai vai uzskaitei juridiski nepieciešamie dati vajadzības gadījumā tiek noformēti atsevišķi no šīs vietnes."],
-    ["Kam dati pieejami", "Pierakstiem un ziņām piekļūst pilnvarots SKINSTINCT administrators. Tehnisko mitināšanu nodrošina Railway. Attēli un fonti atrodas šajā vietnē. Google Calendar, automātiska e-pastu un SMS sūtīšana šobrīd nav pieslēgti. Datus nenododam reklāmas platformām. Pievienojot citus apstrādātājus, politiku atjaunināsim."],
-    ["Mitināšana un datu nosūtīšana", "Vietne izmanto Railway infrastruktūru. Tehniskā apstrāde un mitināšanas atbalsts var iesaistīt piegādātājus ārpus EEZ, un uz to attiecas pakalpojumu sniedzēja līguma noteikumi un piemērojamie datu aizsardzības mehānismi. Atverot ārējās saites uz Instagram vai B41, piemērojamas attiecīgo vietņu politikas."],
-    ["Tavas tiesības", "Vari pieprasīt piekļuvi saviem datiem, to labošanu, dzēšanu, apstrādes ierobežošanu vai pārnesamību un iebilst pret apstrādi, kas balstīta leģitīmajās interesēs. Raksti, izmantojot iepriekš norādīto kontaktu. Privātuma aizsardzībai varam lūgt apliecināt pieraksta piederību. Vari iesniegt sūdzību Datu valsts inspekcijā (dvi.gov.lv). Vietnē nav profilēšanas vai automatizētu lēmumu ar juridiskām sekām."],
-    ["Sīkdatnes un lokālā glabāšana", "Sīkdatne sk_client nodrošina piekļuvi taviem pierakstiem šajā pārlūkā un ir derīga līdz 12 mēnešiem. Sīkdatne sk_admin paredzēta tikai administratora ieejai un ilgst 12 stundas. Abas ir aizsargātas ar HttpOnly un SameSite, un HTTPS savienojumā arī Secure. Sīkdatņu paziņojuma izvēle tiek glabāta pārlūkā 12 mēnešus. Analītikas un reklāmas sīkdatnes neizmantojam. Dzēšot sīkdatnes, pazūd piekļuve pierakstiem šajā pārlūkā; atsevišķu pierakstu var atrast ar kodu un savu kontaktu."],
-    ["Izmaiņas un saziņa", "Aktuālā politikas versija atrodas šajā lapā. Mainoties apstrādei, integrācijām vai kontaktiem, informāciju atjaunināsim. Jautājumos par pierakstu vai datiem izmanto studijas oficiālo Instagram vai iepriekš norādīto kontaktu."],
-  ];
-  return <main className="container inner-page legal-page" id="main-content"><span className="eyebrow">SKINSTINCT / {ru?"ТВОИ ДАННЫЕ":"TAVI DATI"}</span><h1>{ru?"Политика конфиденциальности":"Privātuma politika"}</h1><p className="legal-date">{ru?"Обновлено":"Atjaunināta"}: 17.10.2026</p>{sections.map(([title,body],i)=><section key={title}><h2>{i+1}. {title}</h2><p>{body}</p></section>)}<p><a href={s.instagram} target="_blank" rel="noopener noreferrer">Instagram @vr_skinstinct</a> · <a href="https://www.dvi.gov.lv" target="_blank" rel="noopener noreferrer">Datu valsts inspekcija</a></p><Link href={basePath(lang)||"/"}>{ru?"Вернуться на сайт":"Atgriezties vietnē"}</Link></main>;
+export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSettings }) {
+  const ru = lang === "ru";
+  const sections = ru
+    ? [
+        [
+          "Кто обрабатывает данные",
+          `${s.legalName || "SKINSTINCT"}, ${s.city}, Латвия.${s.legalRegistration ? ` Регистрационный номер: ${s.legalRegistration}.` : ""}${s.legalAddress ? ` Юридический адрес: ${s.legalAddress}.` : ""} По вопросам данных можно обратиться ${s.privacyEmail || s.email ? `по почте ${s.privacyEmail || s.email}` : "в официальный Instagram @vr_skinstinct"}. Медицинский специалист: ${s.specialistName}, регистрационный номер ${s.registration}.`,
+        ],
+        [
+          "Какие данные и зачем",
+          "При записи или обращении мы сохраняем имя, телефон и/или электронную почту, выбранную услугу, дату и время, статус записи и текст сообщения, если ты его добавишь. Эти данные нужны, чтобы обработать запрос, организовать визит и связаться с тобой. Не отправляй через сайт медицинские документы и сведения о здоровье.",
+        ],
+        [
+          "Основание обработки",
+          "Обрабатываем данные для действий по твоему запросу до оказания услуги и организации записи (статья 6(1)(b) GDPR). Необходимые средства защиты сайта и ограничения частоты запросов применяются на основе законного интереса к безопасности (статья 6(1)(f)). Отдельного согласия на рекламу мы не запрашиваем и не используем эти формы для рекламных рассылок.",
+        ],
+        [
+          "Срок хранения",
+          "Данные записи хранятся до 12 месяцев после даты визита. Обращения через контактную форму хранятся до 6 месяцев. После этого они автоматически удаляются при очередной обработке запроса сайтом. Администраторские сеансы действуют 12 часов. Для защиты от злоупотреблений временный хеш сетевого адреса хранится до 30 минут. Данные, требуемые по закону для оказания услуг или учёта, при необходимости оформляются отдельно от этого сайта.",
+        ],
+        [
+          "Кому доступны данные",
+          "К записям и сообщениям имеет доступ уполномоченный администратор SKINSTINCT. Технический хостинг предоставляет Railway. Изображения и шрифты размещены на самом сайте. Google Calendar, автоматическая отправка почты и SMS пока не подключены. Мы не передаём данные рекламным платформам. При добавлении других обработчиков эта политика будет обновлена.",
+        ],
+        [
+          "Хостинг и передача данных",
+          "Сайт использует инфраструктуру Railway. Техническая обработка и поддержка хостинга могут затрагивать поставщиков вне ЕЭЗ и регулируются договорными условиями провайдера и применимыми механизмами защиты данных. При переходе по внешним ссылкам на Instagram или B41 действуют политики соответствующих сайтов.",
+        ],
+        [
+          "Твои права",
+          "Ты можешь запросить доступ, исправление, удаление, ограничение обработки или перенос своих данных, а также возразить против обработки на основании законного интереса. Напиши нам по контакту, указанному выше. Для защиты твоей приватности мы можем попросить подтвердить, что запись принадлежит тебе. Можно подать жалобу в Datu valsts inspekcija (dvi.gov.lv). Автоматических решений, имеющих юридические последствия, и профилирования на сайте нет.",
+        ],
+        [
+          "Cookies и локальное хранилище",
+          "Cookie sk_client обеспечивает доступ к твоим записям в этом браузере и действует до 12 месяцев. Cookie sk_admin используется только для входа администратора и действует 12 часов. Оба защищены HttpOnly и SameSite, а при HTTPS также Secure. Выбор в уведомлении о cookies хранится локально в браузере 12 месяцев. Аналитические и рекламные cookies не используются. Удаление cookies уберёт доступ к записям в этом браузере; восстановить отдельную запись можно по её коду и своему контакту.",
+        ],
+        [
+          "Изменения и связь",
+          "Актуальная версия политики опубликована на этой странице. Если изменятся способы обработки, интеграции или контакты, информация будет обновлена. Для вопросов о записи или данных воспользуйся официальным Instagram студии или указанным выше контактом.",
+        ],
+      ]
+    : [
+        [
+          "Kas apstrādā datus",
+          `${s.legalName || "SKINSTINCT"}, ${s.city}, Latvija.${s.legalRegistration ? ` Reģistrācijas numurs: ${s.legalRegistration}.` : ""}${s.legalAddress ? ` Juridiskā adrese: ${s.legalAddress}.` : ""} Par datiem sazinies ${s.privacyEmail || s.email ? `pa e-pastu ${s.privacyEmail || s.email}` : "oficiālajā Instagram profilā @vr_skinstinct"}. Speciāliste: ${s.specialistName}, ārstniecības personas reģistrācijas numurs ${s.registration}.`,
+        ],
+        [
+          "Kādus datus un kāpēc",
+          "Piesakoties vizītei vai nosūtot ziņu, saglabājam vārdu, tālruni un/vai e-pastu, izvēlēto pakalpojumu, datumu, laiku, pieraksta statusu un ziņas tekstu, ja to pievieno. Dati nepieciešami, lai apstrādātu tavu pieprasījumu, organizētu vizīti un sazinātos ar tevi. Nesūti medicīniskos dokumentus vai sensitīvas ziņas par veselību.",
+        ],
+        [
+          "Apstrādes pamats",
+          "Datus apstrādājam, lai pēc tava pieprasījuma veiktu darbības pirms pakalpojuma sniegšanas un organizētu pierakstu (VDAR 6. panta 1. punkta b) apakšpunkts). Vietnes drošībai un pieprasījumu biežuma ierobežošanai izmantojam leģitīmo interesi par drošu vietnes darbību (6. panta 1. punkta f) apakšpunkts). Šīs formas netiek izmantotas reklāmas sūtījumiem.",
+        ],
+        [
+          "Glabāšanas ilgums",
+          "Pieraksta dati tiek glabāti līdz 12 mēnešiem pēc vizītes datuma. Kontaktformas ziņas glabājam līdz 6 mēnešiem. Pēc šī termiņa tie automātiski tiek dzēsti nākamajā vietnes pieprasījuma apstrādē. Administratora sesijas ilgst 12 stundas. Ļaunprātīgas lietošanas novēršanai tīkla adreses īslaicīgs hešs tiek glabāts līdz 30 minūtēm. Pakalpojuma sniegšanai vai uzskaitei juridiski nepieciešamie dati vajadzības gadījumā tiek noformēti atsevišķi no šīs vietnes.",
+        ],
+        [
+          "Kam dati pieejami",
+          "Pierakstiem un ziņām piekļūst pilnvarots SKINSTINCT administrators. Tehnisko mitināšanu nodrošina Railway. Attēli un fonti atrodas šajā vietnē. Google Calendar, automātiska e-pastu un SMS sūtīšana šobrīd nav pieslēgti. Datus nenododam reklāmas platformām. Pievienojot citus apstrādātājus, politiku atjaunināsim.",
+        ],
+        [
+          "Mitināšana un datu nosūtīšana",
+          "Vietne izmanto Railway infrastruktūru. Tehniskā apstrāde un mitināšanas atbalsts var iesaistīt piegādātājus ārpus EEZ, un uz to attiecas pakalpojumu sniedzēja līguma noteikumi un piemērojamie datu aizsardzības mehānismi. Atverot ārējās saites uz Instagram vai B41, piemērojamas attiecīgo vietņu politikas.",
+        ],
+        [
+          "Tavas tiesības",
+          "Vari pieprasīt piekļuvi saviem datiem, to labošanu, dzēšanu, apstrādes ierobežošanu vai pārnesamību un iebilst pret apstrādi, kas balstīta leģitīmajās interesēs. Raksti, izmantojot iepriekš norādīto kontaktu. Privātuma aizsardzībai varam lūgt apliecināt pieraksta piederību. Vari iesniegt sūdzību Datu valsts inspekcijā (dvi.gov.lv). Vietnē nav profilēšanas vai automatizētu lēmumu ar juridiskām sekām.",
+        ],
+        [
+          "Sīkdatnes un lokālā glabāšana",
+          "Sīkdatne sk_client nodrošina piekļuvi taviem pierakstiem šajā pārlūkā un ir derīga līdz 12 mēnešiem. Sīkdatne sk_admin paredzēta tikai administratora ieejai un ilgst 12 stundas. Abas ir aizsargātas ar HttpOnly un SameSite, un HTTPS savienojumā arī Secure. Sīkdatņu paziņojuma izvēle tiek glabāta pārlūkā 12 mēnešus. Analītikas un reklāmas sīkdatnes neizmantojam. Dzēšot sīkdatnes, pazūd piekļuve pierakstiem šajā pārlūkā; atsevišķu pierakstu var atrast ar kodu un savu kontaktu.",
+        ],
+        [
+          "Izmaiņas un saziņa",
+          "Aktuālā politikas versija atrodas šajā lapā. Mainoties apstrādei, integrācijām vai kontaktiem, informāciju atjaunināsim. Jautājumos par pierakstu vai datiem izmanto studijas oficiālo Instagram vai iepriekš norādīto kontaktu.",
+        ],
+      ];
+  return (
+    <main className="container inner-page legal-page" id="main-content">
+      <span className="eyebrow">SKINSTINCT / {ru ? "ТВОИ ДАННЫЕ" : "TAVI DATI"}</span>
+      <h1>{ru ? "Политика конфиденциальности" : "Privātuma politika"}</h1>
+      <p className="legal-date">{ru ? "Обновлено" : "Atjaunināta"}: 17.10.2026</p>
+      {sections.map(([title, body], i) => (
+        <section key={title}>
+          <h2>
+            {i + 1}. {title}
+          </h2>
+          <p>{body}</p>
+        </section>
+      ))}
+      <p>
+        <a href={s.instagram} target="_blank" rel="noopener noreferrer">
+          Instagram @vr_skinstinct
+        </a>{" "}
+        ·{" "}
+        <a href="https://www.dvi.gov.lv" target="_blank" rel="noopener noreferrer">
+          Datu valsts inspekcija
+        </a>
+      </p>
+      <Link href={basePath(lang) || "/"}>{ru ? "Вернуться на сайт" : "Atgriezties vietnē"}</Link>
+    </main>
+  );
 }

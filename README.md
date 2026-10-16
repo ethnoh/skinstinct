@@ -52,6 +52,8 @@ Deploy using normal GitHub commits and pushes. Do not use `railway up` for this 
 
 The app requires a persistent volume mounted at `/data`. `DATA_DIR=/data` is set in the image. The database and uploaded images must remain outside the container's ephemeral filesystem. Keep this SQLite deployment at one service replica; use Postgres/shared storage before horizontal scaling.
 
+The public preview is https://skinstinct-production.up.railway.app . The Railway domain targets port 8080. Docker build, health check and restart settings are configured on the existing service through `scripts/Configure-Hosting.ps1`; the app does not depend on the deprecated `railway.json` format.
+
 Runtime configuration:
 
 | Variable | Purpose |
