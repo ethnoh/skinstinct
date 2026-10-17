@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { initialArticles, initialCopy, initialServices, initialSettings } from "./content";
 import type { Article, Localized, Service, SiteSettings } from "./types";
+import { addressCase } from "./address-case";
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -92,7 +93,11 @@ export const getSettings = () => {
 // Extend older saved content without overwriting the owner's existing translations.
 function mergeLocalized(saved: Localized | undefined, defaults?: Localized): Localized {
   const lv = saved?.lv ?? defaults?.lv ?? "";
-  return { lv, en: saved?.en ?? defaults?.en ?? lv, ru: saved?.ru ?? defaults?.ru ?? lv };
+  return {
+    lv: addressCase(lv, "lv"),
+    en: saved?.en ?? defaults?.en ?? lv,
+    ru: addressCase(saved?.ru ?? defaults?.ru ?? lv, "ru"),
+  };
 }
 export const getServices = () =>
   getContent<Service[]>("services").map((service) => {

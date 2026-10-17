@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Clock3, LoaderCircle, Search } from "lucide-react";
 import { api, basePath, dateLabel, errorMessage } from "@/lib/client";
-import { tr } from "@/lib/i18n";
+import { addressCase, tr } from "@/lib/i18n";
 import type { Booking, Lang, SiteSettings } from "@/lib/types";
 
 type Visit = Booking & { canCancel: boolean };
@@ -127,7 +127,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                     </span>
                     <span className={`status-pill status-${b.status}`}>{statuses[b.status]}</span>
                   </div>
-                  <h2>{b.service_title}</h2>
+                  <h2>{addressCase(b.service_title, b.lang)}</h2>
                   <span className="visit-date">
                     <Clock3 size={15} />
                     {time(b.start_min)} - {time(b.end_min)} · Europe/Riga
@@ -204,8 +204,8 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           <p>
             {tr(
               lang,
-              "Ievadi pēc pieraksta saņemto kodu un tālruni vai e-pastu, ko norādīji piesakoties. Lai sargātu tavus datus, meklēšana tikai pēc kontakta nav pieejama.",
-              "Введи код, который появился после записи, и телефон или почту, указанные при оформлении. Поиск только по телефону или почте недоступен для защиты твоих данных.",
+              "Ievadi pēc pieraksta saņemto kodu un tālruni vai e-pastu, ko norādīji piesakoties. Lai sargātu Tavus datus, meklēšana tikai pēc kontakta nav pieejama.",
+              "Введи код, который появился после записи, и телефон или почту, указанные при оформлении. Поиск только по телефону или почте недоступен для защиты Твоих данных.",
             )}
           </p>
           <form onSubmit={search} className="form">

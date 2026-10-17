@@ -162,7 +162,7 @@ export default async function Page({ params }: Props) {
             SKINSTINCT / {tr(lang, "STUDIJAS DIENASGRĀMATA", "ЖУРНАЛ СТУДИИ")}
           </span>
           <h1>
-            {tr(lang, "Tuvāk tavai ", "Рядом с твоей ")}
+            {tr(lang, "Tuvāk Tavai ", "Рядом с Твоей ")}
             <em>{tr(lang, "ādai.", "кожей.")}</em>
           </h1>
           <p>

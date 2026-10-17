@@ -178,8 +178,8 @@ export function BookingWidget({
         <p>
           {tr(
             lang,
-            "Es sazināšos ar tevi, lai apstiprinātu vizīti. Izvēlētais laiks jau rezervēts.",
-            "Я свяжусь с тобой, чтобы подтвердить визит. Выбранное время уже зарезервировано.",
+            "Es sazināšos ar Tevi, lai apstiprinātu vizīti. Izvēlētais laiks jau rezervēts.",
+            "Я свяжусь с Тобой, чтобы подтвердить визит. Выбранное время уже зарезервировано.",
           )}
         </p>
         <div className="success-details">
@@ -441,7 +441,7 @@ export function BookingWidget({
           <>
             <div className="stage-heading">
               <span className="eyebrow">03 / {tr(lang, "GANDRĪZ GATAVS", "ПОЧТИ ГОТОВО")}</span>
-              <h3>{tr(lang, "Kā ar tevi sazināties?", "Как с тобой связаться?")}</h3>
+              <h3>{tr(lang, "Kā ar Tevi sazināties?", "Как с Тобой связаться?")}</h3>
             </div>
             <div className="booking-summary">
               <CalendarDays size={21} />
@@ -465,7 +465,7 @@ export function BookingWidget({
                   required
                   minLength={2}
                   maxLength={100}
-                  placeholder={tr(lang, "Kā tevi uzrunāt?", "Как к тебе обращаться?")}
+                  placeholder={tr(lang, "Kā Tevi uzrunāt?", "Как к Тебе обращаться?")}
                 />
               </label>
               <div className="form-row">

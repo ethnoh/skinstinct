@@ -13,11 +13,11 @@ export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSetti
         ],
         [
           "Какие данные и зачем",
-          "При записи или обращении мы сохраняем имя, телефон и/или электронную почту, выбранную услугу, дату и время, статус записи и текст сообщения, если ты его добавишь. Эти данные нужны, чтобы обработать запрос, организовать визит и связаться с тобой. Не отправляй через сайт медицинские документы и сведения о здоровье.",
+          "При записи или обращении мы сохраняем имя, телефон и/или электронную почту, выбранную услугу, дату и время, статус записи и текст сообщения, если Ты его добавишь. Эти данные нужны, чтобы обработать запрос, организовать визит и связаться с Тобой. Не отправляй через сайт медицинские документы и сведения о здоровье.",
         ],
         [
           "Основание обработки",
-          "Обрабатываем данные для действий по твоему запросу до оказания услуги и организации записи (статья 6(1)(b) GDPR). Необходимые средства защиты сайта и ограничения частоты запросов применяются на основе законного интереса к безопасности (статья 6(1)(f)). Отдельного согласия на рекламу мы не запрашиваем и не используем эти формы для рекламных рассылок.",
+          "Обрабатываем данные для действий по Твоему запросу до оказания услуги и организации записи (статья 6(1)(b) GDPR). Необходимые средства защиты сайта и ограничения частоты запросов применяются на основе законного интереса к безопасности (статья 6(1)(f)). Отдельного согласия на рекламу мы не запрашиваем и не используем эти формы для рекламных рассылок.",
         ],
         [
           "Срок хранения",
@@ -33,11 +33,11 @@ export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSetti
         ],
         [
           "Твои права",
-          "Ты можешь запросить доступ, исправление, удаление, ограничение обработки или перенос своих данных, а также возразить против обработки на основании законного интереса. Напиши нам по контакту, указанному выше. Для защиты твоей приватности мы можем попросить подтвердить, что запись принадлежит тебе. Можно подать жалобу в Datu valsts inspekcija (dvi.gov.lv). Автоматических решений, имеющих юридические последствия, и профилирования на сайте нет.",
+          "Ты можешь запросить доступ, исправление, удаление, ограничение обработки или перенос своих данных, а также возразить против обработки на основании законного интереса. Напиши нам по контакту, указанному выше. Для защиты Твоей приватности мы можем попросить подтвердить, что запись принадлежит Тебе. Можно подать жалобу в Datu valsts inspekcija (dvi.gov.lv). Автоматических решений, имеющих юридические последствия, и профилирования на сайте нет.",
         ],
         [
           "Cookies и локальное хранилище",
-          "Cookie sk_client обеспечивает доступ к твоим записям в этом браузере и действует до 12 месяцев. Cookie sk_admin используется только для входа администратора и действует 12 часов. Оба защищены HttpOnly и SameSite, а при HTTPS также Secure. Выбор в уведомлении о cookies хранится локально в браузере 12 месяцев. Выбор светлой или тёмной темы хранится в браузере до её изменения или очистки данных. Аналитические и рекламные cookies не используются. Удаление cookies уберёт доступ к записям в этом браузере; восстановить отдельную запись можно по её коду и своему контакту.",
+          "Cookie sk_client обеспечивает доступ к Твоим записям в этом браузере и действует до 12 месяцев. Cookie sk_admin используется только для входа администратора и действует 12 часов. Оба защищены HttpOnly и SameSite, а при HTTPS также Secure. Выбор в уведомлении о cookies хранится локально в браузере 12 месяцев. Выбор светлой или тёмной темы хранится в браузере до её изменения или очистки данных. Аналитические и рекламные cookies не используются. Удаление cookies уберёт доступ к записям в этом браузере; восстановить отдельную запись можно по её коду и своему контакту.",
         ],
         [
           "Изменения и связь",
@@ -90,11 +90,11 @@ export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSetti
           ],
           [
             "Kādus datus un kāpēc",
-            "Piesakoties vizītei vai nosūtot ziņu, saglabājam vārdu, tālruni un/vai e-pastu, izvēlēto pakalpojumu, datumu, laiku, pieraksta statusu un ziņas tekstu, ja to pievieno. Dati nepieciešami, lai apstrādātu tavu pieprasījumu, organizētu vizīti un sazinātos ar tevi. Nesūti medicīniskos dokumentus vai sensitīvas ziņas par veselību.",
+            "Piesakoties vizītei vai nosūtot ziņu, saglabājam vārdu, tālruni un/vai e-pastu, izvēlēto pakalpojumu, datumu, laiku, pieraksta statusu un ziņas tekstu, ja to pievieno. Dati nepieciešami, lai apstrādātu Tavu pieprasījumu, organizētu vizīti un sazinātos ar Tevi. Nesūti medicīniskos dokumentus vai sensitīvas ziņas par veselību.",
           ],
           [
             "Apstrādes pamats",
-            "Datus apstrādājam, lai pēc tava pieprasījuma veiktu darbības pirms pakalpojuma sniegšanas un organizētu pierakstu (VDAR 6. panta 1. punkta b) apakšpunkts). Vietnes drošībai un pieprasījumu biežuma ierobežošanai izmantojam leģitīmo interesi par drošu vietnes darbību (6. panta 1. punkta f) apakšpunkts). Šīs formas netiek izmantotas reklāmas sūtījumiem.",
+            "Datus apstrādājam, lai pēc Tava pieprasījuma veiktu darbības pirms pakalpojuma sniegšanas un organizētu pierakstu (VDAR 6. panta 1. punkta b) apakšpunkts). Vietnes drošībai un pieprasījumu biežuma ierobežošanai izmantojam leģitīmo interesi par drošu vietnes darbību (6. panta 1. punkta f) apakšpunkts). Šīs formas netiek izmantotas reklāmas sūtījumiem.",
           ],
           [
             "Glabāšanas ilgums",
@@ -114,7 +114,7 @@ export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSetti
           ],
           [
             "Sīkdatnes un lokālā glabāšana",
-            "Sīkdatne sk_client nodrošina piekļuvi taviem pierakstiem šajā pārlūkā un ir derīga līdz 12 mēnešiem. Sīkdatne sk_admin paredzēta tikai administratora ieejai un ilgst 12 stundas. Abas ir aizsargātas ar HttpOnly un SameSite, un HTTPS savienojumā arī Secure. Sīkdatņu paziņojuma izvēle tiek glabāta pārlūkā 12 mēnešus. Gaišās vai tumšās tēmas izvēle tiek glabāta pārlūkā, līdz to maini vai dzēs pārlūka datus. Analītikas un reklāmas sīkdatnes neizmantojam. Dzēšot sīkdatnes, pazūd piekļuve pierakstiem šajā pārlūkā; atsevišķu pierakstu var atrast ar kodu un savu kontaktu.",
+            "Sīkdatne sk_client nodrošina piekļuvi Taviem pierakstiem šajā pārlūkā un ir derīga līdz 12 mēnešiem. Sīkdatne sk_admin paredzēta tikai administratora ieejai un ilgst 12 stundas. Abas ir aizsargātas ar HttpOnly un SameSite, un HTTPS savienojumā arī Secure. Sīkdatņu paziņojuma izvēle tiek glabāta pārlūkā 12 mēnešus. Gaišās vai tumšās tēmas izvēle tiek glabāta pārlūkā, līdz to maini vai dzēs pārlūka datus. Analītikas un reklāmas sīkdatnes neizmantojam. Dzēšot sīkdatnes, pazūd piekļuve pierakstiem šajā pārlūkā; atsevišķu pierakstu var atrast ar kodu un savu kontaktu.",
           ],
           [
             "Izmaiņas un saziņa",

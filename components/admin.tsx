@@ -28,6 +28,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { api, dateLabel, errorMessage } from "@/lib/client";
+import { addressCase } from "@/lib/address-case";
 import type {
   Article,
   Block,
@@ -354,7 +355,7 @@ export function Admin() {
                   {b.phone && <a href={`tel:${b.phone.replace(/[^+\d]/g, "")}`}>{b.phone}</a>}
                   {b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}
                 </td>
-                <td>{b.service_title}</td>
+                <td>{addressCase(b.service_title, b.lang)}</td>
                 <td>
                   <select
                     aria-label={`Pieraksta statuss: ${b.name}`}
@@ -512,7 +513,7 @@ export function Admin() {
                     <h2>{"Pirms pirmās vizītes"}</h2>
                     <p>
                       {
-                        "Sākotnējais darba laiks: pirmdiena-piektdiena, 10:00-18:00. Tas ir paraugs, pārbaudi to iestatījumos. Pieteikumi rezervē laiku kalendārā, bet tos apstiprini tu."
+                        "Sākotnējais darba laiks: pirmdiena-piektdiena, 10:00-18:00. Tas ir paraugs, pārbaudi to iestatījumos. Pieteikumi rezervē laiku kalendārā, bet tos apstiprini Tu."
                       }
                     </p>
                     <div>

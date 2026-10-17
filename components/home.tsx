@@ -79,7 +79,7 @@ export function Home({
         {
           icon: ScanFace,
           title: "Tava āda ir unikāla",
-          text: "Sākam ar tavas ādas vajadzību izpratni.",
+          text: "Sākam ar Tavas ādas vajadzību izpratni.",
         },
         { icon: Leaf, title: "Saudzīgi pret dabisko", text: "Ar cieņu pret ādas aizsargbarjeru." },
         { icon: Heart, title: "Rūpes ilgtermiņā", text: "Palīdzu izprast ikdienas ādas kopšanu." },
@@ -224,8 +224,8 @@ export function Home({
           <Sparkles size={15} />
           {tr(
             lang,
-            "Nezini, ar ko sākt? Iepazīšanās vizīte palīdzēs saprast tavas ādas vajadzības.",
-            "Не знаешь, с чего начать? Первая встреча поможет понять твою кожу.",
+            "Nezini, ar ko sākt? Iepazīšanās vizīte palīdzēs saprast Tavas ādas vajadzības.",
+            "Не знаешь, с чего начать? Первая встреча поможет понять Твою кожу.",
           )}
         </p>
       </section>
@@ -246,7 +246,7 @@ export function Home({
               <Leaf size={25} />
               <span>
                 {tr(lang, "Ar rūpēm", "С заботой")}
-                <em>{tr(lang, "par tevi", "о тебе")}</em>
+                <em>{tr(lang, "par Tevi", "о Тебе")}</em>
               </span>
             </div>
           </div>
@@ -304,14 +304,14 @@ export function Home({
               ? [
                   ["Выбери своё время", "Загляни в календарь и найди удобный день для встречи."],
                   [
-                    "Познакомимся с твоей кожей",
-                    "Поговорим о твоих привычках, потребностях и ожиданиях.",
+                    "Познакомимся с Твоей кожей",
+                    "Поговорим о Твоих привычках, потребностях и ожиданиях.",
                   ],
                   ["Забери заботу с собой", "Уйди с пониманием, как продолжить уход дома."],
                 ]
               : [
                   ["Izvēlies savu laiku", "Ieskaties kalendārā un atrodi ērtu dienu mūsu sarunai."],
-                  ["Iepazīsim tavu ādu", "Pārrunāsim tavus paradumus, vajadzības un gaidas."],
+                  ["Iepazīsim Tavu ādu", "Pārrunāsim Tavus paradumus, vajadzības un gaidas."],
                   [
                     "Paņem rūpes līdzi",
                     "Dodies mājās ar izpratni, kā turpināt ādas kopšanu ikdienā.",
@@ -377,11 +377,11 @@ export function Home({
             ? [
                 [
                   "Что выбрать для первого визита?",
-                  "Начни со знакомства с твоей кожей. Мы обсудим твой уход, пожелания и подберём дальнейшие шаги лично.",
+                  "Начни со знакомства с Твоей кожей. Мы обсудим Твой уход, пожелания и подберём дальнейшие шаги лично.",
                 ],
                 [
                   "Как подтверждается запись?",
-                  "После заявки выбранный час резервируется в системе. Я свяжусь с тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
+                  "После заявки выбранный час резервируется в системе. Я свяжусь с Тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
                 ],
                 [
                   "Как посмотреть или отменить запись?",
@@ -412,7 +412,7 @@ export function Home({
               : [
                   [
                     "Ko izvēlēties pirmajai vizītei?",
-                    "Sāc ar iepazīšanās vizīti. Pārrunāsim tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
+                    "Sāc ar iepazīšanās vizīti. Pārrunāsim Tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
                   ],
                   [
                     "Kā tiek apstiprināts pieraksts?",
@@ -599,8 +599,8 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             <p>
               {tr(
                 lang,
-                "Tava ziņa ir saglabāta. Es sazināšos ar tevi, izmantojot norādīto kontaktu.",
-                "Твоё сообщение сохранено. Я свяжусь с тобой по указанному контакту.",
+                "Tava ziņa ir saglabāta. Es sazināšos ar Tevi, izmantojot norādīto kontaktu.",
+                "Твоё сообщение сохранено. Я свяжусь с Тобой по указанному контакту.",
               )}
             </p>
           </div>
@@ -615,7 +615,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
                 minLength={2}
                 maxLength={100}
                 autoComplete="given-name"
-                placeholder={tr(lang, "Kā tevi sauc?", "Как тебя зовут?")}
+                placeholder={tr(lang, "Kā Tevi sauc?", "Как Тебя зовут?")}
               />
             </label>
             <div className="form-row">
@@ -654,7 +654,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
               )}
             </p>
             <label>
-              {tr(lang, "Kas tevi interesē?", "Что тебя интересует?")}
+              {tr(lang, "Kas Tevi interesē?", "Что Тебя интересует?")}
               <textarea
                 name="message"
                 rows={3}

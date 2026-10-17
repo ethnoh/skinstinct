@@ -3,9 +3,9 @@ import type { Article, Service, SiteSettings } from "./types";
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
   rhythmTitle: {
-    lv: "Laiks, kas veltīts tev.",
+    lv: "Laiks, kas veltīts Tev.",
     en: "Time, dedicated to you.",
-    ru: "Время, посвящённое тебе.",
+    ru: "Время, посвящённое Тебе.",
   },
   rhythmIntro: {
     lv: "Bez steigas. Izvēlies pirmo iepazīšanos vai sev piemērotu kopšanu un ieplāno mirkli sev.",
@@ -13,11 +13,11 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Без спешки. Выбери первую встречу или подходящий уход и запланируй время для себя.",
   },
   rhythmServices: { lv: "kopšanas virzieni", en: "skincare services", ru: "направления ухода" },
-  rhythmDuration: { lv: "tavai vizītei", en: "for your visit", ru: "для твоего визита" },
+  rhythmDuration: { lv: "Tavai vizītei", en: "for your visit", ru: "для Твоего визита" },
   rhythmChartTitle: {
     lv: "Tavas vizītes ritms",
     en: "The rhythm of your visit",
-    ru: "Ритм твоего визита",
+    ru: "Ритм Твоего визита",
   },
   rhythmChartNote: {
     lv: "Plānotais pakalpojumu ilgums. Detaļas pārrunāsim, apstiprinot vizīti.",
@@ -26,18 +26,18 @@ export const initialCopy: SiteSettings["copy"] = {
   },
   servicesTitle: { lv: "Mazi rituāli.", en: "Small rituals.", ru: "Маленькие ритуалы." },
   servicesAccent: {
-    lv: "Lielas rūpes par tevi.",
+    lv: "Lielas rūpes par Tevi.",
     en: "Thoughtful care for you.",
-    ru: "Большая забота о тебе.",
+    ru: "Большая забота о Тебе.",
   },
   servicesIntro: {
-    lv: "Ādai vajag to, kas der tieši tev. Sāksim ar iepazīšanos un kopā izvēlēsimies kopšanu.",
+    lv: "Ādai vajag to, kas der tieši Tev. Sāksim ar iepazīšanos un kopā izvēlēsimies kopšanu.",
     en: "Your skin deserves care that suits you. Let's get to know each other and choose your skincare together.",
-    ru: "Коже нужен уход, который подходит именно тебе. Начнём со знакомства и вместе выберем его.",
+    ru: "Коже нужен уход, который подходит именно Тебе. Начнём со знакомства и вместе выберем его.",
   },
   value1Title: { lv: "Tava āda ir unikāla", en: "Your skin is unique", ru: "Твоя кожа уникальна" },
   value1Text: {
-    lv: "Sākam ar tavas ādas vajadzību izpratni.",
+    lv: "Sākam ar Tavas ādas vajadzību izpratni.",
     en: "We start by understanding what it needs.",
     ru: "Начинаем с понимания её потребностей.",
   },
@@ -74,14 +74,14 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Загляни в календарь и найди удобный день для встречи.",
   },
   process2Title: {
-    lv: "Iepazīsim tavu ādu",
+    lv: "Iepazīsim Tavu ādu",
     en: "Let's get to know your skin",
-    ru: "Познакомимся с твоей кожей",
+    ru: "Познакомимся с Твоей кожей",
   },
   process2Text: {
-    lv: "Pārrunāsim tavus paradumus, vajadzības un gaidas.",
+    lv: "Pārrunāsim Tavus paradumus, vajadzības un gaidas.",
     en: "We'll talk about your routine, needs and expectations.",
-    ru: "Поговорим о твоих привычках, потребностях и ожиданиях.",
+    ru: "Поговорим о Твоих привычках, потребностях и ожиданиях.",
   },
   process3Title: {
     lv: "Paņem rūpes līdzi",
@@ -101,9 +101,9 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Выбери услугу, удобный день и оставь контакт. Всё остальное мы обсудим лично.",
   },
   faqTitle: {
-    lv: "Varbūt tu\nvēlies pajautāt.",
+    lv: "Varbūt Tu\nvēlies pajautāt.",
     en: "You might\nbe wondering.",
-    ru: "Возможно,\nты хочешь спросить.",
+    ru: "Возможно,\nТы хочешь спросить.",
   },
   faq3Question: {
     lv: "Kā apskatīt vai atcelt pierakstu?",
@@ -121,9 +121,9 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Что выбрать для первого визита?",
   },
   faq1Answer: {
-    lv: "Sāc ar iepazīšanās vizīti. Pārrunāsim tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
+    lv: "Sāc ar iepazīšanās vizīti. Pārrunāsim Tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
     en: "Start with an introductory visit. We'll discuss your daily skincare, your wishes and choose the next steps together.",
-    ru: "Начни со знакомства с твоей кожей. Мы обсудим твой уход, пожелания и подберём дальнейшие шаги лично.",
+    ru: "Начни со знакомства с Твоей кожей. Мы обсудим Твой уход, пожелания и подберём дальнейшие шаги лично.",
   },
   faq2Question: {
     lv: "Kā tiek apstiprināts pieraksts?",
@@ -133,7 +133,7 @@ export const initialCopy: SiteSettings["copy"] = {
   faq2Answer: {
     lv: "Pēc pieteikuma izvēlētais laiks tiek rezervēts sistēmā. Es sazināšos pa norādīto tālruni vai e-pastu, lai apstiprinātu tikšanos un precizētu detaļas.",
     en: "Your chosen time is reserved in the system after your request. I'll contact you by phone or email to confirm the appointment and discuss the details.",
-    ru: "После заявки выбранный час резервируется в системе. Я свяжусь с тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
+    ru: "После заявки выбранный час резервируется в системе. Я свяжусь с Тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
   },
   journalTitle: {
     lv: "Nedaudz tuvāk\nsavai ",
@@ -154,9 +154,9 @@ export const initialCopy: SiteSettings["copy"] = {
   },
   contactFormTitle: { lv: "Atstāj pāris vārdus", en: "Leave a few words", ru: "Оставь пару слов" },
   footerDescription: {
-    lv: "Saudzīgi pret ādu. Ar uzmanību tev.",
+    lv: "Saudzīgi pret ādu. Ar uzmanību Tev.",
     en: "Gentle on your skin. Attentive to you.",
-    ru: "Бережно к коже. С вниманием к тебе.",
+    ru: "Бережно к коже. С вниманием к Тебе.",
   },
 };
 
@@ -173,7 +173,7 @@ export const initialSettings: SiteSettings = {
   heroDescription: {
     lv: "Apzināta ādas kopšana, kas sākas ar ieklausīšanos. Individuāla pieeja, saudzīgs pieskāriens un rūpes, kas paliek.",
     en: "Thoughtful skincare starts with listening. An individual approach, a gentle touch and care that stays with you.",
-    ru: "Осознанный уход за кожей начинается с внимания к тебе. Индивидуальный подход, бережное прикосновение и забота, которая остаётся.",
+    ru: "Осознанный уход за кожей начинается с внимания к Тебе. Индивидуальный подход, бережное прикосновение и забота, которая остаётся.",
   },
   heroImage: "/images/hero.webp",
   aboutImage: "/images/valerija-v2.webp",
@@ -183,9 +183,9 @@ export const initialSettings: SiteSettings = {
     ru: "Познакомимся,\nя Валерия.",
   },
   aboutBody: {
-    lv: "Esmu Valērija Razujeva, sertificēta skaistumkopšanas speciāliste kosmetoloģijā un reģistrēta ārstniecības persona.\n\nSKINSTINCT veidoju kā mierpilnu vietu, kur labāk iepazīt savu ādu. Mana pieeja balstās korneoterapijā, ādas diagnostikā un saudzīgā attieksmē pret ādas dabisko aizsargbarjeru.\n\nEs vēlos, lai pēc mūsu tikšanās tev paliek ne tikai patīkama sajūta, bet arī skaidrība, kā rūpēties par ādu ikdienā.",
+    lv: "Esmu Valērija Razujeva, sertificēta skaistumkopšanas speciāliste kosmetoloģijā un reģistrēta ārstniecības persona.\n\nSKINSTINCT veidoju kā mierpilnu vietu, kur labāk iepazīt savu ādu. Mana pieeja balstās korneoterapijā, ādas diagnostikā un saudzīgā attieksmē pret ādas dabisko aizsargbarjeru.\n\nEs vēlos, lai pēc mūsu tikšanās Tev paliek ne tikai patīkama sajūta, bet arī skaidrība, kā rūpēties par ādu ikdienā.",
     en: "I'm Valērija Razujeva, a certified beauty specialist in cosmetology and a registered healthcare practitioner.\n\nI'm creating SKINSTINCT as a calm space to get to know your skin better. My approach is based on corneotherapy, skin diagnostics and respect for the skin's natural protective barrier.\n\nI want you to leave our meeting with a pleasant feeling and a clear understanding of how to care for your skin every day.",
-    ru: "Я Валерия Разуева, сертифицированный специалист по косметологии и зарегистрированный медицинский работник.\n\nЯ создаю SKINSTINCT как спокойное пространство, где можно лучше узнать свою кожу. В основе моего подхода корнеотерапия, диагностика и бережное отношение к естественному защитному барьеру кожи.\n\nМне хочется, чтобы после нашей встречи у тебя осталось не только приятное ощущение, но и понимание, как заботиться о коже каждый день.",
+    ru: "Я Валерия Разуева, сертифицированный специалист по косметологии и зарегистрированный медицинский работник.\n\nЯ создаю SKINSTINCT как спокойное пространство, где можно лучше узнать свою кожу. В основе моего подхода корнеотерапия, диагностика и бережное отношение к естественному защитному барьеру кожи.\n\nМне хочется, чтобы после нашей встречи у Тебя осталось не только приятное ощущение, но и понимание, как заботиться о коже каждый день.",
   },
   specialistName: "Valērija Razujeva",
   specialistTitle: {
@@ -212,7 +212,7 @@ export const initialSettings: SiteSettings = {
   bookingNotice: {
     lv: "Studija top. Izvēlies vēlamo vizītes laiku, un es sazināšos, lai apstiprinātu tikšanos un precizētu adresi. Cenu saskaņosim pirms vizītes.",
     en: "The studio is preparing to open. Choose your preferred appointment time and I'll contact you to confirm your visit and the address. We'll agree on the price before your visit.",
-    ru: "Студия готовится к открытию. Выбери желаемое время, и я свяжусь с тобой, чтобы подтвердить встречу и уточнить адрес. Стоимость согласуем до визита.",
+    ru: "Студия готовится к открытию. Выбери желаемое время, и я свяжусь с Тобой, чтобы подтвердить встречу и уточнить адрес. Стоимость согласуем до визита.",
   },
   bufferMinutes: 15,
   cancellationHours: 24,
@@ -227,15 +227,15 @@ export const initialServices: Service[] = [
   {
     id: "consultation",
     title: {
-      lv: "Iepazīšanās ar tavu ādu",
+      lv: "Iepazīšanās ar Tavu ādu",
       en: "Getting to know your skin",
-      ru: "Знакомство с твоей кожей",
+      ru: "Знакомство с Твоей кожей",
     },
     category: { lv: "PIRMĀ VIZĪTE", en: "FIRST VISIT", ru: "ПЕРВЫЙ ВИЗИТ" },
     description: {
-      lv: "Saruna par tavas ādas vajadzībām, ikdienas paradumiem un kopšanas mērķiem. Pirmais solis pretī pārdomātai ādas kopšanai.",
+      lv: "Saruna par Tavas ādas vajadzībām, ikdienas paradumiem un kopšanas mērķiem. Pirmais solis pretī pārdomātai ādas kopšanai.",
       en: "A conversation about your skin's needs, daily habits and skincare goals. Your first step towards a thoughtful skincare routine.",
-      ru: "Поговорим о потребностях твоей кожи, привычках и целях ухода. Первый шаг к понятной системе заботы о себе.",
+      ru: "Поговорим о потребностях Твоей кожи, привычках и целях ухода. Первый шаг к понятной системе заботы о себе.",
     },
     duration: 60,
     price: null,
@@ -247,7 +247,7 @@ export const initialServices: Service[] = [
     title: { lv: "Ādas diagnostika", en: "Skin diagnostics", ru: "Диагностика кожи" },
     category: { lv: "IZPRATNE", en: "UNDERSTANDING", ru: "ПОНИМАНИЕ" },
     description: {
-      lv: "Iepazīstam tavas ādas stāvokli un individuālās vajadzības, lai kopšanas izvēles būtu pamatotas un saprotamas.",
+      lv: "Iepazīstam Tavas ādas stāvokli un individuālās vajadzības, lai kopšanas izvēles būtu pamatotas un saprotamas.",
       en: "We explore your skin's condition and individual needs to make informed, clear skincare choices.",
       ru: "Изучаем состояние и индивидуальные потребности кожи, чтобы выбор ухода был обоснованным и понятным.",
     },
@@ -261,7 +261,7 @@ export const initialServices: Service[] = [
     title: { lv: "Korneoterapija", en: "Corneotherapy", ru: "Корнеотерапия" },
     category: { lv: "LĪDZSVARS", en: "BALANCE", ru: "БАЛАНС" },
     description: {
-      lv: "Saudzīga pieeja, kuras uzmanības centrā ir ādas aizsargbarjera. Individuāli izvēlēta kopšana tavas ādas komfortam.",
+      lv: "Saudzīga pieeja, kuras uzmanības centrā ir ādas aizsargbarjera. Individuāli izvēlēta kopšana Tavas ādas komfortam.",
       en: "A gentle approach centred on the skin's protective barrier. Individually selected care for your skin's comfort.",
       ru: "Бережный подход с вниманием к защитному барьеру кожи. Индивидуально подобранный уход для её комфорта.",
     },
@@ -287,9 +287,9 @@ export const initialArticles: Article[] = [
       ru: "О начале студии, ценностях и моём подходе к осознанному уходу за кожей.",
     },
     body: {
-      lv: "## Vieta, kur ieklausīties\nSKINSTINCT sākas ar vienkāršu domu: katra āda ir individuāla un ir pelnījusi uzmanīgu attieksmi. Esmu Valērija Razujeva, un šobrīd veidoju savu kosmetoloģijas studiju Jēkabpilī.\n\n## Vispirms izpratne\nPirms kopšanas izvēles es vēlos iepazīt tavu ādu un ikdienas paradumus. Mana profesionālā interese ir korneoterapija un ādas diagnostika.\n\n## Ilgtermiņa attiecības ar savu ādu\nVēlos dalīties zināšanās, kas palīdz orientēties ādas kopšanā arī ārpus studijas. Šeit pamazām stāstīšu par studijas jaunumiem un savu pieeju.\n\nPriecāšos iepazīties. Seko studijas attīstībai Instagram vai atstāj ziņu kontaktformā.",
+      lv: "## Vieta, kur ieklausīties\nSKINSTINCT sākas ar vienkāršu domu: katra āda ir individuāla un ir pelnījusi uzmanīgu attieksmi. Esmu Valērija Razujeva, un šobrīd veidoju savu kosmetoloģijas studiju Jēkabpilī.\n\n## Vispirms izpratne\nPirms kopšanas izvēles es vēlos iepazīt Tavu ādu un ikdienas paradumus. Mana profesionālā interese ir korneoterapija un ādas diagnostika.\n\n## Ilgtermiņa attiecības ar savu ādu\nVēlos dalīties zināšanās, kas palīdz orientēties ādas kopšanā arī ārpus studijas. Šeit pamazām stāstīšu par studijas jaunumiem un savu pieeju.\n\nPriecāšos iepazīties. Seko studijas attīstībai Instagram vai atstāj ziņu kontaktformā.",
       en: "## A place to be heard\nSKINSTINCT begins with a simple thought: every skin is individual and deserves attention. I'm Valērija Razujeva, and I'm currently creating my skincare studio in Jēkabpils.\n\n## Understanding comes first\nBefore choosing skincare, I want to get to know your skin and everyday habits. My professional interests are corneotherapy and skin diagnostics.\n\n## A lasting relationship with your skin\nI want to share knowledge that helps you navigate skincare beyond the studio. Here, I'll gradually share studio news and my approach.\n\nI'd love to meet you. Follow the studio's progress on Instagram or leave a message through the contact form.",
-      ru: "## Место, где тебя услышат\nSKINSTINCT начинается с простой мысли: каждая кожа индивидуальна и заслуживает внимательного отношения. Я Валерия Разуева, и сейчас я создаю свою студию косметологии в Екабпилсе.\n\n## Сначала понимание\nПрежде чем выбирать уход, я хочу познакомиться с твоей кожей и повседневными привычками. Мои профессиональные интересы: корнеотерапия и диагностика кожи.\n\n## Отношения со своей кожей надолго\nМне хочется делиться знаниями, которые помогают ориентироваться в уходе и за пределами студии. Здесь я постепенно буду рассказывать о новостях и своём подходе.\n\nБуду рада знакомству. Следи за развитием студии в Instagram или оставь сообщение через форму на сайте.",
+      ru: "## Место, где Тебя услышат\nSKINSTINCT начинается с простой мысли: каждая кожа индивидуальна и заслуживает внимательного отношения. Я Валерия Разуева, и сейчас я создаю свою студию косметологии в Екабпилсе.\n\n## Сначала понимание\nПрежде чем выбирать уход, я хочу познакомиться с Твоей кожей и повседневными привычками. Мои профессиональные интересы: корнеотерапия и диагностика кожи.\n\n## Отношения со своей кожей надолго\nМне хочется делиться знаниями, которые помогают ориентироваться в уходе и за пределами студии. Здесь я постепенно буду рассказывать о новостях и своём подходе.\n\nБуду рада знакомству. Следи за развитием студии в Instagram или оставь сообщение через форму на сайте.",
     },
     category: { lv: "STUDIJAS DIENASGRĀMATA", en: "STUDIO JOURNAL", ru: "ДНЕВНИК СТУДИИ" },
     image: "/images/valerija-v2.webp",

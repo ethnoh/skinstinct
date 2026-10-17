@@ -11,6 +11,7 @@
 - The studio is in Jekabpils, not Riga. Public source is https://www.instagram.com/vr_skinstinct/ . Do not invent prices, contact details, reviews or clinical results.
 - Keep pending requests visibly distinct from personally confirmed appointments. Do not imply Google Calendar, email or SMS integration exists.
 - Public languages are Latvian by default, English second and Russian third. Admin interface is Latvian only; content editors support LV/EN/RU. Preserve older saved translations when extending content.
+- Capitalize direct-address pronouns and possessives in Latvian and Russian copy. Keep English capitalization unchanged.
 - Theme defaults to automatic sunrise/sunset for Jekabpils, calculated locally with SunCalc and Europe/Riga dates. Manual light/dark overrides are stored in skinstinct-theme-mode; the theme picker can restore automatic mode. Keep both palettes readable.
 - Portrait arches and caption badges must never be clipped by reveal masks. Keep image clipping inside the portrait frame only. Horizontal reveals must remain inside the viewport throughout the animation, including on mobile.
 - Scroll effects use progressive enhancement and honor reduced-motion preferences. Counters and duration charts derive from active services; never invent clinical results or customer counts.

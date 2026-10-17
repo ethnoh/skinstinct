@@ -244,7 +244,7 @@ export function CookieNotice({ lang }: { lang: Lang }) {
             <Leaf size={24} />
           </span>
           <div>
-            <strong>{tr(lang, "Ar rūpēm arī par taviem datiem", "Забота и о твоих данных")}</strong>
+            <strong>{tr(lang, "Ar rūpēm arī par Taviem datiem", "Забота и о Твоих данных")}</strong>
             <p>
               {tr(
                 lang,
@@ -277,8 +277,8 @@ export function CookieNotice({ lang }: { lang: Lang }) {
         <p>
           {tr(
             lang,
-            "Nepieciešamās sīkdatnes nodrošina drošu piekļuvi taviem pierakstiem un administratora ieejai. Glabāšanas laiks: līdz 12 mēnešiem pierakstiem un 12 stundas administratoram.",
-            "Необходимые cookies сохраняют безопасный доступ к твоим записям и вход администратора. Их срок: до 12 месяцев для записи и 12 часов для администратора.",
+            "Nepieciešamās sīkdatnes nodrošina drošu piekļuvi Taviem pierakstiem un administratora ieejai. Glabāšanas laiks: līdz 12 mēnešiem pierakstiem un 12 stundas administratoram.",
+            "Необходимые cookies сохраняют безопасный доступ к Твоим записям и вход администратора. Их срок: до 12 месяцев для записи и 12 часов для администратора.",
           )}
         </p>
         <div className="cookie-category">

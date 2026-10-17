@@ -40,6 +40,7 @@ import {
   timeSchema,
 } from "@/lib/validation";
 import type { Booking, Lang } from "@/lib/types";
+import { addressCase } from "@/lib/address-case";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -113,7 +114,7 @@ export async function GET(request: NextRequest, context: Context) {
         `DTSTAMP:${stamp(new Date())}`,
         `DTSTART:${stamp(startDate(booking.date, booking.start_min))}`,
         `DTEND:${stamp(startDate(booking.date, booking.end_min))}`,
-        `SUMMARY:${escape(`SKINSTINCT: ${booking.service_title}`)}`,
+        `SUMMARY:${escape(`SKINSTINCT: ${addressCase(booking.service_title, booking.lang)}`)}`,
         `LOCATION:${escape([s.address, s.city].filter(Boolean).join(", "))}`,
         `STATUS:${booking.status === "confirmed" ? "CONFIRMED" : "TENTATIVE"}`,
         "END:VEVENT",
