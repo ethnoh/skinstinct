@@ -49,15 +49,18 @@ Tests run the packaged standalone artifact, including its runtime dependencies a
 
 ## Production
 
-Railway project: `6a94610d-2e1c-4aed-b0d9-764b4efa1575` (`SKINSTINCT`).
-Existing service: `9299dc12-f714-44cd-8260-87a853f9f518`.
+Owner Railway project: `bace3102-d5f0-4bb0-a72d-38ee6a070049` (`SKINSTINCT-WEBSITE`).
+Production environment: `1062f9b4-38b9-4eed-b339-04db576dace4`.
+Service: `9a68a02e-dffe-4551-92f0-bed675859609`.
 Repository: `https://github.com/ethnoh/skinstinct`, branch `main`.
 
 Deploy using normal GitHub commits and pushes. Do not use `railway up` for this project. The Dockerfile produces the Next.js standalone server. Health check: `/api/health`.
 
 The app requires a persistent volume mounted at `/data`. `DATA_DIR=/data` is set in the image. The database and uploaded images must remain outside the container's ephemeral filesystem. Keep this SQLite deployment at one service replica; use Postgres/shared storage before horizontal scaling.
 
-The public preview is https://skinstinct-production.up.railway.app . The Railway domain targets port 8080. Docker build, health check and restart settings are configured on the existing service through `scripts/Configure-Hosting.ps1`; the app does not depend on the deprecated `railway.json` format.
+The owner site is https://skinstinct-production-b63b.up.railway.app . The Railway domain targets port 8080. Docker build, health check and restart settings are configured on the owner service through `scripts/Configure-Hosting.ps1`; the app does not depend on the deprecated `railway.json` format.
+
+The previous B41 site at https://skinstinct-production.up.railway.app remains running in project `6a94610d-2e1c-4aed-b0d9-764b4efa1575`, service `9299dc12-f714-44cd-8260-87a853f9f518`. Its database was copied to the owner's project on 2026-10-20. Subsequent bookings, messages and content edits are independent; no live database synchronization is configured. Do not stop the B41 service without Edgar's approval.
 
 Runtime configuration:
 

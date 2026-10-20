@@ -18,7 +18,12 @@ if ($LASTEXITCODE -ne 0) { throw 'Could not prepare the password hash.' }
 if ($ConfigureRailway) {
     $env:RAILWAY_CALLER = 'skill:use-railway@1.3.6'
     $env:RAILWAY_AGENT_SESSION = 'skinstinct-20261017'
-    $passwordHash | railway variable set ADMIN_PASSWORD_HASH --stdin --skip-deploys --service 9299dc12-f714-44cd-8260-87a853f9f518 --project 6a94610d-2e1c-4aed-b0d9-764b4efa1575 --environment production 2>&1 | Out-Null
+    $projectId = 'bace3102-d5f0-4bb0-a72d-38ee6a070049'
+    $environmentId = '1062f9b4-38b9-4eed-b339-04db576dace4'
+    $serviceId = '9a68a02e-dffe-4551-92f0-bed675859609'
+    $state = railway status --project $projectId --environment $environmentId --json | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0 -or $state.id -ne $projectId) { throw 'Owner Railway project verification failed.' }
+    $passwordHash | railway variable set ADMIN_PASSWORD_HASH --stdin --skip-deploys --service $serviceId --project $projectId --environment $environmentId 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) { throw 'Could not configure admin authentication in the SKINSTINCT service.' }
     Write-Output 'Admin password hash configured. No password was printed.'
 }

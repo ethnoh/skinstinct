@@ -4,7 +4,8 @@
 - Communicate with Edgar in Russian. Keep filenames, identifiers and code comments English.
 - Run git status before edits and Git operations. Preserve other agents' changes.
 - GitHub main is the source of truth; commit and push ordinary ready changes. Railway auto-deploys from GitHub. Do not run railway up.
-- Use Railway CLI, never Railway MCP. Assert project 6a94610d-2e1c-4aed-b0d9-764b4efa1575 before infrastructure changes.
+- Use Railway CLI, never Railway MCP. The owner production project is bace3102-d5f0-4bb0-a72d-38ee6a070049, environment 1062f9b4-38b9-4eed-b339-04db576dace4, service 9a68a02e-dffe-4551-92f0-bed675859609. Assert the exact target before infrastructure changes.
+- The previous B41 project 6a94610d-2e1c-4aed-b0d9-764b4efa1575 remains running at Edgar's request. Do not stop, delete, repoint or overwrite its data. The two deployments have independent databases after the 2026-10-20 copy; see docs/OPERATIONS.md.
 - Do not read or edit .env files or expose credentials, private customer data, database contents or session tokens.
 - Production SQLite and uploads require the persistent /data volume and a single application replica. Do not detach, replace or delete that volume.
 - Do not seed or replace a live database. Initial content is inserted only when missing.

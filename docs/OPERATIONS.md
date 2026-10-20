@@ -1,5 +1,17 @@
 # Operations
 
+## Owner hosting and the retained B41 deployment
+
+The owner deployment is Railway project `bace3102-d5f0-4bb0-a72d-38ee6a070049` (`SKINSTINCT-WEBSITE`), environment `1062f9b4-38b9-4eed-b339-04db576dace4`, service `9a68a02e-dffe-4551-92f0-bed675859609`. Public origin: https://skinstinct-production-b63b.up.railway.app . Its dedicated volume `7c564afc-3faa-4c14-8336-f67fd030a142` is mounted at `/data`. GitHub source is `ethnoh/skinstinct`, branch `main`.
+
+The former B41 deployment remains running at https://skinstinct-production.up.railway.app in project `6a94610d-2e1c-4aed-b0d9-764b4efa1575`, environment `5f7b57c6-b29e-4eb5-a88c-cf1d53ffb00f`, service `9299dc12-f714-44cd-8260-87a853f9f518`, volume `608a21aa-b2f9-4160-9567-27b4087c2d3f`. Edgar explicitly asked to retain it. Do not stop, delete, redirect or overwrite it during owner-site maintenance.
+
+On 2026-10-20, a consistent SQLite online-backup snapshot copied the saved content, bookings, availability blocks and inquiries into the owner project. Existing administrator authentication was retained without publishing credentials. Temporary admin sessions and rate limits were excluded. Uploaded-file metadata was checked; no user-uploaded files existed at the copy time, and repository images ship with the build. Private migration files stay in ignored `.data/` storage and outside Git/Docker context.
+
+The two deployments use independent databases after this copy. Later bookings, inquiries and admin edits do not propagate between them. Existing browser cookies are scoped to the old domain; customers can recover a copied appointment on the new domain with its original booking code and contact. A future final cutover must reconcile any newer records on the B41 copy before it is retired.
+
+Always pass explicit owner project, environment and service IDs to Railway CLI operations. Local linking can point to the B41 project in older checkouts. Never copy Railway-provided project/domain variables from the old deployment; `SITE_URL` must use the owner origin.
+
 ## Routes
 
 - `/`, `/en`, `/ru`: public site, Latvian by default, English second and Russian third.
