@@ -176,7 +176,7 @@ export const initialSettings: SiteSettings = {
     ru: "Осознанный уход за кожей начинается с внимания к Тебе. Индивидуальный подход, бережное прикосновение и забота, которая остаётся.",
   },
   heroImage: "/images/hero.webp",
-  aboutImage: "/images/valerija-v2.webp",
+  aboutImage: "/images/valerija-original-white.jpeg",
   aboutTitle: {
     lv: "Iepazīsimies,\nes esmu Valērija.",
     en: "Let's meet,\nI'm Valērija.",

@@ -3746,3 +3746,14 @@ html[data-theme="dark"] .status-cancelled {
     gap: 4px;
   }
 }
+
+/* Preserve the complete owner-supplied portrait at every viewport size. */
+.about-photo.about-photo-original {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1536 / 2752;
+}
+.about-photo-original .portrait-image-frame > img {
+  object-fit: contain;
+  object-position: center;
+}

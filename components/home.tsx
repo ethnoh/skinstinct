@@ -232,10 +232,13 @@ export function Home({
       <Rhythm lang={lang} services={services} settings={settings} />
       <section className="about-section" id="par-mani">
         <div className="container about-grid">
-          <div className="about-photo">
+          <div
+            className={`about-photo${settings.aboutImage === "/images/valerija-original-white.jpeg" ? " about-photo-original" : ""}`}
+          >
             <div className="portrait-image-frame">
               <Image
                 src={settings.aboutImage}
+                unoptimized={settings.aboutImage === "/images/valerija-original-white.jpeg"}
                 alt={settings.specialistName}
                 fill
                 sizes="(max-width: 760px) 100vw, 42vw"

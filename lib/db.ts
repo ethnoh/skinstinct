@@ -73,6 +73,10 @@ export function setContent(key: string, value: unknown) {
 export const getSettings = () => {
   const saved = getContent<SiteSettings>("settings");
   const settings = { ...initialSettings, ...saved };
+  // Upgrade the retired bundled portraits while retaining custom owner uploads.
+  if (["/images/valerija.webp", "/images/valerija-v2.webp"].includes(settings.aboutImage)) {
+    settings.aboutImage = initialSettings.aboutImage;
+  }
   for (const key of Object.keys(initialSettings) as (keyof SiteSettings)[]) {
     const value = initialSettings[key];
     if (value && typeof value === "object" && "lv" in value) {

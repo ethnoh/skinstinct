@@ -4,6 +4,7 @@ All generated images used the built-in image generation tool. Optimized copies l
 
 | Asset | Use |
 | --- | --- |
+| public/images/valerija-original-white.jpeg | Owner-selected original white-uniform portrait on a plain wall. Exact copy of the supplied F7369116-3F67-46B7-A485-1775DA32EFFF.jpeg, with no retouching or AI edit. Displayed at its original aspect ratio without image optimization or cover cropping. Retired bundled portrait settings resolve to this image; custom uploaded images remain unchanged. |
 | public/images/valerija-v2.webp | Final portrait refined against the additional detailed facial reference. |
 | public/images/valerija.webp | Retained first portrait variant. |
 | public/images/hero.webp | Illustrative skincare editorial image, not an actual client result. |
