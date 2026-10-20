@@ -32,7 +32,7 @@ export function Brand({
     logo === "/images/skinstinct-logo.webp" ? "/images/skinstinct-logo-display-v2.webp" : logo;
   return (
     <span className={`brand ${footer ? "brand-footer" : ""}`}>
-      <img src={logoSource} width={88} height={88} alt="SKINSTINCT" />
+      <img src={logoSource} width={128} height={128} alt="SKINSTINCT" />
       <span>
         <strong>SKINSTINCT</strong>
         <small>

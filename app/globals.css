@@ -306,7 +306,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 100px;
+  min-height: 144px;
   gap: 20px;
   position: relative;
 }
@@ -319,8 +319,8 @@ main {
   border-radius: 50%;
   object-fit: contain;
   flex-shrink: 0;
-  width: 88px;
-  height: 88px;
+  width: 128px;
+  height: 128px;
 }
 .brand > span {
   display: flex;
@@ -1622,8 +1622,8 @@ main {
   padding-bottom: 45px;
 }
 .brand-footer img {
-  width: 104px;
-  height: 104px;
+  width: 144px;
+  height: 144px;
 }
 .brand-footer strong {
   font-size: 29px;
@@ -2106,8 +2106,8 @@ main {
     letter-spacing: 1.8px;
   }
   .brand img {
-    width: 72px;
-    height: 72px;
+    width: 112px;
+    height: 112px;
   }
   .hero {
     gap: 28px;
@@ -2371,6 +2371,11 @@ main {
     padding: 20px;
   }
 }
+@media (max-width: 900px) {
+  .header-book {
+    display: none;
+  }
+}
 @media (max-width: 760px) {
   html {
     scroll-padding-top: 90px;
@@ -2397,8 +2402,8 @@ main {
     gap: 8px;
   }
   .brand img {
-    width: 64px;
-    height: 64px;
+    width: 96px;
+    height: 96px;
   }
   .brand strong {
     font-size: 20px;
@@ -2915,8 +2920,8 @@ main {
     grid-column: 1/-1;
   }
   .brand-footer img {
-    width: 88px;
-    height: 88px;
+    width: 128px;
+    height: 128px;
   }
   .brand-footer strong {
     font-size: 28px;
@@ -3098,8 +3103,8 @@ main {
     width: calc(100% - 32px);
   }
   .brand img {
-    width: 56px;
-    height: 56px;
+    width: 88px;
+    height: 88px;
   }
   .brand {
     gap: 6px;
