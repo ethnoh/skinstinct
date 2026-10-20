@@ -28,9 +28,11 @@ export function Brand({
   logo?: string;
   lang?: Lang;
 }) {
+  const logoSource =
+    logo === "/images/skinstinct-logo.webp" ? "/images/skinstinct-logo-display-v2.webp" : logo;
   return (
     <span className={`brand ${footer ? "brand-footer" : ""}`}>
-      <img src={logo} width={68} height={68} alt="SKINSTINCT" />
+      <img src={logoSource} width={88} height={88} alt="SKINSTINCT" />
       <span>
         <strong>SKINSTINCT</strong>
         <small>

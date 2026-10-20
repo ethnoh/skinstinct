@@ -317,9 +317,10 @@ main {
 }
 .brand img {
   border-radius: 50%;
-  object-fit: cover;
-  width: 60px;
-  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
 }
 .brand > span {
   display: flex;
@@ -1621,8 +1622,8 @@ main {
   padding-bottom: 45px;
 }
 .brand-footer img {
-  width: 69px;
-  height: 69px;
+  width: 104px;
+  height: 104px;
 }
 .brand-footer strong {
   font-size: 29px;
@@ -2105,8 +2106,8 @@ main {
     letter-spacing: 1.8px;
   }
   .brand img {
-    width: 50px;
-    height: 50px;
+    width: 72px;
+    height: 72px;
   }
   .hero {
     gap: 28px;
@@ -2396,8 +2397,8 @@ main {
     gap: 8px;
   }
   .brand img {
-    width: 43px;
-    height: 43px;
+    width: 64px;
+    height: 64px;
   }
   .brand strong {
     font-size: 20px;
@@ -2914,8 +2915,8 @@ main {
     grid-column: 1/-1;
   }
   .brand-footer img {
-    width: 61px;
-    height: 61px;
+    width: 88px;
+    height: 88px;
   }
   .brand-footer strong {
     font-size: 28px;
@@ -3097,8 +3098,8 @@ main {
     width: calc(100% - 32px);
   }
   .brand img {
-    width: 36px;
-    height: 36px;
+    width: 56px;
+    height: 56px;
   }
   .brand {
     gap: 6px;

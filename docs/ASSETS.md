@@ -10,6 +10,7 @@ All generated images used the built-in image generation tool. Optimized copies l
 | public/images/treatment.webp | Illustrative skincare still life. |
 | public/images/ritual.webp | Alternate crop of the generated still life. |
 | public/images/skinstinct-logo.webp | High-quality derivative of the owner-supplied logo. |
+| public/images/skinstinct-logo-display-v2.webp | 528px lossless WebP display derivative of the retained logo, Lanczos resampling and mild sharpening for larger high-density header/footer use. No AI regeneration or logo redesign. Custom admin-selected logos remain supported. |
 | public/images/og-cover.jpg | Social card assembled from the hero image and brand typography. |
 
 ## Portrait prompt
