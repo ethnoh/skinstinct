@@ -233,12 +233,15 @@ export function Home({
       <section className="about-section" id="par-mani">
         <div className="container about-grid">
           <div
-            className={`about-photo${settings.aboutImage === "/images/valerija-original-white.jpeg" ? " about-photo-original" : ""}`}
+            className={`about-photo${["/images/valerija-original-white.jpeg", "/images/valerija-botanical-background.webp"].includes(settings.aboutImage) ? " about-photo-original" : ""}`}
           >
             <div className="portrait-image-frame">
               <Image
                 src={settings.aboutImage}
-                unoptimized={settings.aboutImage === "/images/valerija-original-white.jpeg"}
+                unoptimized={[
+                  "/images/valerija-original-white.jpeg",
+                  "/images/valerija-botanical-background.webp",
+                ].includes(settings.aboutImage)}
                 alt={settings.specialistName}
                 fill
                 sizes="(max-width: 760px) 100vw, 42vw"

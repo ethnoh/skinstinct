@@ -30,7 +30,7 @@ export function Brand({
 }) {
   return (
     <span className={`brand ${footer ? "brand-footer" : ""}`}>
-      <img src={logo} width={256} height={256} alt="SKINSTINCT" />
+      <img src={logo} width={192} height={192} alt="SKINSTINCT" />
       <span>
         <strong>SKINSTINCT</strong>
         <small>
@@ -77,6 +77,10 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
           <Link href={base || "/"} aria-label="SKINSTINCT" onClick={() => setOpen(false)}>
             <Brand logo={settings.logoImage} lang={lang} />
           </Link>
+          <Link href={`${base}/#pieraksts`} className="button button-small identity-book">
+            {tr(lang, "Pieteikt vizīti", "Записаться")}
+            <ArrowUpRight size={16} />
+          </Link>
         </div>
       </div>
       <header className="site-header">
@@ -112,10 +116,6 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               aria-label={tr(lang, "Mani pieraksti", "Мои записи")}
             >
               <UserRound size={19} />
-            </Link>
-            <Link href={`${base}/#pieraksts`} className="button button-small header-book">
-              {tr(lang, "Pieteikt vizīti", "Записаться")}
-              <ArrowUpRight size={16} />
             </Link>
             <button
               className="icon-button menu-toggle"

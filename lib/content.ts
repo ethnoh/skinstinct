@@ -176,7 +176,7 @@ export const initialSettings: SiteSettings = {
     ru: "Осознанный уход за кожей начинается с внимания к Тебе. Индивидуальный подход, бережное прикосновение и забота, которая остаётся.",
   },
   heroImage: "/images/hero.webp",
-  aboutImage: "/images/valerija-original-white.jpeg",
+  aboutImage: "/images/valerija-botanical-background.webp",
   aboutTitle: {
     lv: "Iepazīsimies,\nes esmu Valērija.",
     en: "Let's meet,\nI'm Valērija.",
@@ -292,7 +292,7 @@ export const initialArticles: Article[] = [
       ru: "## Место, где Тебя услышат\nSKINSTINCT начинается с простой мысли: каждая кожа индивидуальна и заслуживает внимательного отношения. Я Валерия Разуева, и сейчас я создаю свою студию косметологии в Екабпилсе.\n\n## Сначала понимание\nПрежде чем выбирать уход, я хочу познакомиться с Твоей кожей и повседневными привычками. Мои профессиональные интересы: корнеотерапия и диагностика кожи.\n\n## Отношения со своей кожей надолго\nМне хочется делиться знаниями, которые помогают ориентироваться в уходе и за пределами студии. Здесь я постепенно буду рассказывать о новостях и своём подходе.\n\nБуду рада знакомству. Следи за развитием студии в Instagram или оставь сообщение через форму на сайте.",
     },
     category: { lv: "STUDIJAS DIENASGRĀMATA", en: "STUDIO JOURNAL", ru: "ДНЕВНИК СТУДИИ" },
-    image: "/images/valerija-v2.webp",
+    image: "/images/journal-instagram-intro.jpg",
     published: true,
     createdAt: "2026-10-17T09:00:00.000Z",
   },

@@ -74,7 +74,13 @@ export const getSettings = () => {
   const saved = getContent<SiteSettings>("settings");
   const settings = { ...initialSettings, ...saved };
   // Upgrade the retired bundled portraits while retaining custom owner uploads.
-  if (["/images/valerija.webp", "/images/valerija-v2.webp"].includes(settings.aboutImage)) {
+  if (
+    [
+      "/images/valerija.webp",
+      "/images/valerija-v2.webp",
+      "/images/valerija-original-white.jpeg",
+    ].includes(settings.aboutImage)
+  ) {
     settings.aboutImage = initialSettings.aboutImage;
   }
   for (const key of Object.keys(initialSettings) as (keyof SiteSettings)[]) {
@@ -118,6 +124,11 @@ export const getArticles = () =>
     const defaults = initialArticles.find((item) => item.id === article.id);
     return {
       ...article,
+      image:
+        article.id === "intro" &&
+        ["/images/valerija.webp", "/images/valerija-v2.webp"].includes(article.image)
+          ? "/images/journal-instagram-intro.jpg"
+          : article.image,
       title: mergeLocalized(article.title, defaults?.title),
       category: mergeLocalized(article.category, defaults?.category),
       excerpt: mergeLocalized(article.excerpt, defaults?.excerpt),
