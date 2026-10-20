@@ -28,11 +28,9 @@ export function Brand({
   logo?: string;
   lang?: Lang;
 }) {
-  const logoSource =
-    logo === "/images/skinstinct-logo.webp" ? "/images/skinstinct-logo-display-v2.webp" : logo;
   return (
     <span className={`brand ${footer ? "brand-footer" : ""}`}>
-      <img src={logoSource} width={128} height={128} alt="SKINSTINCT" />
+      <img src={logo} width={256} height={256} alt="SKINSTINCT" />
       <span>
         <strong>SKINSTINCT</strong>
         <small>
@@ -74,11 +72,15 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
           {settings.city}, {lang === "en" ? "Latvia" : lang === "ru" ? "Латвия" : "Latvija"}
         </span>
       </div>
-      <header className="site-header">
-        <div className="container header-inner">
+      <div className="site-identity">
+        <div className="container">
           <Link href={base || "/"} aria-label="SKINSTINCT" onClick={() => setOpen(false)}>
             <Brand logo={settings.logoImage} lang={lang} />
           </Link>
+        </div>
+      </div>
+      <header className="site-header">
+        <div className="container header-inner">
           <nav
             className="desktop-nav"
             aria-label={tr(lang, "Galvenā navigācija", "Основная навигация")}
@@ -120,7 +122,18 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={tr(lang, "Izvēlne", "Меню")}
-              onClick={() => setOpen(!open)}
+              onClick={(event) => {
+                if (!open) {
+                  const header = event.currentTarget.closest("header");
+                  if (header) {
+                    window.scrollTo({
+                      top: window.scrollY + header.getBoundingClientRect().top,
+                      behavior: "instant",
+                    });
+                  }
+                }
+                setOpen(!open);
+              }}
             >
               {open ? <X /> : <Menu />}
             </button>

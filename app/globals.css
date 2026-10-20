@@ -3757,3 +3757,104 @@ html[data-theme="dark"] .status-cancelled {
   object-fit: contain;
   object-position: center;
 }
+
+/* Give the enlarged identity its own row while navigation stays compact and sticky. */
+.site-identity {
+  background: var(--header-surface);
+}
+.site-identity > .container {
+  display: flex;
+  justify-content: center;
+  padding-block: 24px;
+}
+.site-identity .brand {
+  gap: 28px;
+}
+.site-identity .brand img {
+  width: 256px;
+  height: 256px;
+}
+.site-identity .brand strong {
+  font-size: 40px;
+  letter-spacing: 4px;
+}
+.site-identity .brand small,
+.site-footer .brand small {
+  font-size: 14px;
+  letter-spacing: 1.6px;
+  line-height: 1.5;
+}
+.site-header .header-inner {
+  min-height: 76px;
+  padding-block: 8px;
+  gap: 22px;
+}
+.site-footer .brand {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.site-footer .brand img {
+  width: 288px;
+  height: 288px;
+}
+@media (max-width: 1200px) {
+  .site-header .header-inner {
+    justify-content: center;
+  }
+  .mobile-menu {
+    max-height: calc(100dvh - 96px);
+  }
+}
+@media (max-width: 1150px) {
+  .site-identity .brand img,
+  .site-footer .brand img {
+    width: 224px;
+    height: 224px;
+  }
+}
+@media (max-width: 900px) {
+  .site-identity .brand {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .site-identity .brand strong {
+    font-size: 32px;
+    letter-spacing: 3px;
+  }
+  .site-identity .brand small,
+  .site-footer .brand small {
+    font-size: 12px;
+    letter-spacing: 1.2px;
+  }
+}
+@media (max-width: 760px) {
+  .site-identity .brand img {
+    width: 192px;
+    height: 192px;
+  }
+  .site-footer .brand img {
+    width: 256px;
+    height: 256px;
+  }
+  .site-identity > .container {
+    padding-block: 20px;
+  }
+  .site-header .header-inner {
+    min-height: 64px;
+    padding-block: 4px;
+  }
+  .site-header .header-actions {
+    margin-top: 0;
+  }
+  .mobile-menu {
+    max-height: calc(100dvh - 80px);
+  }
+}
+@media (max-width: 370px) {
+  .site-identity .brand img,
+  .site-footer .brand img {
+    width: 176px;
+    height: 176px;
+  }
+}
