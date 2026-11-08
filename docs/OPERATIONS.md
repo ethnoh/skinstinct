@@ -2,7 +2,7 @@
 
 ## Owner hosting and the retained B41 deployment
 
-The owner deployment is Railway project `bace3102-d5f0-4bb0-a72d-38ee6a070049` (`SKINSTINCT-WEBSITE`), environment `1062f9b4-38b9-4eed-b339-04db576dace4`, service `9a68a02e-dffe-4551-92f0-bed675859609`. Public origin: https://skinstinct-production-b63b.up.railway.app . Its dedicated volume `7c564afc-3faa-4c14-8336-f67fd030a142` is mounted at `/data`. GitHub source is `ethnoh/skinstinct`, branch `main`.
+The owner deployment is Railway project `bace3102-d5f0-4bb0-a72d-38ee6a070049` (`SKINSTINCT-WEBSITE`), environment `1062f9b4-38b9-4eed-b339-04db576dace4`, service `9a68a02e-dffe-4551-92f0-bed675859609`. Canonical origin: https://skinstinct.lv . Technical origin: https://skinstinct-production-b63b.up.railway.app . Its dedicated volume `7c564afc-3faa-4c14-8336-f67fd030a142` is mounted at `/data`. GitHub source is `ethnoh/skinstinct`, branch `main`.
 
 The former B41 deployment remains running at https://skinstinct-production.up.railway.app in project `6a94610d-2e1c-4aed-b0d9-764b4efa1575`, environment `5f7b57c6-b29e-4eb5-a88c-cf1d53ffb00f`, service `9299dc12-f714-44cd-8260-87a853f9f518`, volume `608a21aa-b2f9-4160-9567-27b4087c2d3f`. Edgar explicitly asked to retain it. Do not stop, delete, redirect or overwrite it during owner-site maintenance.
 
@@ -11,6 +11,28 @@ On 2026-10-20, a consistent SQLite online-backup snapshot copied the saved conte
 The two deployments use independent databases after this copy. Later bookings, inquiries and admin edits do not propagate between them. Existing browser cookies are scoped to the old domain; customers can recover a copied appointment on the new domain with its original booking code and contact. A future final cutover must reconcile any newer records on the B41 copy before it is retired.
 
 Always pass explicit owner project, environment and service IDs to Railway CLI operations. Local linking can point to the B41 project in older checkouts. Never copy Railway-provided project/domain variables from the old deployment; `SITE_URL` must use the owner origin.
+
+## Custom domain and DNS
+
+Domain registration stays at NIC.LV. Cloudflare manages the `skinstinct.lv` DNS zone in Edgar's existing account, zone ID `2eb855748022944a6b147e0e036882f2`, on the Free plan. On 2026-11-08, Edgar configured the assigned nameservers at NIC.LV:
+
+- `armando.ns.cloudflare.com`
+- `meera.ns.cloudflare.com`
+
+Both custom domains are attached to the owner Railway service on port 8080:
+
+| Type | Name | Target |
+| --- | --- | --- |
+| CNAME | `skinstinct.lv` | `qsawvu7e.up.railway.app` |
+| CNAME | `www.skinstinct.lv` | `uvv0ol1i.up.railway.app` |
+| TXT | `_railway-verify.skinstinct.lv` | Ownership value from `railway domain status skinstinct.lv --json` |
+| TXT | `_railway-verify.www.skinstinct.lv` | Ownership value from `railway domain status www.skinstinct.lv --json` |
+
+The CNAME records use DNS-only mode. Cloudflare flattens the apex CNAME; Railway terminates HTTPS and renews certificates. Do not pin a resolved Railway IP in an A record. Keep the ownership TXT records in place. `SITE_URL=https://skinstinct.lv` controls canonical URLs, sitemap links and structured data. Next.js redirects only `www.skinstinct.lv` to the canonical HTTPS origin using status 308, preserving paths and query parameters. Other hosts keep their existing routing.
+
+The scoped Cloudflare token has DNS Edit and Zone Read for this zone only. Its Windows current-user DPAPI-encrypted copy is outside the repository at `C:\Users\ME\.codex\integrations\cloudflare\skinstinct-dns-token.dpapi`. Never print the token or copy it into project files, documentation or logs. The temporary `api.txt` import was deleted; Git and Docker explicitly exclude that filename.
+
+To verify a cutover, check the public NS and A/CNAME answers, Cloudflare zone activation, Railway domain ownership and certificate status, both HTTPS hostnames, the `www` redirect, and canonical/sitemap URLs. A domain appearing as ACTIVE in Railway's domain list only confirms configuration synchronization; DNS ownership and certificate issuance must be checked separately.
 
 ## Routes
 

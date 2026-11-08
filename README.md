@@ -58,7 +58,9 @@ Deploy using normal GitHub commits and pushes. Do not use `railway up` for this 
 
 The app requires a persistent volume mounted at `/data`. `DATA_DIR=/data` is set in the image. The database and uploaded images must remain outside the container's ephemeral filesystem. Keep this SQLite deployment at one service replica; use Postgres/shared storage before horizontal scaling.
 
-The owner site is https://skinstinct-production-b63b.up.railway.app . The Railway domain targets port 8080. Docker build, health check and restart settings are configured on the owner service through `scripts/Configure-Hosting.ps1`; the app does not depend on the deprecated `railway.json` format.
+The owner site's canonical origin is https://skinstinct.lv . The `www.skinstinct.lv` hostname redirects permanently to the canonical origin, preserving paths and queries. The technical address https://skinstinct-production-b63b.up.railway.app remains available. All three Railway domains target port 8080. Cloudflare manages DNS, with registration retained at NIC.LV. See `docs/OPERATIONS.md` for domain records and verification.
+
+Docker build, health check and restart settings are configured on the owner service through `scripts/Configure-Hosting.ps1`; the app does not depend on the deprecated `railway.json` format.
 
 The previous B41 site at https://skinstinct-production.up.railway.app remains running in project `6a94610d-2e1c-4aed-b0d9-764b4efa1575`, service `9299dc12-f714-44cd-8260-87a853f9f518`. Its database was copied to the owner's project on 2026-10-20. Subsequent bookings, messages and content edits are independent; no live database synchronization is configured. Do not stop the B41 service without Edgar's approval.
 

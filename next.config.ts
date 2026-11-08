@@ -7,6 +7,16 @@ const config: NextConfig = {
   agentRules: false,
   experimental: { cpus: 2 },
   images: { formats: ["image/avif", "image/webp"] },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www\\.skinstinct\\.lv" }],
+        destination: "https://skinstinct.lv/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

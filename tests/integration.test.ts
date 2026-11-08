@@ -7,6 +7,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import net from "node:net";
 import { once } from "node:events";
+import { get as httpGet } from "node:http";
 import { startDate } from "../lib/booking";
 import Database from "better-sqlite3";
 
@@ -95,6 +96,28 @@ const cookieOf = (response: Response, name: string) =>
     .getSetCookie()
     .find((v) => v.startsWith(`${name}=`))
     ?.split(";")[0] || "";
+
+test("Custom domain redirect preserves paths and queries without redirecting other hosts", async () => {
+  function getWithHost(route: string, host: string) {
+    return new Promise<{ status: number | undefined; location: string | undefined }>(
+      (resolve, reject) => {
+        httpGet(`${origin}${route}`, { headers: { Host: host } }, (response) => {
+          response.resume();
+          resolve({ status: response.statusCode, location: response.headers.location });
+        }).on("error", reject);
+      },
+    );
+  }
+  const redirected = await getWithHost("/en/articles?source=domain", "www.skinstinct.lv");
+  assert.equal(redirected.status, 308);
+  assert.equal(redirected.location, "https://skinstinct.lv/en/articles?source=domain");
+
+  for (const host of ["skinstinct.lv", "skinstinct-production.up.railway.app"]) {
+    const response = await getWithHost("/api/health", host);
+    assert.equal(response.status, 200);
+    assert.equal(response.location, undefined);
+  }
+});
 
 test("Booking lifecycle, isolation, content management and restart persistence", async (t) => {
   let admin = "";
