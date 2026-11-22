@@ -187,6 +187,7 @@ export function BookingWidget({
           <span>
             {dateLabel(date, lang)} · {time} · Europe/Riga
           </span>
+          <span>{[settings.address, settings.city].filter(Boolean).join(", ")}</span>
         </div>
         <div className="booking-code">
           <span>

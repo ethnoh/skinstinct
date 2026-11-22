@@ -70,7 +70,7 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
         </span>
         <span>
           <span className="tiny-dot" />
-          {settings.city}, {lang === "en" ? "Latvia" : lang === "ru" ? "Латвия" : "Latvija"}
+          {[settings.address, settings.city].filter(Boolean).join(", ")}
         </span>
       </div>
       <div className="site-identity">
@@ -190,7 +190,7 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
           </div>
           <div className="footer-contact">
             <span className="eyebrow">
-              {settings.city}, {lang === "en" ? "LATVIA" : lang === "ru" ? "ЛАТВИЯ" : "LATVIJA"}
+              {[settings.address, settings.city].filter(Boolean).join(", ")}
             </span>
             <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
               <Instagram size={18} /> @vr_skinstinct <ArrowUpRight size={16} />

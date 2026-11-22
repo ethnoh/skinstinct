@@ -91,6 +91,7 @@ export function setContent(key: string, value: unknown) {
 export const getSettings = () => {
   const saved = getContent<SiteSettings>("settings");
   const settings = { ...initialSettings, ...saved };
+  if (!settings.address?.trim()) settings.address = initialSettings.address;
   // Upgrade the retired bundled portraits while retaining custom owner uploads.
   if (
     [

@@ -196,7 +196,7 @@ export const initialSettings: SiteSettings = {
   },
   registration: "65120058811",
   city: "Jēkabpils",
-  address: "",
+  address: "Pļaviņu iela 51",
   phone: "",
   email: "",
   instagram: "https://www.instagram.com/vr_skinstinct/",

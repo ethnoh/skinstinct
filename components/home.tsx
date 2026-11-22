@@ -566,6 +566,16 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             </span>
           </div>
         </div>
+        {settings.address && (
+          <a
+            className="text-link"
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([settings.address, settings.city].join(", "))}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Maps <ArrowUpRight size={17} />
+          </a>
+        )}
         <div className="social-profile-links">
           <a
             className="text-link"
