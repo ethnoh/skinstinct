@@ -150,7 +150,9 @@ export const getArticles = () =>
           "/images/journal-instagram-intro.jpg",
         ].includes(article.image)
           ? "/images/journal-studio.webp"
-          : article.image,
+          : article.image === "/images/journal-care.webp"
+            ? "/images/valerija-studio-care-v4.webp"
+            : article.image,
       title: mergeLocalized(article.title, defaults?.title),
       category: mergeLocalized(article.category, defaults?.category),
       excerpt: mergeLocalized(article.excerpt, defaults?.excerpt),
