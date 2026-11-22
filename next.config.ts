@@ -5,7 +5,7 @@ const config: NextConfig = {
   serverExternalPackages: ["better-sqlite3"],
   poweredByHeader: false,
   agentRules: false,
-  experimental: { cpus: 2 },
+  experimental: { cpus: process.env.SKINSTINCT_BUILD_CPUS === "1" ? 1 : 2 },
   images: { formats: ["image/avif", "image/webp"] },
   async redirects() {
     return [
@@ -28,7 +28,7 @@ const config: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
           {
             key: "Content-Security-Policy",
-            value: `default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'`,
+            value: `default-src 'self'; script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src https://www.instagram.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'`,
           },
           { key: "Strict-Transport-Security", value: "max-age=31536000" },
         ],

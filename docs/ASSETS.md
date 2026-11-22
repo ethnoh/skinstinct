@@ -4,7 +4,12 @@ All generated images used the built-in image generation tool. Optimized copies l
 
 | Asset | Use |
 | --- | --- |
-| public/images/journal-instagram-intro.jpg | Unchanged 640px public preview from the owner's Instagram introduction post https://www.instagram.com/p/DeGuHoeDNfY/, previously downloaded and visually verified on 2026-10-20. Used for the introductory journal article; other article images and custom uploads remain unchanged. |
+| public/images/journal-studio.webp | Journal introduction cover, derived from the owner's FOTOSESIJA 11.11.26/IMG_5218.jpeg. |
+| public/images/journal-conversation.webp | Conversation article cover, IMG_5147.jpeg from the same photoshoot. |
+| public/images/journal-care.webp | Everyday care article cover, IMG_5263.jpeg from the same photoshoot. |
+| public/images/journal-brushes.webp | Studio gallery, IMG_5142.jpeg from the same photoshoot. |
+| public/images/journal-details.webp | Studio gallery, IMG_5175.jpeg from the same photoshoot. |
+| public/images/journal-instagram-intro.jpg | Unchanged 640px public preview from the owner's Instagram introduction post https://www.instagram.com/p/DeGuHoeDNfY/, previously downloaded and visually verified on 2026-10-20. Retained previous introduction cover; replaced with the studio photograph in November. |
 | public/images/valerija-botanical-background.webp | Current About portrait: original photo foreground composited over the AI-generated warm botanical and window-shadow background. Full 1536x2752 frame, lossless WebP; face, tunic, hands and tools checked against source pixels. Custom uploaded portraits remain unchanged. |
 | public/images/valerija-original-white.jpeg | Retained exact copy of F7369116-3F67-46B7-A485-1775DA32EFFF.jpeg on a plain wall, without retouching or AI edits. Original preserved; the owner requested a background-only edit of this photo. |
 | public/images/valerija-v2.webp | Retained alternate portrait refined against the additional facial reference. |
@@ -31,6 +36,12 @@ Photorealistic intimate editorial close-up of a woman with closed eyes resting i
 Photorealistic tactile skincare still life on warm ivory linen: off-white ceramic cream bowl, wooden-handled fan brush, plain unlabeled frosted cosmetic bottle with olive-toned liquid, an olive branch and a pale ivory flower. Muted sage, warm off-white, dusty peach and subtle gold. Natural sunlight and botanical shadows on peach plaster. Refined European boutique skincare editorial, landscape 3:2, no text, labels or logos.
 
 ## Fonts and icons
+
+The November journal release uses five owner-supplied photographs, rotated using their orientation metadata and resized to at most 1600px width as quality-88 WebP. No AI retouching, recolouring or face changes. Originals remain in the local photoshoot folder and are excluded from Git and Docker; only selected web derivatives ship.
+
+The two new articles are editorial adaptations of the values in the owner's introduction at https://www.instagram.com/p/DeGuHoeDNfY/, not invented additional Instagram posts. The saved introduction caption was reviewed. On 2026-11-22 the public profile confirmed @vr_skinstinct, but did not expose individual post/reel links. The website therefore embeds only the verified introduction, after an explicit visitor click, with an external fallback link. No Instagram request occurs on initial page load. Other posts and reels are reached through the owner's profile link; there is no automatic feed or unverified reel embedded.
+
+Existing article text and custom uploads remain authoritative. The introduction's retired bundled cover is replaced with the studio photograph. Two new multilingual articles are added once using a transactional release marker, so later admin edits, unpublished states and deletions are retained.
 
 - Cormorant Garamond and Manrope are served locally from public/fonts, obtained via the official Google Fonts CSS API. No visitor request goes to Google Fonts.
 - Font families: https://fonts.google.com/specimen/Cormorant+Garamond and https://fonts.google.com/specimen/Manrope . Both are available under the SIL Open Font License.

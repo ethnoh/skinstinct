@@ -13,6 +13,8 @@ import { CookieNotice, Footer, Header, MobileBooking } from "@/components/chrome
 import { ArticleCard, Home } from "@/components/home";
 import { Account } from "@/components/account";
 import { Privacy } from "@/components/legal";
+import { JournalSocial } from "@/components/journal-social";
+import { instagramIntroduction, journalArticles } from "@/lib/journal-content";
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -181,6 +183,7 @@ export default async function Page({ params }: Props) {
         {!articles.length && (
           <p>{tr(lang, "Pirmie pieraksti drīzumā.", "Первые заметки скоро появятся.")}</p>
         )}
+        <JournalSocial lang={lang} instagram={s.instagram} />
       </main>
     );
   else if (parts.length === 2 && parts[0] === "articles") {
@@ -231,6 +234,22 @@ export default async function Page({ params }: Props) {
             />
           </div>
           <ArticleBody text={article.body[lang]} />
+          {(article.id === "intro" || journalArticles.some((item) => item.id === article.id)) && (
+            <a
+              className="text-link article-source"
+              href={instagramIntroduction}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {
+                {
+                  lv: "Saistītais Instagram ieraksts",
+                  en: "Related Instagram post",
+                  ru: "Пост в Instagram по теме",
+                }[lang]
+              }
+            </a>
+          )}
           <div className="article-cta">
             <Link href={`${base}/#pieraksts`} className="button">
               {tr(lang, "Laiks sev", "Время для себя")}

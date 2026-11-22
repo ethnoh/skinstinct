@@ -28,6 +28,7 @@ import type { Article, Lang, Service, SiteSettings } from "@/lib/types";
 import { BookingWidget } from "./booking";
 import { ScrollEffects } from "./scroll-effects";
 import { Rhythm } from "./rhythm";
+import { JournalSocial } from "./journal-social";
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -446,7 +447,7 @@ export function Home({
           ))}
         </div>
       </section>
-      <section className="section journal-section">
+      <section className="section journal-section" id="dienasgramata">
         <div className="container">
           <div className="section-top">
             <div>
@@ -465,41 +466,12 @@ export function Home({
           <div className="journal-grid">
             {articles
               .filter((a) => a.published)
-              .slice(0, 2)
+              .slice(0, 3)
               .map((a) => (
                 <ArticleCard key={a.id} article={a} lang={lang} />
               ))}
-            <a
-              className="instagram-card"
-              href={settings.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Instagram size={27} strokeWidth={1.25} />
-              <div>
-                <span className="eyebrow">@VR_SKINSTINCT</span>
-                <h3>
-                  {tr(
-                    lang,
-                    "Studija top.\nEsi daļa no stāsta.",
-                    "Студия рождается.\nБудь частью истории.",
-                  )}
-                </h3>
-                <p>
-                  {tr(
-                    lang,
-                    "Iepazīšanās, vērtības un mazie rūpju mirkļi Instagram.",
-                    "Знакомство, ценности и маленькие моменты заботы в Instagram.",
-                  )}
-                </p>
-              </div>
-              <span className="text-link">
-                {tr(lang, "Tiekamies tur", "Встретимся там")}
-                <ArrowUpRight size={18} />
-              </span>
-              <Botanical />
-            </a>
           </div>
+          <JournalSocial lang={lang} instagram={settings.instagram} />
         </div>
       </section>
       <ContactSection lang={lang} settings={settings} />

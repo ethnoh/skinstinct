@@ -1,4 +1,5 @@
 import type { Article, Service, SiteSettings } from "./types";
+import { journalArticles } from "./journal-content";
 
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
@@ -292,8 +293,9 @@ export const initialArticles: Article[] = [
       ru: "## Место, где Тебя услышат\nSKINSTINCT начинается с простой мысли: каждая кожа индивидуальна и заслуживает внимательного отношения. Я Валерия Разуева, и сейчас я создаю свою студию косметологии в Екабпилсе.\n\n## Сначала понимание\nПрежде чем выбирать уход, я хочу познакомиться с Твоей кожей и повседневными привычками. Мои профессиональные интересы: корнеотерапия и диагностика кожи.\n\n## Отношения со своей кожей надолго\nМне хочется делиться знаниями, которые помогают ориентироваться в уходе и за пределами студии. Здесь я постепенно буду рассказывать о новостях и своём подходе.\n\nБуду рада знакомству. Следи за развитием студии в Instagram или оставь сообщение через форму на сайте.",
     },
     category: { lv: "STUDIJAS DIENASGRĀMATA", en: "STUDIO JOURNAL", ru: "ДНЕВНИК СТУДИИ" },
-    image: "/images/journal-instagram-intro.jpg",
+    image: "/images/journal-studio.webp",
     published: true,
     createdAt: "2026-10-17T09:00:00.000Z",
   },
+  ...journalArticles,
 ];

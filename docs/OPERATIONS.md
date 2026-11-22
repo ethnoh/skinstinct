@@ -73,6 +73,10 @@ There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online pa
 
 ## Release checks
 
+The November 2026 journal release updates Next.js from 16.4.2 to the registry-recommended security patch 16.4.6 after the build command stopped with a security advisory. React versions are unchanged. The existing Sharp 0.34.5 high-severity audit finding remains a separate dependency maintenance item.
+
+On this 4 GB Windows computer, use `SKINSTINCT_BUILD_CPUS=1`, `RAYON_NUM_THREADS=1`, `UV_THREADPOOL_SIZE=1` and `NODE_OPTIONS=--max-old-space-size=768 --use-system-ca` when building with limited free memory. The default build retains two workers on hosting. Run browser QA and integration tests after the build, with separate temporary data directories.
+
 Appearance uses Cormorant Garamond headings and Manrope navigation/body text. Keep the portrait's image clipping inside `.portrait-image-frame`; the reveal container and caption must remain unmasked. Left/right reveals calculate their travel from the available viewport margin and honor reduced-motion settings.
 
 The default theme is automatic. SunCalc calculates daily sunrise/sunset using Jekabpils city-centre coordinates (56.5, 25.86), not a studio address. Calendar dates and displayed times use Europe/Riga, including DST. The browser schedules the next solar transition and refreshes after midnight, focus and tab visibility changes. No external sunrise API or visitor geolocation is used.

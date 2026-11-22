@@ -4,6 +4,7 @@ import path from "node:path";
 import { initialArticles, initialCopy, initialServices, initialSettings } from "./content";
 import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
+import { journalArticles } from "./journal-content";
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -55,6 +56,23 @@ export function db() {
   insert.run("settings", JSON.stringify(initialSettings));
   insert.run("services", JSON.stringify(initialServices));
   insert.run("articles", JSON.stringify(initialArticles));
+  // Apply this editorial release once, preserving subsequent admin edits and deletions.
+  instance.transaction(() => {
+    if (instance!.prepare("SELECT 1 FROM content WHERE key = ?").get("journal-release-2026-11"))
+      return;
+    const row = instance!.prepare("SELECT value FROM content WHERE key = 'articles'").get() as {
+      value: string;
+    };
+    const articles = JSON.parse(row.value) as Article[];
+    const additions = journalArticles.filter(
+      (article) =>
+        !articles.some((saved) => saved.id === article.id || saved.slug === article.slug),
+    );
+    instance!
+      .prepare("UPDATE content SET value = ? WHERE key = 'articles'")
+      .run(JSON.stringify([...articles, ...additions]));
+    insert.run("journal-release-2026-11", "true");
+  })();
   cleanup(instance);
   return instance;
 }
@@ -126,8 +144,12 @@ export const getArticles = () =>
       ...article,
       image:
         article.id === "intro" &&
-        ["/images/valerija.webp", "/images/valerija-v2.webp"].includes(article.image)
-          ? "/images/journal-instagram-intro.jpg"
+        [
+          "/images/valerija.webp",
+          "/images/valerija-v2.webp",
+          "/images/journal-instagram-intro.jpg",
+        ].includes(article.image)
+          ? "/images/journal-studio.webp"
           : article.image,
       title: mergeLocalized(article.title, defaults?.title),
       category: mergeLocalized(article.category, defaults?.category),
