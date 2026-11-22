@@ -40,6 +40,7 @@ export type SiteSettings = {
   phone: string;
   email: string;
   instagram: string;
+  facebook?: string;
   legalName: string;
   legalRegistration: string;
   legalAddress: string;

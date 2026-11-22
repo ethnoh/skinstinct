@@ -1313,6 +1313,7 @@ export function Admin() {
                           ["phone", "Tālrunis"],
                           ["email", "E-pasts"],
                           ["instagram", "Instagram saite"],
+                          ["facebook", "Facebook saite"],
                           ["legalName", "Juridiskais nosaukums / datu pārzinis"],
                           ["legalRegistration", "Uzņēmuma reģistrācijas numurs"],
                           ["legalAddress", "Juridiskā adrese"],
@@ -1322,7 +1323,7 @@ export function Admin() {
                         <label key={key}>
                           {label}
                           <input
-                            value={String(settings[key])}
+                            value={String(settings[key] ?? "")}
                             onChange={(e) => updateSetting(key, e.target.value as never)}
                           />
                         </label>

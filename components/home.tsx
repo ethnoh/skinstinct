@@ -14,6 +14,7 @@ import {
   Flower2,
   Heart,
   Instagram,
+  Facebook,
   Leaf,
   LoaderCircle,
   MapPin,
@@ -359,10 +360,19 @@ export function Home({
             <img src={settings.logoImage} width={64} height={64} alt="" />
             <div>
               <span>{tr(lang, "Ir jautājumi? Esmu tepat.", "Есть вопросы? Я рядом.")}</span>
-              <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
-                {tr(lang, "Uzraksti man Instagram", "Напиши мне в Instagram")}
-                <ArrowUpRight size={15} />
-              </a>
+              <div className="booking-help-links">
+                <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
+                  {tr(lang, "Uzraksti man Instagram", "Напиши мне в Instagram")}
+                  <ArrowUpRight size={15} />
+                </a>
+                {settings.facebook && (
+                  <a href={settings.facebook} target="_blank" rel="noopener noreferrer">
+                    <Facebook size={15} aria-hidden="true" />
+                    Facebook
+                    <ArrowUpRight size={15} />
+                  </a>
+                )}
+              </div>
             </div>
           </div>
           <Botanical />
@@ -471,7 +481,7 @@ export function Home({
                 <ArticleCard key={a.id} article={a} lang={lang} />
               ))}
           </div>
-          <JournalSocial lang={lang} instagram={settings.instagram} />
+          <JournalSocial lang={lang} instagram={settings.instagram} facebook={settings.facebook} />
         </div>
       </section>
       <ContactSection lang={lang} settings={settings} />
@@ -556,16 +566,29 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             </span>
           </div>
         </div>
-        <a
-          className="text-link"
-          href={settings.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Instagram size={19} />
-          @vr_skinstinct
-          <ArrowUpRight size={17} />
-        </a>
+        <div className="social-profile-links">
+          <a
+            className="text-link"
+            href={settings.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Instagram size={19} />
+            @vr_skinstinct
+            <ArrowUpRight size={17} />
+          </a>
+          {settings.facebook && (
+            <a
+              className="text-link"
+              href={settings.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Facebook size={19} aria-hidden="true" /> Facebook · @vrskinstinct{" "}
+              <ArrowUpRight size={17} />
+            </a>
+          )}
+        </div>
       </div>
       <div className="contact-form-wrap">
         {sent ? (

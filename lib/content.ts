@@ -200,6 +200,7 @@ export const initialSettings: SiteSettings = {
   phone: "",
   email: "",
   instagram: "https://www.instagram.com/vr_skinstinct/",
+  facebook: "https://www.facebook.com/vrskinstinct",
   legalName: "SKINSTINCT",
   legalRegistration: "",
   legalAddress: "",

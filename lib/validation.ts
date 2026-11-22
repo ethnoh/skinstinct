@@ -82,6 +82,20 @@ export const settingsSchema = z.object({
     const u = new URL(v);
     return u.protocol === "https:" && ["instagram.com", "www.instagram.com"].includes(u.hostname);
   }),
+  facebook: z
+    .union([
+      z.literal(""),
+      z.url().refine((value) => {
+        const url = new URL(value);
+        return (
+          url.protocol === "https:" &&
+          ["facebook.com", "www.facebook.com", "m.facebook.com"].includes(url.hostname) &&
+          !url.username &&
+          !url.password
+        );
+      }),
+    ])
+    .optional(),
   legalName: text(200),
   legalRegistration: text(50),
   legalAddress: text(300),

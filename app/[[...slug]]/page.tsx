@@ -127,7 +127,7 @@ export default async function Page({ params }: Props) {
       url: siteUrl(),
       description: s.seoDescription[lang],
       image: `${siteUrl()}${s.heroImage}`,
-      sameAs: [s.instagram],
+      sameAs: [s.instagram, ...(s.facebook ? [s.facebook] : [])],
       address: {
         "@type": "PostalAddress",
         addressLocality: s.city,
@@ -183,7 +183,7 @@ export default async function Page({ params }: Props) {
         {!articles.length && (
           <p>{tr(lang, "Pirmie pieraksti drīzumā.", "Первые заметки скоро появятся.")}</p>
         )}
-        <JournalSocial lang={lang} instagram={s.instagram} />
+        <JournalSocial lang={lang} instagram={s.instagram} facebook={s.facebook} />
       </main>
     );
   else if (parts.length === 2 && parts[0] === "articles") {

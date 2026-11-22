@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Instagram } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 import type { Lang, Localized } from "@/lib/types";
 import { instagramIntroduction } from "@/lib/journal-content";
 
@@ -46,7 +46,15 @@ const copy = {
   },
 } satisfies Record<string, Localized>;
 
-export function JournalSocial({ lang, instagram }: { lang: Lang; instagram: string }) {
+export function JournalSocial({
+  lang,
+  instagram,
+  facebook,
+}: {
+  lang: Lang;
+  instagram: string;
+  facebook?: string;
+}) {
   const [loaded, setLoaded] = useState(false);
   return (
     <section className="journal-social" aria-labelledby="journal-social-title">
@@ -94,6 +102,17 @@ export function JournalSocial({ lang, instagram }: { lang: Lang; instagram: stri
             <Instagram size={19} aria-hidden="true" />
             {copy.profile[lang]}
           </a>
+          {facebook && (
+            <a
+              href={facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="journal-profile-link"
+            >
+              <Facebook size={19} aria-hidden="true" />
+              Facebook · @vrskinstinct
+            </a>
+          )}
         </div>
         <div className="journal-instagram-post">
           <span className="eyebrow">

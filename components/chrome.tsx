@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   CalendarDays,
   Instagram,
+  Facebook,
   Leaf,
   Menu,
   ShieldCheck,
@@ -194,6 +195,12 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <a href={settings.instagram} target="_blank" rel="noopener noreferrer">
               <Instagram size={18} /> @vr_skinstinct <ArrowUpRight size={16} />
             </a>
+            {settings.facebook && (
+              <a href={settings.facebook} target="_blank" rel="noopener noreferrer">
+                <Facebook size={18} aria-hidden="true" /> Facebook · @vrskinstinct{" "}
+                <ArrowUpRight size={16} />
+              </a>
+            )}
             {settings.phone && (
               <a href={`tel:${settings.phone.replace(/[^+\d]/g, "")}`}>{settings.phone}</a>
             )}
