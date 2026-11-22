@@ -175,7 +175,7 @@ export default async function Page({ params }: Props) {
             )}
           </p>
         </div>
-        <div className="articles-list">
+        <div className="journal-grid">
           {articles.map((a) => (
             <ArticleCard article={a} lang={lang} key={a.id} />
           ))}
