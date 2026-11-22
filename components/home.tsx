@@ -30,6 +30,10 @@ import { BookingWidget } from "./booking";
 import { ScrollEffects } from "./scroll-effects";
 import { Rhythm } from "./rhythm";
 import { JournalSocial } from "./journal-social";
+import { ChooseTreatment, PriceList } from "./price-list";
+import { serviceDuration, servicePrice } from "@/lib/service-display";
+import { TreatmentPrice } from './treatment-price';
+import { cataloguePriceDate } from '@/lib/opening-offer';
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -182,11 +186,22 @@ export function Home({
               <em>{settings.copy.servicesAccent[lang]}</em>
             </h2>
           </div>
-          <p className="section-intro">{settings.copy.servicesIntro[lang]}</p>
+          <div className="section-intro">
+            <p>{settings.copy.servicesIntro[lang]}</p>
+            <Link className="text-link full-price-link" href={`${base}/prices`}>
+              {
+                {
+                  lv: "Pilns procedūru cenrādis",
+                  en: "Full treatment price list",
+                  ru: "Полный прайс-лист процедур",
+                }[lang]
+              }
+            </Link>
+          </div>
         </div>
         <div className="services-grid">
           {services
-            .filter((s) => s.active)
+            .filter((s) => s.active && s.group === "face")
             .map((s, i) => (
               <article className="service-card" key={s.id}>
                 <a
@@ -214,20 +229,43 @@ export function Home({
                   <div className="service-meta">
                     <span>
                       <Clock3 size={14} />
-                      {s.duration} min
+                      {serviceDuration(s, lang)}
                     </span>
-                    <span>{money(s.price, lang)}</span>
+                    <strong><TreatmentPrice service={s} lang={lang} date={cataloguePriceDate(initialToday)} /></strong>
                   </div>
+                  <ChooseTreatment service={s} lang={lang} />
                 </div>
               </article>
             ))}
         </div>
+        <div className="home-price-heading">
+          <span className="eyebrow">
+            {{ lv: "SKAIDRI UN PĀRSKATĀMI", en: "CLEAR AND SIMPLE", ru: "ЯСНО И ПОНЯТНО" }[lang]}
+          </span>
+          <h3>
+            {
+              { lv: "Procedūras un cenas", en: "Treatments and prices", ru: "Процедуры и цены" }[
+                lang
+              ]
+            }
+          </h3>
+          <p>
+            {
+              {
+                lv: "Visas cenas norādītas eiro. Izvēlies procedūru un piesaki savu laiku.",
+                en: "All prices are in euros. Choose a treatment and book your time.",
+                ru: "Все цены указаны в евро. Выбери процедуру и удобное время.",
+              }[lang]
+            }
+          </p>
+        </div>
+        <PriceList services={services} lang={lang} today={initialToday} compact />
         <p className="services-note">
           <Sparkles size={15} />
           {tr(
             lang,
-            "Nezini, ar ko sākt? Iepazīšanās vizīte palīdzēs saprast Tavas ādas vajadzības.",
-            "Не знаешь, с чего начать? Первая встреча поможет понять Твою кожу.",
+            "Nezini, ar ko sākt? Sazinies, un palīdzēšu izvēlēties piemērotāko procedūru.",
+            "Не знаешь, с чего начать? Напиши мне — помогу подобрать подходящую процедуру.",
           )}
         </p>
       </section>

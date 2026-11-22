@@ -948,7 +948,11 @@ export function Admin() {
                             checked={s.active}
                             onChange={(e) => updateService(s.id, { active: e.target.checked })}
                           />
-                          <span>{"Pakalpojums redzams vietnē un pieraksta formā"}</span>
+                          <span>{"Pakalpojums redzams vietnē"}</span>
+                        </label>
+                        <label className="checkbox-label">
+                          <input type="checkbox" checked={s.bookable !== false} onChange={e => updateService(s.id, {bookable:e.target.checked})} />
+                          <span>Atļaut pieteikties tiešsaistē</span>
                         </label>
                         <LField
                           label="Nosaukums"
@@ -968,12 +972,12 @@ export function Admin() {
                         />
                         <div className="form-row">
                           <label>
-                            {"Ilgums, min"}
+                            {"Kalendārā rezervējamais ilgums, min"}
                             <input
                               type="number"
                               min={15}
                               max={240}
-                              step={15}
+                              step={5}
                               value={s.duration}
                               onChange={(e) =>
                                 updateService(s.id, { duration: Number(e.target.value) })
@@ -981,7 +985,7 @@ export function Admin() {
                             />
                           </label>
                           <label>
-                            {"Cena, EUR"}
+                            {"Cena / diapazona sākums, EUR"}
                             <input
                               type="number"
                               min={0}
@@ -996,6 +1000,55 @@ export function Admin() {
                             />
                           </label>
                         </div>
+                        <div className="form-row">
+                          <label>
+                            {"Ilgums no, min (ja ir diapazons)"}
+                            <input
+                              type="number"
+                              min={15}
+                              max={s.duration}
+                              step={5}
+                              value={s.durationMin ?? ""}
+                              onChange={(e) =>
+                                updateService(s.id, {
+                                  durationMin:
+                                    e.target.value === "" ? null : Number(e.target.value),
+                                })
+                              }
+                            />
+                          </label>
+                          <label>
+                            {"Cena līdz, EUR (ja ir diapazons)"}
+                            <input
+                              type="number"
+                              min={s.price ?? 0}
+                              max={10000}
+                              value={s.priceMax ?? ""}
+                              onChange={(e) =>
+                                updateService(s.id, {
+                                  priceMax: e.target.value === "" ? null : Number(e.target.value),
+                                })
+                              }
+                            />
+                          </label>
+                        </div>
+                        <label>
+                          {"Cenrāža sadaļa"}
+                          <select
+                            value={s.group ?? ""}
+                            onChange={(e) =>
+                              updateService(s.id, {
+                                group: (e.target.value || undefined) as Service["group"],
+                              })
+                            }
+                          >
+                            <option value="">Citi pakalpojumi</option>
+                            <option value="face">Sejas kopšanas procedūras</option>
+                            <option value="diagnostics">Ādas diagnostika</option>
+                            <option value="injections">Injekciju procedūras</option>
+                            <option value="massage">Masāžas</option>
+                          </select>
+                        </label>
                         <Upload
                           label="Pakalpojuma attēls"
                           value={s.image}

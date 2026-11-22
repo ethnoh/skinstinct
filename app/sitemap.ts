@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     "",
     "/articles",
+    "/prices",
     "/privacy",
     ...getArticles()
       .filter((a) => a.published)

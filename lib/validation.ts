@@ -38,10 +38,22 @@ export const serviceSchema = z
     category: localized,
     duration: z.number().int().min(15).max(240),
     price: z.number().min(0).max(10000).nullable(),
+    priceMax: z.number().min(0).max(10000).nullable().optional(),
+    durationMin: z.number().int().min(15).max(240).nullable().optional(),
+    group: z.enum(["face", "diagnostics", "injections", "massage"]).optional(),
     active: z.boolean(),
+    bookable: z.boolean().optional(),
     image: imagePath,
   })
-  .refine((v) => !v.active || Object.values(v.title).every((title) => title.length >= 2));
+  .refine((v) => !v.active || Object.values(v.title).every((title) => title.length >= 2))
+  .refine((v) => v.priceMax == null || (v.price !== null && v.priceMax >= v.price), {
+    message: "Invalid price range",
+    path: ["priceMax"],
+  })
+  .refine((v) => v.durationMin == null || v.durationMin <= v.duration, {
+    message: "Invalid duration range",
+    path: ["durationMin"],
+  });
 export const articleSchema = z
   .object({
     id: text(80).min(1),

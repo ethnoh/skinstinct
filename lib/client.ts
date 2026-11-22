@@ -80,5 +80,6 @@ export const money = (price: number | null, lang: Lang) =>
     : new Intl.NumberFormat(localeCode(lang), {
         style: "currency",
         currency: "EUR",
-        maximumFractionDigits: 0,
+        minimumFractionDigits: Number.isInteger(price) ? 0 : 2,
+        maximumFractionDigits: 2,
       }).format(price);

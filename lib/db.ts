@@ -5,6 +5,7 @@ import { initialArticles, initialCopy, initialServices, initialSettings } from "
 import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
+import { applyPriceRelease, priceBookingNotice } from "./price-catalogue";
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -53,6 +54,10 @@ export function db() {
     CREATE TABLE IF NOT EXISTS limits (key TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at INTEGER NOT NULL);
   `);
   const insert = instance.prepare("INSERT OR IGNORE INTO content(key,value) VALUES (?,?)");
+  const bookingFields = instance.prepare('PRAGMA table_info(bookings)').all() as {name: string}[];
+  for (const field of ['quoted_price_min', 'quoted_price_max']) {
+    if (!bookingFields.some(column => column.name === field)) instance.exec(`ALTER TABLE bookings ADD COLUMN ${field} REAL`);
+  }
   insert.run("settings", JSON.stringify(initialSettings));
   insert.run("services", JSON.stringify(initialServices));
   insert.run("articles", JSON.stringify(initialArticles));
@@ -72,6 +77,57 @@ export function db() {
       .prepare("UPDATE content SET value = ? WHERE key = 'articles'")
       .run(JSON.stringify([...articles, ...additions]));
     insert.run("journal-release-2026-11", "true");
+  })();
+  instance.transaction(() => {
+    if (instance!.prepare("SELECT 1 FROM content WHERE key = ?").get("price-release-2026-11-23"))
+      return;
+    const row = instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {
+      value: string;
+    };
+    instance!
+      .prepare("UPDATE content SET value=? WHERE key='services'")
+      .run(JSON.stringify(applyPriceRelease(JSON.parse(row.value))));
+    const settingsRow = instance!
+      .prepare("SELECT value FROM content WHERE key='settings'")
+      .get() as { value: string };
+    const settings = JSON.parse(settingsRow.value) as SiteSettings;
+    settings.bufferMinutes = 15;
+    settings.bookingEnabled = true;
+    const outdated = {
+      lv: "Cenu saskaņosim pirms vizītes.",
+      en: "We'll agree on the price before your visit.",
+      ru: "Стоимость согласуем до визита.",
+    };
+    for (const lang of ["lv", "en", "ru"] as const) {
+      if (settings.bookingNotice?.[lang]?.includes(outdated[lang]))
+        settings.bookingNotice[lang] = priceBookingNotice[lang];
+    }
+    const previousIntro = {
+      lv: "Sāc ar iepazīšanās vizīti.",
+      en: "Start with an introductory visit.",
+      ru: "Начни со знакомства с Твоей кожей.",
+    };
+    const newIntro = {
+      lv: "Izvēlies piemērotāko pirmreizējo procedūru — ādas stāvokli izvērtēsim vizītes laikā.",
+      en: "Choose a first treatment — we will assess your skin during the visit.",
+      ru: "Выбери первую процедуру — состояние кожи оценим во время визита.",
+    };
+    for (const lang of ["lv", "en", "ru"] as const) {
+      if (settings.copy?.faq1Answer?.[lang])
+        settings.copy.faq1Answer[lang] = settings.copy.faq1Answer[lang].replace(
+          previousIntro[lang],
+          newIntro[lang],
+        );
+    }
+    const oldMetrics = { lv: "kopšanas virzieni", en: "care directions", ru: "направления ухода" };
+    for (const lang of ["lv", "en", "ru"] as const) {
+      if (settings.copy?.rhythmServices?.[lang] === oldMetrics[lang])
+        settings.copy.rhythmServices[lang] = initialCopy.rhythmServices[lang];
+    }
+    instance!
+      .prepare("UPDATE content SET value=? WHERE key='settings'")
+      .run(JSON.stringify(settings));
+    insert.run("price-release-2026-11-23", "true");
   })();
   cleanup(instance);
   return instance;

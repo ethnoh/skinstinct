@@ -1,4 +1,5 @@
 import type { Lang, Service, SiteSettings } from "@/lib/types";
+import { serviceDuration } from "@/lib/service-display";
 
 function Counter({ value }: { value: number }) {
   return (
@@ -20,10 +21,10 @@ export function Rhythm({
   services: Service[];
   settings: SiteSettings;
 }) {
-  const active = services.filter((service) => service.active);
+  const active = services.filter((service) => service.active && service.bookable !== false);
   if (!active.length) return null;
   const durations = active.map((service) => service.duration);
-  const shortest = Math.min(...durations);
+  const shortest = Math.min(...active.map((service) => service.durationMin ?? service.duration));
   const longest = Math.max(...durations);
   const copy = (key: string) => settings.copy[key][lang];
   return (
@@ -67,9 +68,7 @@ export function Rhythm({
             <div className="duration-row" key={service.id} role="listitem">
               <div>
                 <span>{service.title[lang]}</span>
-                <strong>
-                  <Counter value={service.duration} /> min
-                </strong>
+                <strong>{serviceDuration(service, lang)}</strong>
               </div>
               <div className="duration-track" aria-hidden="true">
                 <span

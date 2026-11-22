@@ -7,7 +7,11 @@ export type Service = {
   category: Localized;
   duration: number;
   price: number | null;
+  priceMax?: number | null;
+  durationMin?: number | null;
+  group?: "face" | "diagnostics" | "injections" | "massage";
   active: boolean;
+  bookable?: boolean;
   image: string;
 };
 export type Article = {
@@ -66,6 +70,8 @@ export type Booking = {
   status: "pending" | "confirmed" | "cancelled" | "completed";
   lang: Lang;
   created_at: string;
+  quoted_price_min?: number | null;
+  quoted_price_max?: number | null;
 };
 export type Block = { id: string; date: string; start_min: number; end_min: number; note: string };
 export type Inquiry = {

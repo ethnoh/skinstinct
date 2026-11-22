@@ -4,6 +4,10 @@ All generated images used the built-in image generation tool. Optimized copies l
 
 | Asset | Use |
 | --- | --- |
+| public/images/procedure-youth.webp | Procedure card, owner photoshoot IMG_5311.jpeg. |
+| public/images/procedure-glow.webp | Procedure card, owner photoshoot IMG_5319.jpeg. |
+| public/images/procedure-signature.webp | Procedure card, owner photoshoot IMG_5224.jpeg. |
+| public/images/procedure-longevity.webp | Procedure card, owner photoshoot IMG_5337.jpeg. |
 | public/images/journal-studio.webp | Journal introduction cover, derived from the owner's FOTOSESIJA 11.11.26/IMG_5218.jpeg. |
 | public/images/journal-conversation.webp | Conversation article cover, IMG_5147.jpeg from the same photoshoot. |
 | public/images/journal-care.webp | Everyday care article cover, IMG_5263.jpeg from the same photoshoot. |

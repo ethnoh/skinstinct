@@ -1,5 +1,6 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
+import { priceCatalogue, priceBookingNotice } from "./price-catalogue";
 
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
@@ -13,7 +14,7 @@ export const initialCopy: SiteSettings["copy"] = {
     en: "No rush. Choose an introductory visit or your individual care, and set aside a moment for yourself.",
     ru: "Без спешки. Выбери первую встречу или подходящий уход и запланируй время для себя.",
   },
-  rhythmServices: { lv: "kopšanas virzieni", en: "skincare services", ru: "направления ухода" },
+  rhythmServices: { lv: "procedūras", en: "skincare services", ru: "процедур" },
   rhythmDuration: { lv: "Tavai vizītei", en: "for your visit", ru: "для Твоего визита" },
   rhythmChartTitle: {
     lv: "Tavas vizītes ritms",
@@ -122,9 +123,9 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Что выбрать для первого визита?",
   },
   faq1Answer: {
-    lv: "Sāc ar iepazīšanās vizīti. Pārrunāsim Tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
-    en: "Start with an introductory visit. We'll discuss your daily skincare, your wishes and choose the next steps together.",
-    ru: "Начни со знакомства с Твоей кожей. Мы обсудим Твой уход, пожелания и подберём дальнейшие шаги лично.",
+    lv: "Izvēlies piemērotāko pirmreizējo procedūru — ādas stāvokli izvērtēsim vizītes laikā. Pārrunāsim Tavu ikdienas kopšanu, vēlmes un kopā izvēlēsimies turpmākos soļus.",
+    en: "Choose a first treatment — we will assess your skin during the visit. We'll discuss your daily skincare, your wishes and choose the next steps together.",
+    ru: "Выбери первую процедуру — состояние кожи оценим во время визита. Мы обсудим Твой уход, пожелания и подберём дальнейшие шаги лично.",
   },
   faq2Question: {
     lv: "Kā tiek apstiprināts pieraksts?",
@@ -211,11 +212,7 @@ export const initialSettings: SiteSettings = {
     ru: "SKINSTINCT, студия косметологии в Екабпилсе. Валерия Разуева: корнеотерапия, диагностика и индивидуальный уход за кожей. Онлайн запись.",
   },
   bookingEnabled: true,
-  bookingNotice: {
-    lv: "Studija top. Izvēlies vēlamo vizītes laiku, un es sazināšos, lai apstiprinātu tikšanos un precizētu adresi. Cenu saskaņosim pirms vizītes.",
-    en: "The studio is preparing to open. Choose your preferred appointment time and I'll contact you to confirm your visit and the address. We'll agree on the price before your visit.",
-    ru: "Студия готовится к открытию. Выбери желаемое время, и я свяжусь с Тобой, чтобы подтвердить встречу и уточнить адрес. Стоимость согласуем до визита.",
-  },
+  bookingNotice: priceBookingNotice,
   bufferMinutes: 15,
   cancellationHours: 24,
   schedule: Array.from({ length: 7 }, (_, day) => ({
@@ -225,54 +222,7 @@ export const initialSettings: SiteSettings = {
   })),
 };
 
-export const initialServices: Service[] = [
-  {
-    id: "consultation",
-    title: {
-      lv: "Iepazīšanās ar Tavu ādu",
-      en: "Getting to know your skin",
-      ru: "Знакомство с Твоей кожей",
-    },
-    category: { lv: "PIRMĀ VIZĪTE", en: "FIRST VISIT", ru: "ПЕРВЫЙ ВИЗИТ" },
-    description: {
-      lv: "Saruna par Tavas ādas vajadzībām, ikdienas paradumiem un kopšanas mērķiem. Pirmais solis pretī pārdomātai ādas kopšanai.",
-      en: "A conversation about your skin's needs, daily habits and skincare goals. Your first step towards a thoughtful skincare routine.",
-      ru: "Поговорим о потребностях Твоей кожи, привычках и целях ухода. Первый шаг к понятной системе заботы о себе.",
-    },
-    duration: 60,
-    price: null,
-    active: true,
-    image: "/images/treatment.webp",
-  },
-  {
-    id: "diagnostics",
-    title: { lv: "Ādas diagnostika", en: "Skin diagnostics", ru: "Диагностика кожи" },
-    category: { lv: "IZPRATNE", en: "UNDERSTANDING", ru: "ПОНИМАНИЕ" },
-    description: {
-      lv: "Iepazīstam Tavas ādas stāvokli un individuālās vajadzības, lai kopšanas izvēles būtu pamatotas un saprotamas.",
-      en: "We explore your skin's condition and individual needs to make informed, clear skincare choices.",
-      ru: "Изучаем состояние и индивидуальные потребности кожи, чтобы выбор ухода был обоснованным и понятным.",
-    },
-    duration: 60,
-    price: null,
-    active: true,
-    image: "/images/hero.webp",
-  },
-  {
-    id: "corneotherapy",
-    title: { lv: "Korneoterapija", en: "Corneotherapy", ru: "Корнеотерапия" },
-    category: { lv: "LĪDZSVARS", en: "BALANCE", ru: "БАЛАНС" },
-    description: {
-      lv: "Saudzīga pieeja, kuras uzmanības centrā ir ādas aizsargbarjera. Individuāli izvēlēta kopšana Tavas ādas komfortam.",
-      en: "A gentle approach centred on the skin's protective barrier. Individually selected care for your skin's comfort.",
-      ru: "Бережный подход с вниманием к защитному барьеру кожи. Индивидуально подобранный уход для её комфорта.",
-    },
-    duration: 90,
-    price: null,
-    active: true,
-    image: "/images/ritual.webp",
-  },
-];
+export const initialServices: Service[] = priceCatalogue;
 
 export const initialArticles: Article[] = [
   {

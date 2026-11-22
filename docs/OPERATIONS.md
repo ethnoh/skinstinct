@@ -63,7 +63,7 @@ All writes require a matching browser Origin. Public forms and login have databa
 
 ## Scheduling
 
-All bookings use Europe/Riga, including daylight saving transitions. New requests may be placed up to 90 days ahead, at least one hour before start. The initial schedule is a template: Monday to Friday, 10:00-18:00. Default consultation/diagnostic length is 60 minutes, corneotherapy 90 minutes, with 15-minute buffers. The owner must confirm the actual schedule and durations.
+All bookings use Europe/Riga, including daylight saving transitions. New requests may be placed up to 90 days ahead, at least one hour before start, with visits beginning 2026-12-01. The initial schedule is a template: Monday to Friday, 10:00-18:00; the owner's Google Maps profile hours are still awaiting a verified profile link. Standalone diagnostics take 30 minutes but are not bookable until the owner enables them. Mesotherapy and biorevitalisation reserve 60 minutes. Duration ranges reserve their upper bound. A 15-minute buffer separates clients, including exact boundary slots after 40-minute procedures.
 
 Pending and confirmed visits both occupy time. Cancelled visits release it. Restoring a cancelled visit checks for conflicts again. Single-day blocks close additional time without silently cancelling existing clients. Customer cancellation is allowed until 24 hours before start by default; the owner may change this window.
 
@@ -72,6 +72,10 @@ Pending and confirmed visits both occupy time. Cancelled visits release it. Rest
 There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online payment configured. Do not label stored requests as emailed or confirmed. iCalendar download is available. A future Google integration should use a separate provider module, verified delegated authorization and explicit reconciliation of calendar conflicts.
 
 ## Release checks
+
+The price catalogue is transcribed from the owner's `Izdruka ar logo,cenulapa,vizītkarte/Cenrādis mazāk izplūdis fons.png`. `/prices` is a live HTML price list, including print styles for vector-text PDF output through the browser. The same saved services supply the homepage, price page and appointment selector; no separate static price image can drift from booking prices. `priceMax` represents an actual price range, not a fixed starting price. `durationMin` is the displayed minimum; `duration` is the full time reserved by availability and booking checks.
+
+The one-time price release preserves old service records as inactive entries for historical references, updates the diagnostic entry and adds the new catalogue. Later admin changes, inactive states and deletions remain authoritative. Existing booking records are retained. Custom uploaded diagnostic images and unrelated settings are retained. Additive nullable quote columns keep the server-calculated price range for new appointments; historical rows remain unpriced. A 10 EUR introductory discount applies by visit date from 2026-12-01 through 2026-12-31, with standard prices from January. The same pure pricing rule supplies the catalogue and booking quote. No client-supplied price is trusted.
 
 The November 2026 journal release updates Next.js from 16.4.2 to the registry-recommended security patch 16.4.6 after the build command stopped with a security advisory. React versions are unchanged. The existing Sharp 0.34.5 high-severity audit finding remains a separate dependency maintenance item.
 

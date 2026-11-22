@@ -6,6 +6,7 @@ import { ArrowRight, CalendarDays, Clock3, LoaderCircle, Search } from "lucide-r
 import { api, basePath, dateLabel, errorMessage } from "@/lib/client";
 import { addressCase, tr } from "@/lib/i18n";
 import type { Booking, Lang, SiteSettings } from "@/lib/types";
+import { servicePrice } from '@/lib/service-display';
 
 type Visit = Booking & { canCancel: boolean };
 const time = (n: number) =>
@@ -133,6 +134,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                     {time(b.start_min)} - {time(b.end_min)} · Europe/Riga
                   </span>
                   <p>{b.name}</p>
+                  {b.quoted_price_min != null && <p>{servicePrice({price:b.quoted_price_min,priceMax:b.quoted_price_max},lang)}</p>}
                   <p>
                     {settings.address
                       ? `${settings.address}, ${settings.city}`

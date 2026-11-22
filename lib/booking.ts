@@ -2,6 +2,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { db, getServices, getSettings } from "./db";
 import { HttpError } from "./security";
 import type { Block, Booking } from "./types";
+import { BOOKING_START } from './opening-offer';
 
 export const TIMEZONE = "Europe/Riga";
 export function today() {
@@ -26,9 +27,9 @@ export function validHorizon(date: string) {
 }
 export function getSlots(date: string, serviceId: string) {
   const settings = getSettings();
-  const service = getServices().find((s) => s.id === serviceId && s.active);
+  const service = getServices().find((s) => s.id === serviceId && s.active && s.bookable !== false);
   if (!service) throw new HttpError(404, "SERVICE_NOT_FOUND");
-  if (!settings.bookingEnabled || !validHorizon(date)) return [];
+  if (!settings.bookingEnabled || !validHorizon(date) || date < BOOKING_START || service.duration < 15) return [];
   const day = settings.schedule[new Date(`${date}T12:00:00Z`).getUTCDay()];
   if (!day?.enabled) return [];
   const bookings = db()
@@ -40,11 +41,14 @@ export function getSlots(date: string, serviceId: string) {
     .prepare("SELECT start_min,end_min FROM blocks WHERE date=?")
     .all(date) as Block[];
   const slots: { time: string; available: boolean }[] = [];
-  for (
-    let minute = timeMinute(day.start);
-    minute + service.duration <= timeMinute(day.end);
-    minute += 30
-  ) {
+  const candidates = new Set<number>();
+  for (let minute = timeMinute(day.start); minute + service.duration <= timeMinute(day.end); minute += 15) candidates.add(minute);
+  for (const booking of bookings) {
+    candidates.add(booking.end_min + settings.bufferMinutes);
+    candidates.add(booking.start_min - settings.bufferMinutes - service.duration);
+  }
+  for (const minute of [...candidates].sort((a,b) => a-b)) {
+    if (minute < timeMinute(day.start) || minute + service.duration > timeMinute(day.end)) continue;
     if (startDate(date, minute).getTime() < Date.now() + 60 * 60 * 1000) continue;
     const end = minute + service.duration;
     const occupied =
@@ -68,4 +72,4 @@ export function publicBooking(booking: Booking) {
   return { ...safe, canCancel: canCancel(booking) };
 }
 export const bookingColumns =
-  "id,customer_id,service_id,service_title,date,start_min,end_min,name,phone,email,status,lang,created_at";
+  "id,customer_id,service_id,service_title,date,start_min,end_min,name,phone,email,status,lang,created_at,quoted_price_min,quoted_price_max";

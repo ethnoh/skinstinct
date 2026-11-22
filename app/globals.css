@@ -1455,6 +1455,26 @@ main {
   margin-top: 15px;
   padding-right: 30px;
 }
+.treatment-price {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: inherit;
+  gap: 2px;
+}
+.regular-treatment-price {
+  font-family: var(--font-body);
+  font-size: 0.64em;
+  font-weight: 400;
+  opacity: 0.65;
+}
+.price-offer-notice {
+  background: var(--cream);
+  border-left: 3px solid var(--olive);
+  padding: 16px 20px;
+  margin-block: 0 24px;
+  line-height: 1.65;
+  font-size: 15px;
+}
 .journal-section {
   background: var(--cream);
 }
@@ -1600,6 +1620,383 @@ main {
 .article-source {
   margin-top: 30px;
   font-size: 15px;
+}
+
+/* Live treatment catalogue shared with the appointment selector. */
+.full-price-link {
+  margin-top: 18px;
+  font-size: 15px;
+}
+.services-section .services-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.service-card-content > .text-link {
+  display: inline-flex;
+  margin-top: 18px;
+  font-size: 15px;
+}
+.service-meta strong {
+  font-size: 22px;
+  color: var(--olive);
+  font-weight: 600;
+}
+.home-price-heading {
+  margin-top: 64px;
+  margin-bottom: 30px;
+}
+.home-price-heading h3 {
+  font-size: clamp(34px, 4vw, 48px);
+  margin-block: 12px;
+}
+.home-price-heading > p {
+  font-size: 16px;
+  line-height: 1.8;
+}
+.price-page-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 42px;
+}
+.price-page-heading > div {
+  max-width: 780px;
+}
+.price-page-heading h1 {
+  font-size: clamp(42px, 5.5vw, 72px);
+  line-height: 1.1;
+  margin-block: 18px;
+}
+.price-page-heading p {
+  font-size: 16px;
+  line-height: 1.9;
+  max-width: 680px;
+}
+.price-print-logo {
+  display: none;
+}
+.price-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+.price-group {
+  min-width: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 28px;
+  border-radius: 5px;
+}
+.price-group[data-group="face"] {
+  grid-column: 1/-1;
+  background: var(--cream);
+}
+.price-group[data-group="massage"] {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+}
+.price-group > h3 {
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.15;
+  margin-bottom: 14px;
+  color: var(--olive);
+}
+.price-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.price-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 20px;
+  padding-block: 22px;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.price-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.price-row-copy {
+  min-width: 0;
+}
+.price-row-copy h4 {
+  overflow-wrap: anywhere;
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+.price-row-copy p {
+  font-size: 15px;
+  line-height: 1.75;
+  margin-top: 8px;
+}
+.price-row-value {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 9px;
+}
+.price-row-value > strong {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 23px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--olive);
+  white-space: nowrap;
+}
+.price-row-value > span {
+  font-size: 14px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.price-row > a {
+  grid-column: 1/-1;
+  justify-self: start;
+  font-size: 14px;
+  min-height: 32px;
+}
+.price-list-compact .price-row-copy p {
+  display: none;
+}
+.price-footnote {
+  font-size: 14px;
+  line-height: 1.9;
+  margin-top: 26px;
+  max-width: 900px;
+}
+.service-option .service-option-price {
+  font-size: 19px;
+  font-weight: 650;
+  color: var(--olive);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.service-option .service-option-copy strong {
+  overflow-wrap: anywhere;
+}
+.service-option .service-option-copy small {
+  font-size: 14px;
+}
+.selected-treatment-price {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  align-items: center;
+  padding: 16px 20px;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface-hover);
+  border-radius: 4px;
+}
+.selected-treatment-price > span {
+  font-size: 15px;
+}
+.selected-treatment-price > strong,
+.summary-treatment-price,
+.booking-confirmed-price {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--olive);
+}
+.selected-treatment-price > small {
+  flex-basis: 100%;
+  font-size: 14px;
+  line-height: 1.8;
+}
+@media (max-width: 1150px) {
+  .services-section .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .services-section .services-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .price-groups {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .price-group[data-group="face"],
+  .price-group[data-group="massage"] {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .price-group {
+    padding: 22px 18px;
+  }
+  .price-row {
+    gap: 12px;
+  }
+  .price-row-copy {
+    grid-column: 1/-1;
+  }
+  .price-row-value {
+    grid-column: 1;
+    align-items: flex-start;
+  }
+  .price-row > a {
+    grid-column: 2;
+    justify-self: end;
+    align-self: center;
+  }
+  .price-row-value > span {
+    white-space: normal;
+  }
+  .price-row-copy h4 {
+    font-size: 16px;
+  }
+  .price-row-value > strong {
+    font-size: 20px;
+  }
+  .price-row-value > span {
+    font-size: 13px;
+  }
+  .price-row-copy p {
+    font-size: 15px;
+  }
+  .home-price-heading {
+    margin-top: 42px;
+  }
+  .price-print-button {
+    font-size: 14px;
+    padding: 14px 18px;
+    max-width: 100%;
+    white-space: normal;
+  }
+  .service-option {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .service-option .service-option-price {
+    grid-column: 2;
+    font-size: 20px;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #243722 !important;
+    padding: 0 !important;
+    font-size: 11pt;
+  }
+  .announcement,
+  .site-identity,
+  .site-header,
+  .site-footer,
+  .mobile-booking,
+  .cookie-notice,
+  .price-print-button,
+  .skip-link,
+  .price-row > a {
+    display: none !important;
+  }
+  .price-page {
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    --paper: #fff;
+    --ink: #243722;
+    --cream: #faf8f3;
+    --olive: #425c35;
+    --muted: #47543f;
+    --line: #d9dfd2;
+  }
+  .price-print-logo {
+    display: block;
+    border-radius: 50%;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+  }
+  .price-page-heading {
+    margin-bottom: 16px;
+    justify-content: flex-start;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  .price-page-heading h1 {
+    font-size: 30pt;
+    margin: 6px 0;
+  }
+  .price-page-heading .eyebrow {
+    font-size: 8pt;
+    letter-spacing: 1px;
+  }
+  .price-page-heading p {
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+  .price-groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .price-group,
+  .price-group[data-group="face"] {
+    padding: 14px;
+    background: #faf8f3 !important;
+    border-color: #d9dfd2 !important;
+    break-inside: avoid;
+    print-color-adjust: exact;
+  }
+  .price-group[data-group="face"] {
+    grid-column: 1/-1;
+  }
+  .price-group[data-group="massage"] {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+  }
+  .price-group > h3 {
+    font-size: 18pt;
+    margin-bottom: 8px;
+    color: #425c35 !important;
+  }
+  .price-row {
+    padding: 10px 0;
+    gap: 4px 12px;
+  }
+  .price-row-copy h4 {
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+  .price-row-copy {
+    grid-column: auto;
+  }
+  .price-row-value {
+    grid-column: auto;
+    align-items: flex-end;
+  }
+  .price-row-copy p {
+    font-size: 8pt;
+    line-height: 1.35;
+    margin-top: 4px;
+  }
+  .price-row-value > strong {
+    font-size: 15pt;
+    color: #425c35 !important;
+  }
+  .price-row-value > span {
+    font-size: 8pt;
+  }
+  .price-footnote {
+    font-size: 8pt;
+    line-height: 1.5;
+    margin-top: 12px;
+    color: #243722 !important;
+  }
 }
 @media (min-width: 761px) and (max-width: 1000px) {
   .journal-grid {

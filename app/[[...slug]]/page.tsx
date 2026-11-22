@@ -15,6 +15,7 @@ import { Account } from "@/components/account";
 import { Privacy } from "@/components/legal";
 import { JournalSocial } from "@/components/journal-social";
 import { instagramIntroduction, journalArticles } from "@/lib/journal-content";
+import { PriceList, PrintPriceList } from "@/components/price-list";
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -36,9 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? tr(lang, "Mani pieraksti", "Мои записи")
       : parts[0] === "privacy"
         ? tr(lang, "Privātuma politika", "Конфиденциальность")
-        : parts[0] === "articles"
-          ? tr(lang, "Studijas dienasgrāmata", "Журнал студии")
-          : tr(lang, "Kosmetoloģija Jēkabpilī", "Косметология в Екабпилсе");
+        : parts[0] === "prices"
+          ? { lv: "Procedūras un cenrādis", en: "Treatments and prices", ru: "Процедуры и цены" }[
+              lang
+            ]
+          : parts[0] === "articles"
+            ? tr(lang, "Studijas dienasgrāmata", "Журнал студии")
+            : tr(lang, "Kosmetoloģija Jēkabpilī", "Косметология в Екабпилсе");
   const suffix = parts.length ? `/${parts.join("/")}` : "";
   const canonical = `${siteUrl()}${basePath(lang)}${suffix}`;
   const description = article?.excerpt[lang] || s.seoDescription[lang];
@@ -156,6 +161,47 @@ export default async function Page({ params }: Props) {
     content = <Account lang={lang} settings={s} />;
   else if (parts.length === 1 && ["privacy", "cookies"].includes(parts[0]))
     content = <Privacy lang={lang} settings={s} />;
+  else if (parts.length === 1 && parts[0] === "prices")
+    content = (
+      <main id="main-content" className="container inner-page price-page">
+        <div className="price-page-heading">
+          <img
+            className="price-print-logo"
+            src={s.logoImage}
+            width={100}
+            height={100}
+            alt="SKINSTINCT"
+          />
+          <div>
+            <span className="eyebrow">
+              SKINSTINCT /{" "}
+              {
+                {
+                  lv: "PROFESIONĀLA ĀDAS KOPŠANA",
+                  en: "PROFESSIONAL SKINCARE",
+                  ru: "ПРОФЕССИОНАЛЬНЫЙ УХОД ЗА КОЖЕЙ",
+                }[lang]
+              }
+            </span>
+            <h1>
+              {{ lv: "Procedūras un ", en: "Treatments and ", ru: "Процедуры и " }[lang]}
+              <em>{{ lv: "cenas.", en: "prices.", ru: "цены." }[lang]}</em>
+            </h1>
+            <p>
+              {
+                {
+                  lv: "Pārskatāms studijas cenrādis. Visas cenas norādītas eiro; izvēloties procedūru, tās cena būs redzama arī pierakstā.",
+                  en: "A clear studio price list. All prices are in euros; your chosen treatment's price is also shown during booking.",
+                  ru: "Понятный прайс-лист студии. Все цены указаны в евро; стоимость выбранной процедуры видна и при записи.",
+                }[lang]
+              }
+            </p>
+          </div>
+          <PrintPriceList lang={lang} />
+        </div>
+        <PriceList services={services} lang={lang} today={today()} />
+      </main>
+    );
   else if (parts.length === 1 && parts[0] === "articles")
     content = (
       <main id="main-content" className="container inner-page">

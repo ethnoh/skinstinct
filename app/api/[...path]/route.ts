@@ -6,6 +6,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { z } from "zod";
 import { dataDir, db, getArticles, getServices, getSettings, setContent } from "@/lib/db";
+import { priceForDate } from '@/lib/opening-offer';
 import {
   bookingColumns,
   canCancel,
@@ -214,14 +215,15 @@ export async function POST(request: NextRequest, context: Context) {
       const id = randomUUID();
       const result = db()
         .transaction(() => {
-          const service = getServices().find((s) => s.id === input.serviceId && s.active);
+          const service = getServices().find((s) => s.id === input.serviceId && s.active && s.bookable !== false);
           if (!service) throw new HttpError(404, "SERVICE_NOT_FOUND");
           if (!getSlots(input.date, service.id).some((s) => s.time === input.time && s.available))
             throw new HttpError(409, "SLOT_UNAVAILABLE");
           const start = timeMinute(input.time);
+          const quote = priceForDate(service, input.date);
           db()
             .prepare(
-              "INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,lang,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,lang,created_at,quoted_price_min,quoted_price_max) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             )
             .run(
               id,
@@ -237,6 +239,8 @@ export async function POST(request: NextRequest, context: Context) {
               contact.email.toLowerCase(),
               input.lang,
               new Date().toISOString(),
+              quote.price,
+              quote.priceMax ?? quote.price,
             );
           return db()
             .prepare(`SELECT ${bookingColumns} FROM bookings WHERE id=?`)

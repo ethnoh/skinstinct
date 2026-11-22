@@ -19,6 +19,9 @@ import {
 import { api, basePath, dateLabel, errorMessage, localeCode, money } from "@/lib/client";
 import { tr } from "@/lib/i18n";
 import type { Booking, Lang, Service, SiteSettings } from "@/lib/types";
+import { isPriceRange, serviceDuration, servicePrice } from "@/lib/service-display";
+import { BOOKING_START, introductoryNotice, OFFER_END } from '@/lib/opening-offer';
+import { TreatmentPrice } from './treatment-price';
 
 type Slots = { time: string; available: boolean }[];
 export function BookingWidget({
@@ -33,11 +36,13 @@ export function BookingWidget({
   initialToday: string;
 }) {
   const ru = lang === "ru";
-  const active = services.filter((s) => s.active);
+  const active = services.filter((s) => s.active && s.bookable !== false);
+  const firstDate = initialToday < BOOKING_START ? BOOKING_START : initialToday;
   const [serviceId, setService] = useState(active[0]?.id || "");
   const [step, setStep] = useState(1);
-  const [month, setMonth] = useState(initialToday.slice(0, 7));
+  const [month, setMonth] = useState(firstDate.slice(0, 7));
   const [date, setDate] = useState("");
+  const priceDate = date || `${month}-01`;
   const [time, setTime] = useState("");
   const [days, setDays] = useState<Record<string, number>>({});
   const [slots, setSlots] = useState<Slots>([]);
@@ -62,6 +67,9 @@ export function BookingWidget({
       }
     };
     window.addEventListener("choose-service", choose);
+    const requested = new URLSearchParams(window.location.search).get("service");
+    if (requested && active.some((item) => item.id === requested))
+      choose(new CustomEvent("choose-service", { detail: requested }));
     return () => window.removeEventListener("choose-service", choose);
   }, [services]);
   useEffect(() => {
@@ -184,6 +192,9 @@ export function BookingWidget({
         </p>
         <div className="success-details">
           <strong>{result.booking.service_title}</strong>
+          {service && (
+            <strong className="booking-confirmed-price">{servicePrice({price:result.booking.quoted_price_min ?? null,priceMax:result.booking.quoted_price_max},lang)}</strong>
+          )}
           <span>
             {dateLabel(date, lang)} · {time} · Europe/Riga
           </span>
@@ -254,6 +265,7 @@ export function BookingWidget({
         ))}
       </div>
       <div className="booking-stage" key={step}>
+        {initialToday <= OFFER_END && <p className="price-offer-notice">{introductoryNotice[lang]}</p>}
         {step === 1 && (
           <>
             <div className="stage-heading">
@@ -262,11 +274,13 @@ export function BookingWidget({
               </span>
               <h3>{tr(lang, "Ar ko sāksim?", "С чего начнём?")}</h3>
               <p>
-                {tr(
-                  lang,
-                  "Izvēlies sev piemērotāko. Ja šaubies, sāc ar iepazīšanās vizīti.",
-                  "Выбери подходящую услугу. Если сомневаешься, начни с первой встречи.",
-                )}
+                {
+                  {
+                    lv: "Izvēlies procedūru — tās cenu un ilgumu redzēsi pirms laika izvēles.",
+                    en: "Choose a treatment — you can see its price and duration before selecting a time.",
+                    ru: "Выбери процедуру — её стоимость и длительность видны до выбора времени.",
+                  }[lang]
+                }
               </p>
             </div>
             <div className="service-options">
@@ -281,13 +295,14 @@ export function BookingWidget({
                   }}
                 >
                   <span className="radio-mark">{s.id === serviceId && <span />}</span>
-                  <span>
+                  <span className="service-option-copy">
                     <strong>{s.title[lang]}</strong>
-                    <small>
-                      {s.duration} min · {money(s.price, lang)}
-                    </small>
+                    <small>{serviceDuration(s, lang)}</small>
                   </span>
-                  <Leaf size={22} />
+                  <strong className="service-option-price">
+                    <TreatmentPrice service={s} lang={lang} date={priceDate} />
+                    {isPriceRange(s) && "*"}
+                  </strong>
                 </button>
               ))}
             </div>
@@ -307,14 +322,31 @@ export function BookingWidget({
               <span className="eyebrow">02 / {tr(lang, "LAIKS TEV", "ВРЕМЯ ДЛЯ ТЕБЯ")}</span>
               <h3>{tr(lang, "Atrodi savu mirkli.", "Найди свой момент.")}</h3>
               <p>
-                {service?.title[lang]} · {service?.duration} min · Europe/Riga
+                {service?.title[lang]} · {service && serviceDuration(service, lang)} · Europe/Riga
               </p>
+              {service && (
+                <p className="selected-treatment-price">
+                  <span>{{ lv: "Cena", en: "Price", ru: "Стоимость" }[lang]}</span>
+                  <strong><TreatmentPrice service={service} lang={lang} date={priceDate} /></strong>
+                  {isPriceRange(service) && (
+                    <small>
+                      {
+                        {
+                          lv: "Precīzu cenu saskaņosim pirms procedūras atbilstoši preparāta daudzumam un individuālajam plānam.",
+                          en: "We will agree on the exact price before treatment, based on product quantity and your individual plan.",
+                          ru: "Точную стоимость согласуем до процедуры с учётом количества препарата и индивидуального плана.",
+                        }[lang]
+                      }
+                    </small>
+                  )}
+                </p>
+              )}
             </div>
             <div className="calendar-header">
               <button
                 className="icon-button"
                 onClick={() => changeMonth(-1)}
-                disabled={month <= initialToday.slice(0, 7)}
+                disabled={month <= firstDate.slice(0, 7)}
                 aria-label={tr(lang, "Iepriekšējais mēnesis", "Предыдущий месяц")}
               >
                 <ChevronLeft size={20} />
@@ -451,9 +483,11 @@ export function BookingWidget({
                   {dateLabel(date, lang)} · {time}
                 </strong>
                 <span>
-                  {service?.title[lang]} · {service?.duration} min
+                  {service?.title[lang]} · {service && serviceDuration(service, lang)}
                 </span>
-                <small>{money(service?.price ?? null, lang)}</small>
+                <strong className="summary-treatment-price">
+                  {service ? <TreatmentPrice service={service} lang={lang} date={priceDate} /> : ""}
+                </strong>
               </div>
             </div>
             <form onSubmit={submit} className="form">

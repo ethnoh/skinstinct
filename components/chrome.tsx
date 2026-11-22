@@ -163,6 +163,9 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               <Link href={`${base}/account`} onClick={() => setOpen(false)}>
                 {tr(lang, "Mani pieraksti", "Мои записи")}
               </Link>
+              <Link href={`${base}/prices`} onClick={() => setOpen(false)}>
+                {{ lv: "Cenrādis", en: "Prices", ru: "Прайс-лист" }[lang]}
+              </Link>
             </nav>
           )}
         </div>
@@ -183,6 +186,9 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <p>{settings.copy.footerDescription[lang]}</p>
           </div>
           <div className="footer-links">
+            <Link href={`${base}/prices`}>
+              {{ lv: "Cenrādis", en: "Prices", ru: "Прайс-лист" }[lang]}
+            </Link>
             <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
             <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
             <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>

@@ -138,7 +138,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     const english = await (await fetch(`${origin}/en`)).text();
     assert.ok(english.includes('<html lang="en"'));
     assert.ok(english.includes("Your skin."));
-    assert.ok(english.includes("Getting to know your skin"));
+    assert.ok(english.includes("Youth facial"));
     const englishMarkup = english.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
     assert.ok(englishMarkup.includes("How can I view or cancel an appointment?"));
     assert.ok(!englishMarkup.includes("Kā apskatīt vai atcelt pierakstu?"));
@@ -166,11 +166,14 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       assert.equal((await fetch(`${origin}${route}`)).status, 200, route);
   });
   await t.test("one contact is mandatory and concurrent requests cannot double-book", async () => {
+    assert.equal((await fetch(`${origin}/api/availability?date=2026-12-01&service=diagnostics`)).status,404);
+    const beforeOpening = await (await fetch(`${origin}/api/availability?date=2026-11-30&service=youth-facial`)).json();
+    assert.deepEqual(beforeOpening.slots,[]);
     const now = new Date();
     now.setUTCDate(now.getUTCDate() + 3);
     let month = now.toISOString().slice(0, 7);
     const available = await (
-      await fetch(`${origin}/api/availability?month=${month}&service=consultation`)
+      await fetch(`${origin}/api/availability?month=${month}&service=youth-facial`)
     ).json();
     date =
       Object.keys(available.days).find(
@@ -180,12 +183,12 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       now.setUTCMonth(now.getUTCMonth() + 1, 1);
       month = now.toISOString().slice(0, 7);
       const next = await (
-        await fetch(`${origin}/api/availability?month=${month}&service=consultation`)
+        await fetch(`${origin}/api/availability?month=${month}&service=youth-facial`)
       ).json();
       date = Object.keys(next.days).find((key) => next.days[key] > 0)!;
     }
     const slots = await (
-      await fetch(`${origin}/api/availability?date=${date}&service=consultation`)
+      await fetch(`${origin}/api/availability?date=${date}&service=youth-facial`)
     ).json();
     time = slots.slots.find((slot: { available: boolean }) => slot.available).time;
     const data = {
@@ -193,7 +196,8 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       phone: "+37120000000",
       email: "",
       consent: true,
-      serviceId: "consultation",
+      serviceId: "youth-facial",
+      quoted_price_min: 1,
       date,
       time,
       lang: "en",
@@ -206,13 +210,15 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     assert.ok(customer);
     const result = await winner.json();
     assert.equal(result.booking.lang, "en");
-    assert.equal(result.booking.service_title, "Getting to know your skin");
+    assert.equal(result.booking.service_title, "Youth facial");
+    assert.equal(result.booking.quoted_price_min,date >= '2026-12-01' && date <= '2026-12-31' ? 50 : 60);
+    assert.equal(result.booking.end_min-result.booking.start_min,60);
     code = result.code;
     bookingId = result.booking.id;
     assert.ok(!("code_hash" in result.booking));
     assert.ok(!("customer_id" in result.booking));
     const fresh = await (
-      await fetch(`${origin}/api/availability?date=${date}&service=consultation`)
+      await fetch(`${origin}/api/availability?date=${date}&service=youth-facial`)
     ).json();
     assert.equal(fresh.slots.find((slot: { time: string }) => slot.time === time).available, false);
   });
@@ -239,7 +245,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       assert.ok((await calendar.text()).includes("STATUS:TENTATIVE"));
       assert.equal((await post("/api/bookings/cancel", { id: bookingId }, customer)).status, 200);
       const released = await (
-        await fetch(`${origin}/api/availability?date=${date}&service=consultation`)
+        await fetch(`${origin}/api/availability?date=${date}&service=youth-facial`)
       ).json();
       assert.equal(
         released.slots.find((slot: { time: string }) => slot.time === time).available,
@@ -285,7 +291,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         200,
       );
       const blocked = await (
-        await fetch(`${origin}/api/availability?date=${date}&service=consultation`)
+        await fetch(`${origin}/api/availability?date=${date}&service=youth-facial`)
       ).json();
       assert.ok(blocked.slots.every((s: { available: boolean }) => !s.available));
       const withBlock = await (
@@ -417,7 +423,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     );
     const english = await (await fetch(`${origin}/en`)).text();
     assert.ok(english.includes("Your skin."));
-    assert.ok(english.includes("Getting to know your skin"));
+    assert.ok(english.includes("Youth facial"));
     assert.ok(
       (await (await fetch(`${origin}/en/articles/iepazisti-skinstinct`)).text()).includes(
         "A place to be heard",
