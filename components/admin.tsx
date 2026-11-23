@@ -1563,7 +1563,7 @@ function copyLabel(key: string) {
   if (copyLabels[key]) return copyLabels[key];
   const value = key.match(/^value([1-3])(Title|Text)$/);
   if (value)
-    return `Mūsu pieeja: vērtība ${value[1]}, ${value[2] === "Title" ? "nosaukums" : "apraksts"}`;
+    return `Mana pieeja: vērtība ${value[1]}, ${value[2] === "Title" ? "nosaukums" : "apraksts"}`;
   const process = key.match(/^process([1-3])(Title|Text)$/);
   if (process)
     return `Vizītes solis ${process[1]}: ${process[2] === "Title" ? "nosaukums" : "apraksts"}`;

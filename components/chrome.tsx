@@ -91,7 +91,7 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
             className="desktop-nav"
             aria-label={tr(lang, "Galvenā navigācija", "Основная навигация")}
           >
-            <Link href={`${base}/#pieeja`}>{tr(lang, "Mūsu pieeja", "Наш подход")}</Link>
+            <Link href={`${base}/#pieeja`}>{tr(lang, "Mana pieeja", "Мой подход")}</Link>
             <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
             <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
             <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>
@@ -147,7 +147,7 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               aria-label={tr(lang, "Mobilā izvēlne", "Мобильное меню")}
             >
               {[
-                ["pieeja", tr(lang, "Mūsu pieeja", "Наш подход")],
+                ["pieeja", tr(lang, "Mana pieeja", "Мой подход")],
                 ["pakalpojumi", tr(lang, "Pakalpojumi", "Услуги")],
                 ["par-mani", tr(lang, "Par mani", "Обо мне")],
                 ["pieraksts", tr(lang, "Pieteikt vizīti", "Записаться")],
