@@ -34,6 +34,7 @@ import { ChooseTreatment, PriceList } from "./price-list";
 import { serviceDuration, servicePrice } from "@/lib/service-display";
 import { TreatmentPrice } from './treatment-price';
 import { cataloguePriceDate } from '@/lib/opening-offer';
+import {studioMapsUrl} from '@/lib/studio-details';
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -588,6 +589,10 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
           {settings.copy.contactTitle[lang]} <em>{settings.copy.contactAccent[lang]}</em>
         </h2>
         <p>{settings.copy.contactIntro[lang]}</p>
+        <p>
+          <strong>{{lv:'SKINSTINCT — kosmetoloģija Jēkabpilī.',en:'SKINSTINCT — skincare in Jēkabpils.',ru:'SKINSTINCT — косметология в Екабпилсе.'}[lang]}</strong>{' '}
+          {{lv:`Sejas kopšanas procedūras, korneoterapija un individuāla ādas izvērtēšana pie ${settings.specialistName}. Vizītes pēc iepriekšēja pieraksta.`,en:`Facial treatments, corneotherapy and individual skin assessment with ${settings.specialistName}. Visits by appointment.`,ru:`Уход за лицом, корнеотерапия и индивидуальная оценка состояния кожи у ${settings.specialistName}. Приём по предварительной записи.`}[lang]}
+        </p>
         <div className="contact-detail">
           <MapPin size={20} />
           <div>
@@ -607,7 +612,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
         {settings.address && (
           <a
             className="text-link"
-            href="https://www.google.com/maps?cid=14328165829266811010"
+            href={studioMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
           >

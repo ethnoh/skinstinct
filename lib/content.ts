@@ -1,6 +1,7 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
 import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
+import { localSearchDescription, studioPhone } from './studio-details';
 
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
@@ -198,7 +199,7 @@ export const initialSettings: SiteSettings = {
   registration: "65120058811",
   city: "Jēkabpils",
   address: "Pļaviņu iela 51",
-  phone: "",
+  phone: studioPhone,
   email: "",
   instagram: "https://www.instagram.com/vr_skinstinct/",
   facebook: "https://www.facebook.com/vrskinstinct",
@@ -206,11 +207,7 @@ export const initialSettings: SiteSettings = {
   legalRegistration: "",
   legalAddress: "",
   privacyEmail: "",
-  seoDescription: {
-    lv: "SKINSTINCT kosmetoloģijas studija Jēkabpilī. Valērija Razujeva: korneoterapija, ādas diagnostika un individuāla ādas kopšana. Piesaki vizīti tiešsaistē.",
-    en: "SKINSTINCT skincare studio in Jēkabpils. Valērija Razujeva: corneotherapy, skin diagnostics and individual skincare. Book your visit online.",
-    ru: "SKINSTINCT, студия косметологии в Екабпилсе. Валерия Разуева: корнеотерапия, диагностика и индивидуальный уход за кожей. Онлайн запись.",
-  },
+  seoDescription: localSearchDescription,
   bookingEnabled: true,
   bookingNotice: priceBookingNotice,
   bufferMinutes: 15,

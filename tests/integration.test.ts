@@ -29,6 +29,7 @@ async function start() {
       DATA_DIR: directory,
       SITE_URL: origin,
       ADMIN_PASSWORD_HASH: passwordHash,
+      GOOGLE_SITE_VERIFICATION: 'local-qa-verification-token',
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -132,6 +133,16 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     const home = await (await fetch(origin)).text();
     assert.ok(home.includes("Tava āda."));
     assert.ok(home.includes("application/ld+json"));
+    assert.ok(home.includes('name="google-site-verification" content="local-qa-verification-token"'));
+    const diary=await (await fetch(`${origin}/articles/rupes-ari-arpus-studijas`)).text();
+    assert.ok(!diary.includes('Raksts veidots, izvēršot'));
+    assert.ok(diary.includes('https://www.instagram.com/p/DeGuHoeDNfY/'));
+    const structuredMatch=home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    assert.ok(structuredMatch);
+    const structured=JSON.parse(structuredMatch[1]);
+    assert.equal(structured.address.postalCode,'LV-5201');
+    assert.equal(structured.telephone,'+37126054744');
+    assert.equal(structured.hasMap,'https://www.google.com/maps?cid=14328165829266811010');
     const russian = await (await fetch(`${origin}/ru`)).text();
     assert.ok(russian.includes('<html lang="ru"'));
     assert.ok(russian.includes("Твоя кожа."));

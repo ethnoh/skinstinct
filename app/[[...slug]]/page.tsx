@@ -16,6 +16,7 @@ import { Privacy } from "@/components/legal";
 import { JournalSocial } from "@/components/journal-social";
 import { instagramIntroduction, journalArticles } from "@/lib/journal-content";
 import { PriceList, PrintPriceList } from "@/components/price-list";
+import { studioMapsUrl } from '@/lib/studio-details';
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -50,6 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    verification: process.env.GOOGLE_SITE_VERIFICATION ? {google:process.env.GOOGLE_SITE_VERIFICATION} : undefined,
     alternates: {
       canonical,
       languages: {
@@ -129,15 +131,20 @@ export default async function Page({ params }: Props) {
       "@type": "BeautySalon",
       "@id": `${siteUrl()}/#studio`,
       name: "SKINSTINCT",
+      alternateName: "VR SKINSTINCT",
       url: siteUrl(),
       description: s.seoDescription[lang],
       image: `${siteUrl()}${s.heroImage}`,
-      sameAs: [s.instagram, ...(s.facebook ? [s.facebook] : [])],
+      logo: `${siteUrl()}${s.logoImage}`,
+      hasMap: studioMapsUrl,
+      areaServed: { '@type':'City', name:s.city },
+      sameAs: [studioMapsUrl, s.instagram, ...(s.facebook ? [s.facebook] : [])],
       address: {
         "@type": "PostalAddress",
         addressLocality: s.city,
         addressCountry: "LV",
         ...(s.address ? { streetAddress: s.address } : {}),
+        ...(s.address === 'Pļaviņu iela 51' && s.city === 'Jēkabpils' ? {postalCode:'LV-5201'} : {}),
       },
       ...(s.phone ? { telephone: s.phone } : {}),
       ...(s.email ? { email: s.email } : {}),

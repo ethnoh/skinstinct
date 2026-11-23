@@ -1,9 +1,10 @@
 import type { Article } from "./types";
+import { cleanJournalBody } from './journal-cleanup';
 
 export const instagramIntroduction = "https://www.instagram.com/p/DeGuHoeDNfY/";
 
 // Editorial adaptations of the owner's introduction, not additional Instagram posts.
-export const journalArticles: Article[] = [
+const journalDrafts: Article[] = [
   {
     id: "journal-conversation-2026-11",
     slug: "kopsana-sakas-ar-sarunu",
@@ -51,3 +52,7 @@ export const journalArticles: Article[] = [
     createdAt: "2026-11-22T09:00:00.000Z",
   },
 ];
+export const journalArticles: Article[] = journalDrafts.map(article => ({
+ ...article,
+ body:{lv:cleanJournalBody(article.body.lv),en:cleanJournalBody(article.body.en),ru:cleanJournalBody(article.body.ru)},
+}));

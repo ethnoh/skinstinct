@@ -6,6 +6,8 @@ import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
 import { applyPriceRelease, introductoryTreatment, priceBookingNotice } from "./price-catalogue";
+import {localSearchDescription,previousSearchDescription,studioPhone} from './studio-details';
+import {cleanJournalBody} from './journal-cleanup';
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -137,6 +139,29 @@ export function db() {
     if (!services.some(service => service.id === introductoryTreatment.id)) {
       instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify([introductoryTreatment,...services]));
     }
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='local-search-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
+    const settings=JSON.parse(row.value) as SiteSettings;
+    if(!settings.phone?.trim()) settings.phone=studioPhone;
+    for(const lang of ['lv','en','ru'] as const){
+      if(settings.seoDescription?.[lang]===previousSearchDescription[lang]) settings.seoDescription[lang]=localSearchDescription[lang];
+    }
+    instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='journal-cleanup-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='articles'").get() as {value:string};
+    const articles=JSON.parse(row.value) as Article[];
+    for(const article of articles) for(const lang of ['lv','en','ru'] as const){
+      if(typeof article.body?.[lang]==='string') article.body[lang]=cleanJournalBody(article.body[lang]);
+    }
+    instance!.prepare("UPDATE content SET value=? WHERE key='articles'").run(JSON.stringify(articles));
     insert.run(marker,'true');
   })();
   cleanup(instance);
