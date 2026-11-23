@@ -199,6 +199,16 @@ export function db() {
     }
     insert.run(marker,'true');
   })();
+  instance.transaction(() => {
+    const marker='owner-december-closures-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const block=instance!.prepare('INSERT INTO blocks(id,date,start_min,end_min,note) VALUES (?,?,?,?,?)');
+    block.run('b26a8b1e-822a-4ab5-80ac-bc183d66b818','2026-12-18',870,1440,'Aizņemta no 14:30');
+    for(const day of [23,24,25,28,29,31]) {
+      block.run(`b26a8b1e-822a-4ab5-80ac-bc183d66b8${day}`,`2026-12-${day}`,0,1440,'Brīvdiena');
+    }
+    insert.run(marker,'true');
+  })();
   cleanup(instance);
   return instance;
 }
