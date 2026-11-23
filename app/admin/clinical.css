@@ -1,0 +1,320 @@
+.clinical-section {
+  min-width: 0;
+}
+.clinical-title,
+.clinical-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.clinical-title h2 {
+  margin: 8px 0;
+}
+.clinical-title small {
+  display: block;
+  margin-bottom: 8px;
+}
+.clinical-unlock {
+  max-width: 560px;
+  padding: 28px;
+  background: var(--paper, #faf8f4);
+  border: 1px solid #deded3;
+  border-radius: 16px;
+}
+.clinical-workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.clinical-sidebar {
+  display: grid;
+  gap: 18px;
+  position: sticky;
+  top: 20px;
+}
+.clinical-sidebar label,
+.clinical-form label {
+  display: grid;
+  gap: 7px;
+  font-size: 13px;
+}
+.clinical-section input:not([type="checkbox"]),
+.clinical-section select,
+.clinical-section textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #d5d8cd;
+  border-radius: 7px;
+  font: inherit;
+  color: inherit;
+  background: var(--paper, #fff);
+  box-sizing: border-box;
+}
+.clinical-section textarea {
+  resize: vertical;
+}
+.clinical-section button {
+  cursor: pointer;
+}
+.clinical-section button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.clinical-client-list {
+  max-height: 480px;
+  overflow: auto;
+  display: grid;
+  gap: 8px;
+}
+.clinical-client-list button {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  border: 1px solid #d8dbd0;
+  border-radius: 9px;
+  overflow-wrap: anywhere;
+}
+.clinical-client-list button.active {
+  background: var(--sage);
+  border-color: #7c8968;
+}
+.clinical-client-list small {
+  font-size: 11px;
+}
+.clinical-main {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid #deded3;
+  border-radius: 16px;
+}
+.clinical-card-heading h3 {
+  margin: 0 0 8px;
+}
+.clinical-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 14px;
+}
+.clinical-tabs button {
+  border: 1px solid transparent;
+  padding: 9px 12px;
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+}
+.clinical-tabs button[aria-pressed="true"] {
+  background: var(--sage);
+  border-color: #b6c1a7;
+  color: var(--ink);
+}
+.clinical-form {
+  display: grid;
+  gap: 20px;
+}
+.clinical-form > fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+.clinical-form fieldset fieldset {
+  border: 1px solid #deded3;
+  padding: 18px;
+  border-radius: 10px;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+.clinical-form legend {
+  padding: 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.clinical-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.clinical-question {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.2fr);
+  gap: 20px;
+  border-bottom: 1px solid #e5e5df;
+  padding-bottom: 16px;
+}
+.clinical-section .clinical-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.clinical-check input {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.clinical-help {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted, #626b5b);
+}
+.clinical-success {
+  padding: 12px;
+  border-radius: 8px;
+  background: #e9f1e3;
+  color: #31472a;
+}
+.clinical-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.clinical-visits {
+  margin-top: 20px;
+  display: grid;
+  gap: 14px;
+}
+.clinical-visits details {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+}
+.clinical-visits summary {
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.clinical-snapshot {
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.clinical-snapshot > div {
+  padding: 9px 0;
+  border-bottom: 1px solid #e4e5de;
+}
+.clinical-snapshot dt {
+  font-weight: 600;
+}
+.clinical-snapshot dd {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.clinical-metric {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 16px;
+}
+.clinical-documents {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.clinical-documents li {
+  padding: 16px;
+  background: var(--sage);
+  border-radius: 8px;
+}
+.clinical-documents a {
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+}
+.clinical-documents small {
+  display: block;
+  margin-top: 5px;
+}
+.clinical-visit-choices {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+.clinical-table-wrap {
+  overflow-x: auto;
+}
+.clinical-table-wrap table {
+  border-collapse: collapse;
+  min-width: 550px;
+  width: 100%;
+  font-size: 13px;
+}
+.clinical-table-wrap th,
+.clinical-table-wrap td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+.clinical-history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0;
+  font-size: 13px;
+}
+.clinical-empty {
+  padding: 30px 0;
+  line-height: 1.8;
+}
+@media (max-width: 1100px) {
+  .clinical-workspace {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+  .clinical-question {
+    grid-template-columns: 1fr;
+  }
+  .clinical-main {
+    padding: 18px;
+  }
+}
+@media (max-width: 760px) {
+  .clinical-workspace {
+    grid-template-columns: 1fr;
+  }
+  .clinical-sidebar {
+    position: static;
+  }
+  .clinical-client-list {
+    max-height: 220px;
+  }
+  .clinical-title,
+  .clinical-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .clinical-fields,
+  .clinical-metric {
+    grid-template-columns: 1fr;
+  }
+  .clinical-main {
+    padding: 14px;
+  }
+  .clinical-title h2 {
+    font-size: 34px;
+  }
+  .clinical-history-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

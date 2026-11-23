@@ -31,6 +31,7 @@ import { api, dateLabel, errorMessage } from "@/lib/client";
 import { addressCase } from "@/lib/address-case";
 import {BOOKING_START} from '@/lib/opening-offer';
 import {isPublicHoliday} from '@/lib/holidays';
+import {ClinicalRecords} from './clinical-records';
 import type {
   Article,
   Block,
@@ -54,6 +55,7 @@ type Tab =
   | "overview"
   | "calendar"
   | "bookings"
+  | "clients"
   | "inquiries"
   | "content"
   | "services"
@@ -72,6 +74,7 @@ const tabs: { id: Tab; label: string; icon: typeof Leaf }[] = [
   { id: "overview", label: "Pārskats", icon: LayoutDashboard },
   { id: "calendar", label: "Kalendārs", icon: CalendarDays },
   { id: "bookings", label: "Pieraksti", icon: UsersRound },
+  { id: "clients", label: "Klientu kartes", icon: ShieldCheck },
   { id: "inquiries", label: "Ziņas", icon: Inbox },
   { id: "content", label: "Teksti un attēli", icon: ImagePlus },
   { id: "services", label: "Pakalpojumi", icon: SlidersHorizontal },
@@ -245,6 +248,7 @@ function Upload({
 export function Admin() {
   const [state, setState] = useState<State | null>(null);
   const [tab, setTab] = useState<Tab>("overview");
+  const [clinicalDirty,setClinicalDirty]=useState(false);
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -295,6 +299,8 @@ export function Admin() {
     return act(() => api("/api/admin/content", { type, data }));
   }
   function selectTab(next: Tab) {
+    if(tab==='clients'&&clinicalDirty&&!window.confirm('Ir nesaglabātas izmaiņas klienta kartē. Atmest un pāriet uz citu sadaļu?'))return;
+    setClinicalDirty(false);
     setTab(next);
     setError("");
     setMessage("");
@@ -303,6 +309,7 @@ export function Admin() {
     setDateFilter("");
   }
   async function logout() {
+    if(clinicalDirty&&!window.confirm('Ir nesaglabātas izmaiņas klienta kartē. Atmest un izrakstīties?'))return;
     await api("/api/auth/logout", {});
     window.location.reload();
   }
@@ -472,6 +479,7 @@ export function Admin() {
             </div>
           ) : (
             <>
+              {tab === "clients" && <ClinicalRecords onDirtyChange={setClinicalDirty} />}
               {tab === "overview" && (
                 <>
                   <div className="admin-welcome">

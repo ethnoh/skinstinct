@@ -121,11 +121,21 @@ export function Privacy({ lang, settings: s }: { lang: Lang; settings: SiteSetti
             "Aktuālā politikas versija atrodas šajā lapā. Mainoties apstrādei, integrācijām vai kontaktiem, informāciju atjaunināsim. Jautājumos par pierakstu vai datiem izmanto studijas oficiālo Instagram vai iepriekš norādīto kontaktu.",
           ],
         ];
+  sections.push(lang==='lv' ? [
+    'Privātā klienta karte',
+    'Pakalpojuma sniedzējs administrācijas privātajā kartotēkā var dokumentēt veselības anamnēzi, mājas kopšanu, veiktās procedūras, faktiskās cenas, diagnostikas rādītājus un klienta iesniegtos dokumentus. Šīs kartes un pielikumi nav publiski vai pieejami klientu pierakstu kontā. Tos glabā šifrētā veidā Railway infrastruktūrā; piekļuve mājaslapā paredzēta tikai autorizētam administratoram ar atkārtotu paroles pārbaudi. Konkrēto apstrādes pamatu, glabāšanas kritērijus un pārējo informāciju klients saņem pie speciālista pirms kartes veidošanas. Šīm kartēm nepiemēro automātisko pierakstu un kontaktformas datu dzēšanas termiņu. Veselības dokumentus nesūti publiskajā kontaktformā.'
+  ] : lang==='en' ? [
+    'Private client records',
+    'The provider may document medical history, home care, procedures, actual prices, diagnostic measurements and client documents in a private administrator workspace. These records and attachments are not public and are not available in appointment accounts. They are stored encrypted on Railway infrastructure; website access requires an authenticated administrator and a further password check. The specialist provides the applicable processing basis, retention criteria and other information before creating a record. The automatic retention periods for bookings and contact messages do not apply to these records. Do not submit health documents through the public contact form.'
+  ] : [
+    'Личная карта клиента',
+    'В закрытом разделе администрирования специалист может документировать анамнез, домашний уход, процедуры, фактическую стоимость, диагностические показатели и документы клиента. Карты и приложения не публикуются и не доступны в аккаунте записей. Они хранятся в зашифрованном виде в инфраструктуре Railway; доступ на сайте требует авторизации администратора и повторного ввода пароля. Основание обработки, критерии хранения и другую информацию специалист предоставляет до создания карты. Сроки автоматического удаления записей и сообщений не распространяются на эти карты. Не отправляй медицинские документы через публичную контактную форму.'
+  ]);
   return (
     <main className="container inner-page legal-page" id="main-content">
       <span className="eyebrow">SKINSTINCT / {tr(lang, "TAVI DATI", "ТВОИ ДАННЫЕ")}</span>
       <h1>{tr(lang, "Privātuma politika", "Политика конфиденциальности")}</h1>
-      <p className="legal-date">{tr(lang, "Atjaunināta", "Обновлено")}: 17.10.2026</p>
+      <p className="legal-date">{tr(lang, "Atjaunināta", "Обновлено")}: 23.11.2026</p>
       {sections.map(([title, body], i) => (
         <section key={title}>
           <h2>

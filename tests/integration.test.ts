@@ -10,6 +10,7 @@ import { once } from "node:events";
 import { get as httpGet } from "node:http";
 import { startDate } from "../lib/booking";
 import Database from "better-sqlite3";
+import {emptyClientCard,emptyClinicalVisit} from '../lib/clinical-schema';
 
 let server: ChildProcess;
 let origin = "";
@@ -17,6 +18,7 @@ let port = 0;
 let logs = "";
 const directory = mkdtempSync(path.join(tmpdir(), "skinstinct-qa-"));
 const password = randomBytes(24).toString("hex");
+const clinicalKey=randomBytes(32).toString('hex');
 const salt = randomBytes(16).toString("hex");
 const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
 async function start() {
@@ -29,6 +31,7 @@ async function start() {
       DATA_DIR: directory,
       SITE_URL: origin,
       ADMIN_PASSWORD_HASH: passwordHash,
+      CLINICAL_RECORDS_KEY: clinicalKey,
       GOOGLE_SITE_VERIFICATION: 'local-qa-verification-token',
     },
     stdio: ["ignore", "pipe", "pipe"],
@@ -468,4 +471,38 @@ test("Europe/Riga calendar conversion respects daylight saving changes", () => {
   assert.equal(startDate("2026-10-25", 600).toISOString(), "2026-10-25T08:00:00.000Z");
   assert.equal(startDate("2026-03-28", 600).toISOString(), "2026-03-28T08:00:00.000Z");
   assert.equal(startDate("2026-03-29", 600).toISOString(), "2026-03-29T07:00:00.000Z");
+});
+
+test('private clinical API requires administrator and fresh unlock for cards and PDFs, retains data on restart',async()=>{
+ const rejected=await fetch(origin+'/api/clinical/clients');assert.equal(rejected.status,401);assert.match(rejected.headers.get('cache-control')||'',/no-store/);
+ assert.equal((await post('/api/clinical/unlock',{password})).status,401);
+ const login=await post('/api/auth/login',{password}),admin=cookieOf(login,'sk_admin');assert.equal(login.status,200);
+ assert.equal((await fetch(origin+'/api/clinical/clients',{headers:{Cookie:admin}})).status,401);
+ assert.equal((await post('/api/clinical/unlock',{password},admin,'https://attacker.invalid')).status,403);
+ const unlock=await post('/api/clinical/unlock',{password},admin);assert.equal(unlock.status,200);
+ const clinical=cookieOf(unlock,'sk_clinical'),cookie=admin+'; '+clinical;
+ const status=await (await fetch(origin+'/api/clinical/status',{headers:{Cookie:cookie}})).json();assert.equal(status.unlocked,true);
+ const draft={...emptyClientCard(),name:'TEST ONLY Clinical Client',notes:'Private health sentinel 27bb4d'};
+ const created=await post('/api/clinical/clients',{id:null,version:0,data:draft},cookie);assert.equal(created.status,200);
+ const {client}=await created.json();
+ const visitResponse=await post(`/api/clinical/clients/${client.id}/visits`,{id:null,version:0,data:{...emptyClinicalVisit('2026-12-01'),service:'TEST ONLY Facial',price:49.50}},cookie);assert.equal(visitResponse.status,200);const {visit}=await visitResponse.json();
+ const pdf=Buffer.from('%PDF-1.4\nTEST ONLY\n%%EOF');
+ const uploaded=await fetch(`${origin}/api/clinical/clients/${client.id}/documents?name=diagnostika.pdf&visit=${visit.id}`,{method:'POST',headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/pdf'},body:pdf});assert.equal(uploaded.status,200);const document=await uploaded.json();
+ const documentPath=`/api/clinical/clients/${client.id}/documents/${document.id}`;
+ assert.equal((await fetch(origin+documentPath)).status,401);
+ assert.equal((await fetch(origin+documentPath,{headers:{Cookie:admin}})).status,401);
+ const downloaded=await fetch(origin+documentPath,{headers:{Cookie:cookie}});assert.equal(downloaded.status,200);assert.match(downloaded.headers.get('content-disposition')||'',/^attachment/);assert.deepEqual(Buffer.from(await downloaded.arrayBuffer()),pdf);
+ const publicPage=await (await fetch(origin)).text();assert.ok(!publicPage.includes(draft.notes));
+ const adminPayload=await (await fetch(origin+'/api/admin',{headers:{Cookie:admin}})).text();assert.ok(!adminPayload.includes(draft.notes),'Health data must not leak into general admin payload');
+ const otherLogin=await post('/api/auth/login',{password}),otherAdmin=cookieOf(otherLogin,'sk_admin');
+ assert.equal((await fetch(origin+documentPath,{headers:{Cookie:otherAdmin+'; '+clinical}})).status,401,'Unlock must be bound to its admin session');
+ const backup=await fetch(origin+'/api/clinical/backup',{headers:{Cookie:cookie}});assert.equal(backup.status,200);const backupText=await backup.text();assert.ok(!backupText.includes(draft.name));assert.ok(!backupText.includes(draft.notes));assert.ok(!backupText.includes(clinicalKey));
+ await stop();await start();
+ const persisted=await fetch(origin+`/api/clinical/clients/${client.id}`,{headers:{Cookie:cookie}});assert.equal(persisted.status,200);assert.equal((await persisted.json()).client.data.notes,draft.notes);
+ const stale=await post('/api/clinical/clients',{id:client.id,version:0,data:draft},cookie);assert.equal(stale.status,409);
+ const lock=await post('/api/clinical/lock',{},cookie);assert.equal(lock.status,200);assert.equal((await fetch(origin+documentPath,{headers:{Cookie:cookie}})).status,401);
+ const again=await post('/api/clinical/unlock',{password},admin);const second=admin+'; '+cookieOf(again,'sk_clinical');
+ const connection=new Database(path.join(directory,'skinstinct.db'));connection.prepare('UPDATE clinical_sessions SET expires_at=?').run(Date.now()-1);connection.close();
+ assert.equal((await fetch(origin+'/api/clinical/clients',{headers:{Cookie:second}})).status,401,'Expired unlock must be denied');
+ const loggedOut=await post('/api/auth/logout',{},admin);assert.equal(loggedOut.status,200);assert.equal((await fetch(origin+'/api/clinical/status',{headers:{Cookie:second}})).status,401);
 });

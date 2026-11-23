@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/security";
 import { Admin, AdminLogin } from "@/components/admin";
 import { DocumentLanguage } from "@/components/document-language";
 import "./admin.css";
+import './clinical.css';
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Administrācija",
