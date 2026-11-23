@@ -1467,6 +1467,16 @@ main {
   font-weight: 400;
   opacity: 0.65;
 }
+.price-row[data-service-id="introductory-treatment"] .price-row-value > strong {
+  white-space: normal;
+  font-size: 17px;
+  max-width: 180px;
+}
+.service-option[data-service-id="introductory-treatment"] .service-option-price {
+  white-space: normal;
+  max-width: 180px;
+  font-size: 16px;
+}
 .price-offer-notice {
   background: var(--cream);
   border-left: 3px solid var(--olive);

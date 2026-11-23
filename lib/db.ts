@@ -5,7 +5,7 @@ import { initialArticles, initialCopy, initialServices, initialSettings } from "
 import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
-import { applyPriceRelease, priceBookingNotice } from "./price-catalogue";
+import { applyPriceRelease, introductoryTreatment, priceBookingNotice } from "./price-catalogue";
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -128,6 +128,16 @@ export function db() {
       .prepare("UPDATE content SET value=? WHERE key='settings'")
       .run(JSON.stringify(settings));
     insert.run("price-release-2026-11-23", "true");
+  })();
+  instance.transaction(() => {
+    const marker = 'introductory-treatment-release-2026-11-23';
+    if (instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row = instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {value:string};
+    const services = JSON.parse(row.value) as Service[];
+    if (!services.some(service => service.id === introductoryTreatment.id)) {
+      instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify([introductoryTreatment,...services]));
+    }
+    insert.run(marker,'true');
   })();
   cleanup(instance);
   return instance;

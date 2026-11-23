@@ -206,8 +206,21 @@ export const priceCatalogue: Service[] = [
   ),
 ];
 
+export const introductoryTreatment: Service = service(
+  'introductory-treatment',
+  text('Iepazīšanās procedūra', 'Introductory treatment', 'Ознакомительная процедура'),
+  text(
+    'Uz vietas veiksim ādas diagnostiku un kopā izvēlēsimies piemērotāko procedūru no cenrāža. Cena atbilstoši izvēlētajai procedūrai — to saskaņosim pirms veikšanas. Rezervējam 90 minūtes.',
+    'We will assess your skin during the visit and choose a suitable treatment from the price list together. The price follows the chosen treatment and is agreed before we begin. We reserve 90 minutes.',
+    'На месте проведём диагностику кожи и вместе выберем подходящую процедуру из прайс-листа. Стоимость зависит от выбранной процедуры и согласуется до её проведения. Резервируем 90 минут.',
+  ),
+  'face', 90, 0, '/images/valerija-studio-care-v4.webp',
+  {price:null,durationMin:60},
+);
+export const bookingCatalogue = [introductoryTreatment, ...priceCatalogue];
+
 export function applyPriceRelease(saved: Service[]): Service[] {
-  const current = priceCatalogue.map((replacement) => {
+  const current = bookingCatalogue.map((replacement) => {
     const old = saved.find((item) => item.id === replacement.id);
     return {
       ...old,
@@ -218,7 +231,7 @@ export function applyPriceRelease(saved: Service[]): Service[] {
   return [
     ...current,
     ...saved
-      .filter((old) => !priceCatalogue.some((item) => item.id === old.id))
+      .filter((old) => !bookingCatalogue.some((item) => item.id === old.id))
       .map((old) => ({ ...old, active: false })),
   ];
 }

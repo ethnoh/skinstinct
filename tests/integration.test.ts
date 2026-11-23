@@ -431,6 +431,21 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     );
   });
 });
+test('introductory visit reserves 90 minutes and has no invented fixed price', async () => {
+  const month = '2026-12';
+  const availability = await (await fetch(`${origin}/api/availability?month=${month}&service=introductory-treatment`)).json();
+  const date = Object.keys(availability.days).find(day=>availability.days[day]>0)!;
+  assert.ok(date);
+  const slots = await (await fetch(`${origin}/api/availability?date=${date}&service=introductory-treatment`)).json();
+  const time = slots.slots.find((slot:{available:boolean})=>slot.available).time;
+  const response = await post('/api/bookings',{serviceId:'introductory-treatment',date,time,lang:'lv',name:'Intro QA',phone:'+37120000009',consent:true});
+  assert.equal(response.status,200);
+  const {booking}=await response.json();
+  assert.equal(booking.end_min-booking.start_min,90);
+  assert.equal(booking.quoted_price_min,null);
+  assert.equal(booking.quoted_price_max,null);
+});
+
 test("Europe/Riga calendar conversion respects daylight saving changes", () => {
   assert.equal(startDate("2026-10-24", 600).toISOString(), "2026-10-24T07:00:00.000Z");
   assert.equal(startDate("2026-10-25", 600).toISOString(), "2026-10-25T08:00:00.000Z");

@@ -288,6 +288,7 @@ export function BookingWidget({
                 <button
                   className={`service-option ${s.id === serviceId ? "selected" : ""}`}
                   key={s.id}
+                  data-service-id={s.id}
                   onClick={() => {
                     setService(s.id);
                     setDate("");
@@ -298,6 +299,7 @@ export function BookingWidget({
                   <span className="service-option-copy">
                     <strong>{s.title[lang]}</strong>
                     <small>{serviceDuration(s, lang)}</small>
+                    {s.id === 'introductory-treatment' && <small>{s.description[lang]}</small>}
                   </span>
                   <strong className="service-option-price">
                     <TreatmentPrice service={s} lang={lang} date={priceDate} />

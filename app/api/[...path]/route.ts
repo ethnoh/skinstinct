@@ -62,7 +62,7 @@ export async function GET(request: NextRequest, context: Context) {
       return ok({ status: "ok" });
     }
     if (route === "availability") {
-      const service = query.get("service") || "consultation";
+      const service = query.get("service") || "introductory-treatment";
       if (query.has("date")) {
         const date = dateSchema.parse(query.get("date"));
         return ok({ date, slots: getSlots(date, service), timezone: "Europe/Riga" });

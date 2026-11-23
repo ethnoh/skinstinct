@@ -201,7 +201,7 @@ export function Home({
         </div>
         <div className="services-grid">
           {services
-            .filter((s) => s.active && s.group === "face")
+            .filter((s) => s.active && s.group === "face" && s.id !== 'introductory-treatment')
             .map((s, i) => (
               <article className="service-card" key={s.id}>
                 <a
@@ -607,7 +607,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
         {settings.address && (
           <a
             className="text-link"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([settings.address, settings.city].join(", "))}`}
+            href="https://www.google.com/maps?cid=14328165829266811010"
             target="_blank"
             rel="noopener noreferrer"
           >

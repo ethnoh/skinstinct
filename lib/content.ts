@@ -1,6 +1,6 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
-import { priceCatalogue, priceBookingNotice } from "./price-catalogue";
+import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
 
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
@@ -222,7 +222,7 @@ export const initialSettings: SiteSettings = {
   })),
 };
 
-export const initialServices: Service[] = priceCatalogue;
+export const initialServices: Service[] = bookingCatalogue;
 
 export const initialArticles: Article[] = [
   {

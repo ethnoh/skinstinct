@@ -4,7 +4,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import Database from "better-sqlite3";
-import { priceCatalogue, priceBookingNotice } from "../lib/price-catalogue";
+import { priceCatalogue, priceBookingNotice, introductoryTreatment } from "../lib/price-catalogue";
 import { initialSettings } from "../lib/content";
 import { servicePrice, serviceDuration } from "../lib/service-display";
 import { serviceSchema } from "../lib/validation";
@@ -75,7 +75,7 @@ test("price release retires old entries without deleting them, preserves uploads
   const { db, getServices, getSettings, setContent } = await import("../lib/db");
   try {
     const services = getServices();
-    assert.equal(services.filter((s) => s.active).length, 11);
+    assert.equal(services.filter((s) => s.active).length, 12);
     assert.equal(services.find((s) => s.id === "consultation")?.active, false);
     assert.equal(services.find((s) => s.id === "consultation")?.title.lv, original.title.lv);
     assert.equal(services.find((s) => s.id === "diagnostics")?.price, 30);
@@ -96,6 +96,9 @@ test("price release retires old entries without deleting them, preserves uploads
       ["10:00", "10:15", "10:30"],
       "reserve the full 90 minutes, not the displayed 60-minute minimum",
     );
+    assert.equal(introductoryTreatment.price,null,'no invented fixed price before choosing a treatment');
+    assert.equal(serviceSchema.safeParse(introductoryTreatment).success,true);
+    assert.deepEqual(getSlots(date.toISOString().slice(0,10),'introductory-treatment').map(s=>s.time),['10:00','10:15','10:30']);
     assert.throws(() => getSlots('2026-12-01','diagnostics'), /SERVICE_NOT_FOUND/);
     assert.deepEqual(getSlots('2026-11-30','youth-facial'),[]);
     setContent('settings',{...getSettings(),bufferMinutes:15,schedule:Array.from({length:7},()=>({enabled:true,start:'10:00',end:'14:00'}))});
