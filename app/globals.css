@@ -3173,9 +3173,6 @@ main {
   .service-image {
     height: 310px;
   }
-  .service-card:nth-child(2) .service-image {
-    border-radius: 150px 150px 4px 4px;
-  }
   .service-card h3 {
     font-size: 36px;
     margin: 9px 0 12px;
