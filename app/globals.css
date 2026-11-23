@@ -607,9 +607,6 @@ main {
 .service-card:hover .service-image img {
   transform: scale(1.045);
 }
-.service-card:nth-child(2) .service-image {
-  border-radius: 140px 140px 4px 4px;
-}
 .service-card:nth-child(3) .service-image img {
   object-position: 60% 50%;
 }
