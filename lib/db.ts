@@ -5,6 +5,7 @@ import { initialArticles, initialCopy, initialServices, initialSettings } from "
 import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
+import { journalTopicArticles } from './journal-topics';
 import { applyPriceRelease, introductoryTreatment, priceBookingNotice, priceCatalogue } from "./price-catalogue";
 import {localSearchDescription,previousSearchDescription,studioPhone,studioSchedule} from './studio-details';
 import {cleanJournalBody} from './journal-cleanup';
@@ -209,6 +210,15 @@ export function db() {
       service.image=procedureImages['youth-facial'].image;
       instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
     }
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='journal-topics-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='articles'").get() as {value:string};
+    const articles=JSON.parse(row.value) as Article[];
+    const additions=journalTopicArticles.filter(article=>!articles.some(saved=>saved.id===article.id||saved.slug===article.slug));
+    instance!.prepare("UPDATE content SET value=? WHERE key='articles'").run(JSON.stringify([...articles,...additions]));
     insert.run(marker,'true');
   })();
   instance.transaction(() => {

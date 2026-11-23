@@ -15,6 +15,7 @@ import { Account } from "@/components/account";
 import { Privacy } from "@/components/legal";
 import { JournalSocial } from "@/components/journal-social";
 import { instagramIntroduction, journalArticles } from "@/lib/journal-content";
+import { journalTopicArticles } from '@/lib/journal-topics';
 import { PriceList, PrintPriceList } from "@/components/price-list";
 import { studioMapsUrl } from '@/lib/studio-details';
 
@@ -112,7 +113,7 @@ export default async function Page({ params }: Props) {
   const { lang, parts } = resolve((await params).slug);
   const s = getSettings();
   const services = getServices();
-  const articles = getArticles().filter((a) => a.published);
+  const articles = getArticles().filter((a) => a.published).sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));
   const base = basePath(lang);
   let content: React.ReactNode;
   let structured: unknown = null;
@@ -287,15 +288,15 @@ export default async function Page({ params }: Props) {
             />
           </div>
           <ArticleBody text={article.body[lang]} />
-          {(article.id === "intro" || journalArticles.some((item) => item.id === article.id)) && (
+          {(article.id === "intro" || journalArticles.some((item) => item.id === article.id) || journalTopicArticles.some(item=>item.id===article.id)) && (
             <a
               className="text-link article-source"
-              href={instagramIntroduction}
+              href={journalTopicArticles.some(item=>item.id===article.id) ? s.instagram : instagramIntroduction}
               target="_blank"
               rel="noopener noreferrer"
             >
               {
-                {
+                journalTopicArticles.some(item=>item.id===article.id) ? {lv:'Posti un reels Instagram',en:'Posts and reels on Instagram',ru:'Посты и reels в Instagram'}[lang] : {
                   lv: "Saistītais Instagram ieraksts",
                   en: "Related Instagram post",
                   ru: "Пост в Instagram по теме",

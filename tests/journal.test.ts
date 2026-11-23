@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import Database from "better-sqlite3";
 import { journalArticles } from "../lib/journal-content";
+import { journalTopicArticles } from '../lib/journal-topics';
 import { articleSchema } from "../lib/validation";
 
 test("journal release adds articles once and retains owner edits, uploads and deletions", async () => {
@@ -25,15 +26,16 @@ test("journal release adds articles once and retains owner edits, uploads and de
   const { db, getArticles, setContent } = await import("../lib/db");
   try {
     const articles = getArticles();
-    assert.equal(articles.length, 3);
+    assert.equal(articles.length, 3+journalTopicArticles.length);
     assert.deepEqual(
       articles.find((a) => a.id === "intro"),
       original,
     );
     assert.ok(journalArticles.every((a) => articleSchema.safeParse(a).success));
-    assert.equal(getArticles().length, 3);
+    assert.ok(journalTopicArticles.every(a=>articleSchema.safeParse(a).success));
+    assert.equal(getArticles().length, 3+journalTopicArticles.length);
     const edited = articles
-      .filter((a) => a.id !== journalArticles[1].id)
+      .filter((a) => a.id !== journalArticles[1].id && a.id !== journalTopicArticles[0].id)
       .map((a) =>
         a.id === journalArticles[0].id
           ? { ...a, published: false, image: "/uploads/changed.webp" }
@@ -41,6 +43,7 @@ test("journal release adds articles once and retains owner edits, uploads and de
       );
     setContent("articles", edited);
     assert.deepEqual(getArticles(), edited);
+    assert.ok(db().prepare("SELECT 1 FROM content WHERE key = 'journal-topics-release-2026-11-23'").get());
     assert.ok(db().prepare("SELECT 1 FROM content WHERE key = 'journal-release-2026-11'").get());
     setContent("articles", [{ ...original, image: "/images/journal-instagram-intro.jpg" }]);
     assert.equal(getArticles()[0].image, "/images/journal-studio.webp");

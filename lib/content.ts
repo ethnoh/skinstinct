@@ -1,5 +1,6 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
+import { journalTopicArticles } from './journal-topics';
 import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
 import { localSearchDescription, studioPhone, studioSchedule } from './studio-details';
 
@@ -242,4 +243,5 @@ export const initialArticles: Article[] = [
     createdAt: "2026-10-17T09:00:00.000Z",
   },
   ...journalArticles,
+  ...journalTopicArticles,
 ];
