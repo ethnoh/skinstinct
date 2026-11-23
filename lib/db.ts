@@ -5,7 +5,7 @@ import { initialArticles, initialCopy, initialServices, initialSettings } from "
 import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
-import { applyPriceRelease, introductoryTreatment, priceBookingNotice } from "./price-catalogue";
+import { applyPriceRelease, introductoryTreatment, priceBookingNotice, priceCatalogue } from "./price-catalogue";
 import {localSearchDescription,previousSearchDescription,studioPhone,studioSchedule} from './studio-details';
 import {cleanJournalBody} from './journal-cleanup';
 import {procedureImages} from './procedure-images';
@@ -207,6 +207,19 @@ export function db() {
     const service=services.find(item=>item.id==='youth-facial');
     if(service && ['/images/procedure-youth-pink-v2.webp','/images/procedure-youth-client-v3.webp'].includes(service.image)) {
       service.image=procedureImages['youth-facial'].image;
+      instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
+    }
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='youth-description-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {value:string};
+    const services=JSON.parse(row.value) as Service[];
+    const service=services.find(item=>item.id==='youth-facial');
+    const updated=priceCatalogue.find(item=>item.id==='youth-facial');
+    if(service && updated) {
+      service.description=updated.description;
       instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
     }
     insert.run(marker,'true');

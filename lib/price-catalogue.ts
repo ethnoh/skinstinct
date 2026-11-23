@@ -43,9 +43,9 @@ export const priceCatalogue: Service[] = [
     "youth-facial",
     text("Jauniešu procedūra", "Youth facial", "Процедура для молодой кожи"),
     text(
-      "Kopšana jaunai ādai ar vismaz vienu aparātmetodi.",
-      "Care for young skin with at least one device-based method.",
-      "Уход за молодой кожей с использованием минимум одной аппаратной методики.",
+      "Jauniešu ādai pielāgots kopšanas protokols jutīguma pazīmju mazināšanai un problemātiskas ādas nomierināšanai. Procedūrā iekļauta vismaz viena aparātmetode, ko izvēlas atbilstoši ādas stāvoklim.",
+      "A skincare protocol tailored to teenage skin, designed to ease signs of sensitivity and soothe problem-prone skin. Includes at least one device-based method selected according to the skin’s condition.",
+      "Протокол ухода, адаптированный для подростковой кожи, для уменьшения признаков чувствительности и успокоения проблемной кожи. Включает минимум одну аппаратную методику, подобранную с учётом состояния кожи.",
     ),
     "face",
     60,
