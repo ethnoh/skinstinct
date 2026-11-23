@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { SavedClient, SavedVisit } from "@/lib/clinical-schema";
 import { renderClinicalForms } from "@/lib/clinical-forms";
 export function ClinicalPrintForms({
@@ -9,6 +9,9 @@ export function ClinicalPrintForms({
   client?: SavedClient;
   visits?: SavedVisit[];
 }) {
+  useEffect(() => () => {
+    document.querySelectorAll('iframe[data-skinstinct-clinical-print]').forEach(frame => frame.remove());
+  }, []);
   const [fill, setFill] = useState(false),
     [visit, setVisit] = useState(""),
     [section, setSection] = useState<"all" | "base" | "visit" | "aftercare">("all"),
@@ -18,6 +21,7 @@ export function ClinicalPrintForms({
     setPrinting(true);
     setError("");
     const frame = document.createElement("iframe");
+    frame.dataset.skinstinctClinicalPrint = 'true';
     frame.title = "SKINSTINCT dokumentu druka";
     frame.style.cssText = "position:fixed;left:-10000px;top:0;width:800px;height:1000px;border:0";
     frame.srcdoc = renderClinicalForms({
