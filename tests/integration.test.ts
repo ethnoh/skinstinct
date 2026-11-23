@@ -272,6 +272,12 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       assert.equal(login.status, 200);
       admin = cookieOf(login, "sk_admin");
       assert.ok(admin);
+      assert.equal((await post('/api/admin/open-day',{date:'2026-12-05',start:'09:00',end:'12:00'})).status,401);
+      assert.equal((await post('/api/admin/open-day',{date:'2026-12-05',start:'09:00',end:'12:00'},admin)).status,200);
+      const saturday=await(await fetch(`${origin}/api/availability?date=2026-12-05&service=youth-facial`)).json();
+      assert.equal(saturday.slots.at(-1).time,'11:00');
+      assert.equal((await post('/api/admin/open-day',{date:'2026-12-25',start:'09:00',end:'12:00'},admin)).status,400);
+      assert.equal((await post('/api/admin/close-day',{date:'2026-12-05'},admin)).status,200);
       const state = await (
         await fetch(`${origin}/api/admin`, { headers: { Cookie: admin } })
       ).json();

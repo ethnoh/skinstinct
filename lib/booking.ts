@@ -3,6 +3,7 @@ import { db, getServices, getSettings } from "./db";
 import { HttpError } from "./security";
 import type { Block, Booking } from "./types";
 import { BOOKING_START } from './opening-offer';
+import {isPublicHoliday} from './holidays';
 
 export const TIMEZONE = "Europe/Riga";
 export function today() {
@@ -29,8 +30,9 @@ export function getSlots(date: string, serviceId: string) {
   const settings = getSettings();
   const service = getServices().find((s) => s.id === serviceId && s.active && s.bookable !== false);
   if (!service) throw new HttpError(404, "SERVICE_NOT_FOUND");
-  if (!settings.bookingEnabled || !validHorizon(date) || date < BOOKING_START || service.duration < 15) return [];
-  const day = settings.schedule[new Date(`${date}T12:00:00Z`).getUTCDay()];
+  if (!settings.bookingEnabled || !validHorizon(date) || date < BOOKING_START || isPublicHoliday(date) || service.duration < 15) return [];
+  const opening=db().prepare('SELECT start_min,end_min FROM opening_days WHERE date=?').get(date) as {start_min:number;end_min:number}|undefined;
+  const day = opening ? {enabled:true,start:minuteTime(opening.start_min),end:minuteTime(opening.end_min)} : settings.schedule[new Date(`${date}T12:00:00Z`).getUTCDay()];
   if (!day?.enabled) return [];
   const bookings = db()
     .prepare(

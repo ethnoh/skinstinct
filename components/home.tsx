@@ -35,6 +35,7 @@ import { serviceDuration, servicePrice } from "@/lib/service-display";
 import { TreatmentPrice } from './treatment-price';
 import { cataloguePriceDate } from '@/lib/opening-offer';
 import {studioMapsUrl} from '@/lib/studio-details';
+import {StudioHours} from './studio-hours';
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -619,6 +620,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
             Google Maps <ArrowUpRight size={17} />
           </a>
         )}
+        <StudioHours lang={lang} settings={settings} />
         <div className="social-profile-links">
           <a
             className="text-link"

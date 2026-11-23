@@ -50,7 +50,7 @@ export const priceCatalogue: Service[] = [
     "face",
     60,
     60,
-    "/images/procedure-youth.webp",
+    "/images/procedure-youth-pink-v2.webp",
     { durationMin: 40 },
   ),
   service(
@@ -64,7 +64,7 @@ export const priceCatalogue: Service[] = [
     "face",
     60,
     60,
-    "/images/procedure-glow.webp",
+    "/images/procedure-glow-hydrodiamond-v2.webp",
     { durationMin: 40 },
   ),
   service(
@@ -78,7 +78,7 @@ export const priceCatalogue: Service[] = [
     "face",
     90,
     70,
-    "/images/procedure-signature.webp",
+    "/images/procedure-signature-v2.webp",
     { durationMin: 60 },
   ),
   service(
@@ -92,7 +92,7 @@ export const priceCatalogue: Service[] = [
     "face",
     90,
     90,
-    "/images/procedure-longevity.webp",
+    "/images/procedure-longevity-pink-v3.webp",
   ),
   service(
     "diagnostics",

@@ -1,7 +1,7 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
 import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
-import { localSearchDescription, studioPhone } from './studio-details';
+import { localSearchDescription, studioPhone, studioSchedule } from './studio-details';
 
 export const initialCopy: SiteSettings["copy"] = {
   rhythmEyebrow: { lv: "RŪPES TAVĀ RITMĀ", en: "CARE AT YOUR PACE", ru: "ЗАБОТА В ТВОЁМ РИТМЕ" },
@@ -212,11 +212,7 @@ export const initialSettings: SiteSettings = {
   bookingNotice: priceBookingNotice,
   bufferMinutes: 15,
   cancellationHours: 24,
-  schedule: Array.from({ length: 7 }, (_, day) => ({
-    enabled: day > 0 && day < 6,
-    start: "10:00",
-    end: "18:00",
-  })),
+  schedule: studioSchedule,
 };
 
 export const initialServices: Service[] = bookingCatalogue;

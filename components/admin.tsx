@@ -29,6 +29,8 @@ import {
 } from "lucide-react";
 import { api, dateLabel, errorMessage } from "@/lib/client";
 import { addressCase } from "@/lib/address-case";
+import {BOOKING_START} from '@/lib/opening-offer';
+import {isPublicHoliday} from '@/lib/holidays';
 import type {
   Article,
   Block,
@@ -46,6 +48,7 @@ type State = {
   bookings: Booking[];
   inquiries: Inquiry[];
   blocks: Block[];
+  openDays?: {date:string;start_min:number;end_min:number}[];
 };
 type Tab =
   | "overview"
@@ -639,6 +642,7 @@ export function Admin() {
                             (b) => b.date === date && b.status !== "cancelled",
                           ).length;
                           const blocked = state.blocks.some((b) => b.date === date);
+                          const opened=state.openDays?.some(day=>day.date===date);
                           return (
                             <button
                               key={date}
@@ -652,6 +656,8 @@ export function Admin() {
                                 </span>
                               )}
                               {blocked && <small>{"Bloķēts"}</small>}
+                              {isPublicHoliday(date)&&<small>Svētku diena</small>}
+                              {opened&&<small>Atvērts papildus</small>}
                             </button>
                           );
                         },
@@ -666,6 +672,23 @@ export function Admin() {
                   )}
                   <section className="admin-panel">
                     <h2>{"Slēgt laiku pierakstiem"}</h2>
+                    <details>
+                      <summary>Atvērt atsevišķu dienu, piemēram, sestdienu</summary>
+                      <p className="admin-hint">Atver tikai izvēlēto datumu. Svētku dienas ir slēgtas. Esošās vizītes saglabājas.</p>
+                      <form key={selectedDay||today} className="form block-form" onSubmit={event=>{
+                        event.preventDefault();const form=new FormData(event.currentTarget);
+                        act(()=>api('/api/admin/open-day',{date:form.get('date'),start:form.get('start'),end:form.get('end')}),'Diena atvērta pierakstiem');
+                      }}>
+                        <label>Datums<input type="date" name="date" required min={today<BOOKING_START?BOOKING_START:today} defaultValue={selectedDay|| (today<BOOKING_START?BOOKING_START:today)} /></label>
+                        <label>No<input type="time" name="start" required defaultValue="09:00" /></label>
+                        <label>Līdz<input type="time" name="end" required defaultValue="15:00" /></label>
+                        <button className="button button-small" disabled={pending}>Atvērt šo dienu</button>
+                      </form>
+                      <div className="blocks-list">{(state.openDays||[]).map(day=><div key={day.date}>
+                        <span>{dateLabel(day.date,'lv')} · {time(day.start_min)}–{time(day.end_min)}</span>
+                        <button type="button" className="text-button" disabled={pending} onClick={()=>act(()=>api('/api/admin/close-day',{date:day.date}),'Atjaunots nedēļas grafiks')}>Atjaunot nedēļas grafiku</button>
+                      </div>)}</div>
+                    </details>
                     <p className="admin-hint">
                       {
                         "Atvaļinājums, brīvdiena vai pārtraukums. Esošās vizītes saglabājas. Ja nepieciešams, atcel tās atsevišķi."

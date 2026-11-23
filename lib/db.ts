@@ -6,8 +6,9 @@ import type { Article, Localized, Service, SiteSettings } from "./types";
 import { addressCase } from "./address-case";
 import { journalArticles } from "./journal-content";
 import { applyPriceRelease, introductoryTreatment, priceBookingNotice } from "./price-catalogue";
-import {localSearchDescription,previousSearchDescription,studioPhone} from './studio-details';
+import {localSearchDescription,previousSearchDescription,studioPhone,studioSchedule} from './studio-details';
 import {cleanJournalBody} from './journal-cleanup';
+import {procedureImages} from './procedure-images';
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -51,6 +52,7 @@ export function db() {
     CREATE INDEX IF NOT EXISTS booking_customer ON bookings(customer_id);
     CREATE TABLE IF NOT EXISTS blocks (id TEXT PRIMARY KEY, date TEXT NOT NULL, start_min INTEGER NOT NULL, end_min INTEGER NOT NULL, note TEXT NOT NULL DEFAULT '');
     CREATE INDEX IF NOT EXISTS block_day ON blocks(date);
+    CREATE TABLE IF NOT EXISTS opening_days (date TEXT PRIMARY KEY,start_min INTEGER NOT NULL,end_min INTEGER NOT NULL,CHECK(start_min>=0 AND end_min>start_min AND end_min<=1440));
     CREATE TABLE IF NOT EXISTS inquiries (id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '', message TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, expires_at INTEGER NOT NULL);
     CREATE TABLE IF NOT EXISTS limits (key TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at INTEGER NOT NULL);
@@ -162,6 +164,27 @@ export function db() {
       if(typeof article.body?.[lang]==='string') article.body[lang]=cleanJournalBody(article.body[lang]);
     }
     instance!.prepare("UPDATE content SET value=? WHERE key='articles'").run(JSON.stringify(articles));
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='studio-hours-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
+    const settings=JSON.parse(row.value) as SiteSettings;
+    settings.schedule=studioSchedule;
+    instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='procedure-images-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {value:string};
+    const services=JSON.parse(row.value) as Service[];
+    for(const service of services){
+      const replacement=procedureImages[service.id];
+      if(replacement&&service.image===replacement.previous)service.image=replacement.image;
+    }
+    instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
     insert.run(marker,'true');
   })();
   cleanup(instance);

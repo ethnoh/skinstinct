@@ -1,4 +1,5 @@
 "use client";
+import {StudioHours} from './studio-hours';
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -195,6 +196,7 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <Link href={`${base}/account`}>{tr(lang, "Mani pieraksti", "Мои записи")}</Link>
           </div>
           <div className="footer-contact">
+            <StudioHours lang={lang} settings={settings} />
             <span className="eyebrow">
               {[settings.address, settings.city].filter(Boolean).join(", ")}
             </span>

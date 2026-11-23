@@ -7,6 +7,8 @@ import sharp from "sharp";
 import { z } from "zod";
 import { dataDir, db, getArticles, getServices, getSettings, setContent } from "@/lib/db";
 import { priceForDate } from '@/lib/opening-offer';
+import {BOOKING_START} from '@/lib/opening-offer';
+import {isPublicHoliday} from '@/lib/holidays';
 import {
   bookingColumns,
   canCancel,
@@ -159,6 +161,7 @@ export async function GET(request: NextRequest, context: Context) {
         inquiries: db()
           .prepare("SELECT * FROM inquiries ORDER BY created_at DESC LIMIT 1000")
           .all(),
+        openDays: db().prepare('SELECT date,start_min,end_min FROM opening_days WHERE date>=? ORDER BY date').all(today()),
         blocks: db()
           .prepare("SELECT * FROM blocks WHERE date>=? ORDER BY date,start_min")
           .all(today()),
@@ -413,6 +416,17 @@ export async function POST(request: NextRequest, context: Context) {
           .parse(await jsonBody(request, 1000));
         db().prepare("UPDATE inquiries SET status=? WHERE id=?").run(input.status, input.id);
         return ok({ ok: true });
+      }
+      if(route==='admin/open-day'){
+        const input=z.object({date:dateSchema,start:timeSchema,end:timeSchema}).parse(await jsonBody(request,1000));
+        if(input.start>=input.end||!validHorizon(input.date)||input.date<BOOKING_START||isPublicHoliday(input.date))throw new HttpError(400,'INVALID_DATE');
+        db().prepare('INSERT INTO opening_days(date,start_min,end_min) VALUES (?,?,?) ON CONFLICT(date) DO UPDATE SET start_min=excluded.start_min,end_min=excluded.end_min').run(input.date,timeMinute(input.start),timeMinute(input.end));
+        return ok({ok:true});
+      }
+      if(route==='admin/close-day'){
+        const input=z.object({date:dateSchema}).parse(await jsonBody(request,500));
+        db().prepare('DELETE FROM opening_days WHERE date=?').run(input.date);
+        return ok({ok:true});
       }
       if (route === "admin/block") {
         const input = z
