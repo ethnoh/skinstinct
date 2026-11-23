@@ -92,7 +92,7 @@ export const priceCatalogue: Service[] = [
     "face",
     90,
     90,
-    "/images/procedure-longevity-pink-v3.webp",
+    "/images/procedure-longevity-glow-v4.webp",
   ),
   service(
     "diagnostics",

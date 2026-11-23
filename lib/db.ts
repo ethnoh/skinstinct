@@ -187,6 +187,18 @@ export function db() {
     instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
     insert.run(marker,'true');
   })();
+  instance.transaction(() => {
+    const marker='procedure-longevity-glow-release-2026-11-23';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {value:string};
+    const services=JSON.parse(row.value) as Service[];
+    const service=services.find(item=>item.id==='anti-age-longevity');
+    if(service?.image==='/images/procedure-longevity-pink-v3.webp') {
+      service.image=procedureImages['anti-age-longevity'].image;
+      instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
+    }
+    insert.run(marker,'true');
+  })();
   cleanup(instance);
   return instance;
 }
