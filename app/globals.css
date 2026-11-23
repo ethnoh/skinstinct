@@ -1066,7 +1066,7 @@ main {
 .calendar-header strong {
   font-size: 15px;
   font-weight: 600;
-  text-transform: capitalize;
+  text-transform: none;
 }
 .calendar-grid {
   display: grid;

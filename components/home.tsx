@@ -442,7 +442,7 @@ export function Home({
                 ],
                 [
                   "Как посмотреть или отменить запись?",
-                  `Раздел «Мои записи» показывает визиты, оформленные в этом браузере. С другого устройства можно войти по коду записи и своему контакту. Отмена на сайте доступна не позднее чем за ${settings.cancellationHours} ч до визита. Позже напиши мне в Instagram.`,
+                  `Раздел «Мои записи» показывает визиты, оформленные в этом браузере. С другого устройства можно войти по коду записи и своему контакту. Отмена на сайте доступна не позднее чем за ${settings.cancellationHours} ч до визита. Напиши мне в Instagram.`,
                 ],
                 [
                   "Где находится студия?",
@@ -457,7 +457,7 @@ export function Home({
                   [settings.copy.faq2Question.en, settings.copy.faq2Answer.en],
                   [
                     "How can I view or cancel an appointment?",
-                    `My appointments shows visits booked in this browser. On another device, use your booking code and the contact you provided. Online cancellation is available until ${settings.cancellationHours} h before your visit. After that, message me on Instagram.`,
+                    `My appointments shows visits booked in this browser. On another device, use your booking code and the contact you provided. Online cancellation is available until ${settings.cancellationHours} h before your visit. Message me on Instagram.`,
                   ],
                   [
                     "Where is the studio?",
@@ -477,7 +477,7 @@ export function Home({
                   ],
                   [
                     "Kā apskatīt vai atcelt pierakstu?",
-                    `Sadaļā «Mani pieraksti» redzēsi šajā pārlūkā veiktos pierakstus. No citas ierīces vari izmantot pieraksta kodu un savu kontaktu. Atcelšana vietnē pieejama vismaz ${settings.cancellationHours} h pirms vizītes. Vēlāk uzraksti man Instagram.`,
+                    `Sadaļā «Mani pieraksti» redzēsi šajā pārlūkā veiktos pierakstus. No citas ierīces vari izmantot pieraksta kodu un savu kontaktu. Atcelšana vietnē pieejama vismaz ${settings.cancellationHours} h pirms vizītes. Uzraksti man Instagram.`,
                   ],
                   [
                     "Kur atrodas studija?",
@@ -592,7 +592,7 @@ function ContactSection({ lang, settings }: { lang: Lang; settings: SiteSettings
         <p>{settings.copy.contactIntro[lang]}</p>
         <p>
           <strong>{{lv:'SKINSTINCT — kosmetoloģija Jēkabpilī.',en:'SKINSTINCT — skincare in Jēkabpils.',ru:'SKINSTINCT — косметология в Екабпилсе.'}[lang]}</strong>{' '}
-          {{lv:`Sejas kopšanas procedūras, korneoterapija un individuāla ādas izvērtēšana pie ${settings.specialistName}. Vizītes pēc iepriekšēja pieraksta.`,en:`Facial treatments, corneotherapy and individual skin assessment with ${settings.specialistName}. Visits by appointment.`,ru:`Уход за лицом, корнеотерапия и индивидуальная оценка состояния кожи у ${settings.specialistName}. Приём по предварительной записи.`}[lang]}
+          {{lv:`Sejas kopšanas procedūras, korneoterapija un individuāla ādas izvērtēšana pie ${settings.specialistName === 'Valērija Razujeva' ? 'Valērijas Razujevas' : settings.specialistName}. Vizītes pēc iepriekšēja pieraksta.`,en:`Facial treatments, corneotherapy and individual skin assessment with ${settings.specialistName}. Visits by appointment.`,ru:`Уход за лицом, корнеотерапия и индивидуальная оценка состояния кожи у ${settings.specialistName === 'Valērija Razujeva' ? 'Валерии Разуевой' : settings.specialistName}. Приём по предварительной записи.`}[lang]}
         </p>
         <div className="contact-detail">
           <MapPin size={20} />
