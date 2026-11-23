@@ -50,7 +50,7 @@ export const priceCatalogue: Service[] = [
     "face",
     60,
     60,
-    "/images/procedure-youth-pink-v2.webp",
+    "/images/procedure-youth-client-v3.webp",
     { durationMin: 40 },
   ),
   service(
