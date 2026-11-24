@@ -52,6 +52,14 @@ export function db() {
     );
     CREATE INDEX IF NOT EXISTS booking_day ON bookings(date, status);
     CREATE INDEX IF NOT EXISTS booking_customer ON bookings(customer_id);
+    CREATE TABLE IF NOT EXISTS booking_notifications (
+      id TEXT PRIMARY KEY,booking_id TEXT NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+      kind TEXT NOT NULL CHECK(kind IN ('confirmation','reminder')),due_at INTEGER NOT NULL,
+      status TEXT NOT NULL DEFAULT 'queued',attempts INTEGER NOT NULL DEFAULT 0,
+      provider_id TEXT,updated_at INTEGER NOT NULL,error_code TEXT,
+      UNIQUE(booking_id,kind)
+    );
+    CREATE INDEX IF NOT EXISTS notification_due ON booking_notifications(status,due_at);
     CREATE TABLE IF NOT EXISTS blocks (id TEXT PRIMARY KEY, date TEXT NOT NULL, start_min INTEGER NOT NULL, end_min INTEGER NOT NULL, note TEXT NOT NULL DEFAULT '');
     CREATE INDEX IF NOT EXISTS block_day ON blocks(date);
     CREATE TABLE IF NOT EXISTS opening_days (date TEXT PRIMARY KEY,start_min INTEGER NOT NULL,end_min INTEGER NOT NULL,CHECK(start_min>=0 AND end_min>start_min AND end_min<=1440));
@@ -64,6 +72,8 @@ export function db() {
   for (const field of ['quoted_price_min', 'quoted_price_max']) {
     if (!bookingFields.some(column => column.name === field)) instance.exec(`ALTER TABLE bookings ADD COLUMN ${field} REAL`);
   }
+  if(!bookingFields.some(column=>column.name==='whatsapp_opt_in')) instance.exec('ALTER TABLE bookings ADD COLUMN whatsapp_opt_in INTEGER NOT NULL DEFAULT 0');
+  if(!bookingFields.some(column=>column.name==='whatsapp_opt_in_at')) instance.exec('ALTER TABLE bookings ADD COLUMN whatsapp_opt_in_at TEXT');
   insert.run("settings", JSON.stringify(initialSettings));
   insert.run("services", JSON.stringify(initialServices));
   insert.run("articles", JSON.stringify(initialArticles));
@@ -299,6 +309,16 @@ export function db() {
     const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
     const settings=JSON.parse(row.value) as SiteSettings;
     for(const key of ['legalName','legalRegistration','legalAddress','vatNumber','bankName','bankSwift','bankIban','email'] as const) settings[key]=initialSettings[key] || '';
+    instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='automatic-confirmation-copy-release-2026-11-24';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker))return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
+    const settings=JSON.parse(row.value) as SiteSettings;
+    settings.copy={...settings.copy,faq2Answer:bookingFollowup};
+    settings.bookingNotice={...bookingPriceNotice};
     instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
     insert.run(marker,'true');
   })();

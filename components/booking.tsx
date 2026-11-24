@@ -55,6 +55,9 @@ export function BookingWidget({
   const [sending, setSending] = useState(false);
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [whatsappReady,setWhatsappReady]=useState(false);
+  const [whatsappOptIn,setWhatsappOptIn]=useState(false);
+  useEffect(()=>{let active=true;setWhatsappReady(false);setWhatsappOptIn(false);api<{whatsapp:Record<Lang,boolean>}>('/api/notifications/options').then(data=>{if(active)setWhatsappReady(data.whatsapp[lang])}).catch(()=>{});return()=>{active=false}},[lang]);
   const [result, setResult] = useState<{ booking: Booking; code: string } | null>(null);
   const [copied, setCopied] = useState(false);
   const service = active.find((s) => s.id === serviceId);
@@ -144,6 +147,7 @@ export function BookingWidget({
         date,
         time,
         lang,
+        whatsappOptIn:whatsappReady&&whatsappOptIn,
       });
       setResult(data);
     } catch (e) {
@@ -183,7 +187,7 @@ export function BookingWidget({
           <CalendarCheck size={35} />
         </span>
         <span className="eyebrow">
-          {tr(lang, "VIZĪTES PIETEIKUMS SAGLABĀTS", "ЗАЯВКА НА ВИЗИТ СОХРАНЕНА")}
+          {{lv:'VIZĪTE APSTIPRINĀTA',en:'APPOINTMENT CONFIRMED',ru:'ВИЗИТ ПОДТВЕРЖДЁН'}[lang]}
         </span>
         <h3>{tr(lang, "Laiks sev\njau ieplānots.", "Время для себя\nуже в планах.")}</h3>
         <p>
@@ -220,10 +224,11 @@ export function BookingWidget({
         <p className="small muted">
           {tr(
             lang,
-            "Piekļuvei no citas ierīces vajadzēs šo kodu un norādīto kontaktu. E-pasti un SMS šobrīd netiek sūtīti automātiski.",
-            "Для входа с другого устройства понадобятся этот код и указанный контакт. Письма и SMS пока не отправляются автоматически.",
+            "Piekļuvei no citas ierīces vajadzēs šo kodu un norādīto kontaktu.",
+            "Для входа с другого устройства понадобятся этот код и указанный контакт.",
           )}
         </p>
+        {Boolean(result.booking.whatsapp_opt_in)&&<p className="booking-whatsapp-status">{{lv:'WhatsApp apstiprinājuma ziņa ir pieteikta nosūtīšanai. Ja līdz vizītei ir vairāk nekā 24 stundas, atgādinājumu saņemsi arī 1 dienu pirms vizītes.',en:'Your WhatsApp confirmation is queued for sending. If your visit is more than 24 hours away, you will also receive a reminder 1 day before it.',ru:'Подтверждение в WhatsApp поставлено в очередь на отправку. Если до визита больше 24 часов, напоминание придёт также за 1 день до него.'}[lang]}</p>}
         <div className="success-actions">
           <Link className="button" href={`${basePath(lang)}/account`}>
             {tr(lang, "Mani pieraksti", "Мои записи")}
@@ -550,6 +555,10 @@ export function BookingWidget({
                 Website
                 <input name="website" tabIndex={-1} autoComplete="off" />
               </label>
+              {whatsappReady&&<label className="checkbox-label booking-whatsapp-choice">
+                <input type="checkbox" name="whatsappOptIn" checked={whatsappOptIn} onChange={event=>setWhatsappOptIn(event.target.checked)}/>
+                <span>{{lv:'Vēlos saņemt šīs vizītes apstiprinājumu un atgādinājumu WhatsApp uz norādīto tālruņa numuru. Atgādinājumu saņemšu 1 dienu pirms vizītes, ja pierakstīšos vairāk nekā 24 stundas iepriekš.',en:'Send me this appointment’s confirmation and reminder on WhatsApp at the phone number provided. I will receive a reminder 1 day before my visit if I book more than 24 hours ahead.',ru:'Хочу получить подтверждение этого визита и напоминание в WhatsApp на указанный номер. Напоминание придёт за 1 день до визита, если запись оформлена более чем за 24 часа.'}[lang]}</span>
+              </label>}
               <label className="checkbox-label">
                 <input type="checkbox" name="consent" required />
                 <span>
@@ -573,14 +582,14 @@ export function BookingWidget({
                   {sending ? <LoaderCircle size={18} className="spin" /> : <Check size={18} />}{" "}
                   {sending
                     ? tr(lang, "Saglabājam...", "Сохраняем...")
-                    : tr(lang, "Pieteikt vizīti", "Записаться")}
+                    : ({lv:"Apstiprināt pierakstu",en:"Confirm appointment",ru:"Подтвердить запись"}[lang])}
                 </button>
               </div>
               <p className="small muted">
                 {tr(
                   lang,
-                  "Bez tiešsaistes priekšapmaksas. Vizīti apstiprinās studija personīgi.",
-                  "Без предоплаты онлайн. Студия подтвердит визит лично.",
+                    "Bez tiešsaistes priekšapmaksas. Izvēlētais laiks tiek apstiprināts automātiski.",
+                    "Без предоплаты онлайн. Выбранное время подтверждается автоматически.",
                 )}
               </p>
             </form>

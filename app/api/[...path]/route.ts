@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { cookies } from "next/headers";
 import { randomBytes, randomUUID, scryptSync } from "node:crypto";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
@@ -44,6 +44,7 @@ import {
 } from "@/lib/validation";
 import type { Booking, Lang } from "@/lib/types";
 import { addressCase } from "@/lib/address-case";
+import {enqueueBookingNotifications,notificationAvailability,notificationSummary,processBookingNotifications,whatsappConfig,whatsappPhone} from '@/lib/booking-notifications';
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -59,6 +60,8 @@ export async function GET(request: NextRequest, context: Context) {
   try {
     const route = (await context.params).path.join("/");
     const query = request.nextUrl.searchParams;
+    if(route==='notifications/options')return ok({whatsapp:notificationAvailability()});
+    if(route==='admin/notifications'){await requireAdmin();return ok(notificationSummary())}
     if (route === "health") {
       db().prepare("SELECT 1").get();
       return ok({ status: "ok" });
@@ -210,8 +213,11 @@ export async function POST(request: NextRequest, context: Context) {
           date: dateSchema,
           time: timeSchema,
           lang: z.enum(["lv", "en", "ru"]).default("lv"),
+          whatsappOptIn: z.boolean().default(false),
         })
         .parse(body);
+      if(input.whatsappOptIn&&!whatsappPhone(contact.phone))throw new HttpError(400,'INVALID_PHONE');
+      if(input.whatsappOptIn&&!whatsappConfig(input.lang).ready)throw new HttpError(503,'WHATSAPP_UNAVAILABLE');
       if (!validHorizon(input.date)) throw new HttpError(400, "INVALID_DATE");
       const rawCustomer = (await cookies()).get("sk_client")?.value || secret();
       const code = randomBytes(8).toString("hex").toUpperCase();
@@ -226,7 +232,7 @@ export async function POST(request: NextRequest, context: Context) {
           const quote = priceForDate(service, input.date);
           db()
             .prepare(
-              "INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,lang,created_at,quoted_price_min,quoted_price_max) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,lang,created_at,quoted_price_min,quoted_price_max,status,whatsapp_opt_in,whatsapp_opt_in_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'confirmed',?,?)",
             )
             .run(
               id,
@@ -244,13 +250,18 @@ export async function POST(request: NextRequest, context: Context) {
               new Date().toISOString(),
               quote.price,
               quote.priceMax ?? quote.price,
+              input.whatsappOptIn?1:0,
+              input.whatsappOptIn?new Date().toISOString():null,
             );
-          return db()
+          const booked=db()
             .prepare(`SELECT ${bookingColumns} FROM bookings WHERE id=?`)
             .get(id) as Booking;
+          enqueueBookingNotifications(booked);
+          return booked;
         })
         .immediate();
       (await cookies()).set("sk_client", rawCustomer, { ...sessionOptions, maxAge: 365 * 86400 });
+      if(input.whatsappOptIn)after(()=>processBookingNotifications());
       return ok({ booking: publicBooking(result), code: code.match(/.{1,4}/g)!.join("-") });
     }
     if (route === "account") {
@@ -302,6 +313,7 @@ export async function POST(request: NextRequest, context: Context) {
       if (!authorized) throw new HttpError(403, "AUTH_REQUIRED");
       if (!canCancel(booking)) throw new HttpError(400, "CANCEL_WINDOW");
       db().prepare("UPDATE bookings SET status='cancelled' WHERE id=?").run(body.id);
+      db().prepare("UPDATE booking_notifications SET status='cancelled',updated_at=? WHERE booking_id=? AND status='queued'").run(Date.now(),body.id);
       return ok({ ok: true });
     }
     if (route === "inquiries") {
@@ -326,6 +338,14 @@ export async function POST(request: NextRequest, context: Context) {
     }
     if (route.startsWith("admin/")) {
       await requireAdmin();
+      if(route==='admin/whatsapp-opt-out') {
+        const input=z.object({id:z.uuid()}).parse(await jsonBody(request,1000));
+        db().transaction(()=>{
+          db().prepare('UPDATE bookings SET whatsapp_opt_in=0 WHERE id=?').run(input.id);
+          db().prepare("UPDATE booking_notifications SET status='cancelled',updated_at=? WHERE booking_id=? AND status='queued'").run(Date.now(),input.id);
+        }).immediate();
+        return ok({ok:true});
+      }
       if (route === "admin/upload") {
         const bytes = await limitedBody(request, 8_500_000);
         const form = await new Response(bytes, {
@@ -406,6 +426,7 @@ export async function POST(request: NextRequest, context: Context) {
               if (overlap || blocked) throw new HttpError(409, "SLOT_UNAVAILABLE");
             }
             db().prepare("UPDATE bookings SET status=? WHERE id=?").run(input.status, input.id);
+            if(input.status!=='confirmed')db().prepare("UPDATE booking_notifications SET status='cancelled',updated_at=? WHERE booking_id=? AND status='queued'").run(Date.now(),input.id);
           })
           .immediate();
         return ok({ ok: true });

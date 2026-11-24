@@ -1,4 +1,5 @@
 "use client";
+import {NotificationStatus} from './notification-status';
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -364,6 +365,7 @@ export function Admin() {
                   <strong>{b.name}</strong>
                   {b.phone && <a href={`tel:${b.phone.replace(/[^+\d]/g, "")}`}>{b.phone}</a>}
                   {b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}
+                  {Boolean(b.whatsapp_opt_in)&&<button type="button" className="text-button" disabled={pending} onClick={()=>act(()=>api('/api/admin/whatsapp-opt-out',{id:b.id}),'WhatsApp paziņojumi šim pierakstam atcelti')}>Atteikt WhatsApp paziņojumus</button>}
                 </td>
                 <td>{addressCase(b.service_title, b.lang)}</td>
                 <td>
@@ -524,7 +526,7 @@ export function Admin() {
                     <h2>{"Pirms pirmās vizītes"}</h2>
                     <p>
                       {
-                        "Sākotnējais darba laiks: pirmdiena-piektdiena, 10:00-18:00. Tas ir paraugs, pārbaudi to iestatījumos. Pieteikumi rezervē laiku kalendārā, bet tos apstiprini Tu."
+                        "Jauni pieraksti apstiprinās automātiski atbilstoši kalendārā pieejamajiem laikiem. Darba laiku un izņēmumus vari mainīt iestatījumos."
                       }
                     </p>
                     <div>
@@ -1423,6 +1425,7 @@ export function Admin() {
                       </p>
                     </div>
                   </section>
+                  <NotificationStatus/>
                   <section className="admin-panel">
                     <h2>{"Meklēšana un indeksācija"}</h2>
                     <div className="form">

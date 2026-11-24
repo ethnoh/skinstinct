@@ -1,7 +1,7 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn, type ChildProcess } from "node:child_process";
-import { randomBytes, scryptSync } from "node:crypto";
+import { randomBytes, scryptSync,createHmac } from "node:crypto";
 import { existsSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -19,6 +19,8 @@ let logs = "";
 const directory = mkdtempSync(path.join(tmpdir(), "skinstinct-qa-"));
 const password = randomBytes(24).toString("hex");
 const clinicalKey=randomBytes(32).toString('hex');
+const webhookSecret=randomBytes(32).toString('hex');
+const webhookVerify=randomBytes(16).toString('hex');
 const salt = randomBytes(16).toString("hex");
 const passwordHash = `${salt}:${scryptSync(password, salt, 64).toString("hex")}`;
 async function start() {
@@ -33,6 +35,9 @@ async function start() {
       ADMIN_PASSWORD_HASH: passwordHash,
       CLINICAL_RECORDS_KEY: clinicalKey,
       GOOGLE_SITE_VERIFICATION: 'local-qa-verification-token',
+      WHATSAPP_APP_SECRET: webhookSecret,
+      WHATSAPP_VERIFY_TOKEN: webhookVerify,
+      WHATSAPP_PHONE_NUMBER_ID: '123456',
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -132,6 +137,13 @@ test("Booking lifecycle, isolation, content management and restart persistence",
   let time = "";
   await t.test("public pages are server rendered and private state is protected", async () => {
     assert.equal((await fetch(`${origin}/api/admin`)).status, 401);
+    assert.equal((await fetch(`${origin}/api/admin/notifications`)).status,401);
+    assert.deepEqual((await(await fetch(`${origin}/api/notifications/options`)).json()).whatsapp,{lv:false,en:false,ru:false});
+    assert.equal((await fetch(`${origin}/api/whatsapp?hub.mode=subscribe&hub.verify_token=invalid&hub.challenge=123`)).status,403);
+    assert.equal(await(await fetch(`${origin}/api/whatsapp?hub.mode=subscribe&hub.verify_token=${webhookVerify}&hub.challenge=123`)).text(),'123');
+    const webhookBody=JSON.stringify({object:'whatsapp_business_account',entry:[]});
+    assert.equal((await fetch(`${origin}/api/whatsapp`,{method:'POST',body:webhookBody})).status,403);
+    assert.equal((await fetch(`${origin}/api/whatsapp`,{method:'POST',body:webhookBody,headers:{'x-hub-signature-256':'sha256='+createHmac('sha256',webhookSecret).update(webhookBody).digest('hex')}})).status,200);
     assert.equal((await post("/api/inquiries", {}, "", "https://untrusted.example")).status, 403);
     const home = await (await fetch(origin)).text();
     assert.ok(home.includes("Tava āda."));
@@ -226,6 +238,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       lang: "en",
     };
     assert.equal((await post("/api/bookings", { ...data, phone: "" })).status, 400);
+    assert.equal((await post('/api/bookings',{...data,whatsappOptIn:true})).status,503);
     const responses = await Promise.all([post("/api/bookings", data), post("/api/bookings", data)]);
     assert.deepEqual(responses.map((r) => r.status).sort(), [200, 409]);
     const winner = responses.find((r) => r.ok)!;
@@ -233,6 +246,8 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     assert.ok(customer);
     const result = await winner.json();
     assert.equal(result.booking.lang, "en");
+    assert.equal(result.booking.status,'confirmed');
+    assert.equal(result.booking.whatsapp_opt_in,0);
     assert.equal(result.booking.service_title, "Youth facial");
     assert.equal(result.booking.quoted_price_min,date >= '2026-12-01' && date <= '2026-12-31' ? 50 : 60);
     assert.equal(result.booking.end_min-result.booking.start_min,60);
@@ -265,7 +280,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         headers: { Cookie: customer },
       });
       assert.equal(calendar.status, 200);
-      assert.ok((await calendar.text()).includes("STATUS:TENTATIVE"));
+      assert.ok((await calendar.text()).includes("STATUS:CONFIRMED"));
       assert.equal((await post("/api/bookings/cancel", { id: bookingId }, customer)).status, 200);
       const released = await (
         await fetch(`${origin}/api/availability?date=${date}&service=youth-facial`)

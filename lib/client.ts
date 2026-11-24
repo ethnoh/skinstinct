@@ -23,6 +23,8 @@ export function errorMessage(error: unknown, lang: Lang) {
       "Проверь данные. Укажи имя и корректный телефон или почту.",
       "Check your details. Enter your name and a valid phone or email.",
     ],
+    WHATSAPP_UNAVAILABLE: ['WhatsApp ziņas pašlaik nav pieejamas. Noņem WhatsApp atzīmi un apstiprini pierakstu.','Сообщения WhatsApp сейчас недоступны. Сними отметку WhatsApp и подтверди запись.','WhatsApp messages are currently unavailable. Uncheck WhatsApp and confirm your booking.'],
+    INVALID_PHONE: ['WhatsApp ziņām norādi derīgu tālruņa numuru ar valsts kodu, piemēram, +371 26054744.','Для WhatsApp укажи действующий номер с кодом страны, например +371 26054744.','For WhatsApp, enter a valid phone number with its country code, for example +371 26054744.'],
     SLOT_UNAVAILABLE: [
       "Šo laiku tikko rezervēja. Lūdzu, izvēlies citu.",
       "Это время уже заняли. Выбери другое.",
@@ -39,9 +41,9 @@ export function errorMessage(error: unknown, lang: Lang) {
       "Appointment not found. Check your code and contact details.",
     ],
     CANCEL_WINDOW: [
-      "Atcelšanas termiņš ir beidzies. Sazinies ar studiju Instagram.",
-      "Срок отмены на сайте истёк. Свяжись со студией в Instagram.",
-      "The online cancellation deadline has passed. Contact the studio on Instagram.",
+      "Atcelšanas termiņš ir beidzies. Nosūti SMS vai piezvani uz +371 26054744.",
+      "Срок отмены на сайте истёк. Отправь SMS или позвони по номеру +371 26054744.",
+      "The online cancellation deadline has passed. Send an SMS or call +371 26054744.",
     ],
     INVALID_PASSWORD: ["Nepareiza parole.", "Неверный пароль.", "Incorrect password."],
     AUTH_REQUIRED: ["Lūdzu, pieslēdzies vēlreiz.", "Войди ещё раз.", "Please sign in again."],

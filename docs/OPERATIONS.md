@@ -73,7 +73,7 @@ Pending and confirmed visits both occupy time. Cancelled visits release it. Rest
 
 The introductory treatment is an additional booking choice: 60–90 minutes displayed, 90 minutes reserved, with skin assessment and a treatment selected from the catalogue during the visit. Its price is deliberately null, not zero: the agreed price follows the selected procedure, including the date-based introductory offer where applicable. A separate one-time migration adds this choice without replacing existing services or subsequent owner edits.
 
-There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online payment configured. Do not label stored requests as emailed or confirmed. iCalendar download is available. A future Google integration should use a separate provider module, verified delegated authorization and explicit reconciliation of calendar conflicts.
+There is no Google OAuth/Calendar sync, mail transport, SMS gateway or online payment configured. New bookings are now confirmed automatically, while older pending requests retain their status. Optional WhatsApp Cloud API confirmations and 24-hour reminders use a persistent outbox, explicit per-booking opt-in, a 30-second worker and signed delivery webhooks; the owner must finish Meta onboarding before activation. No WhatsApp credentials or provider connection were present at implementation. See [WhatsApp setup and operations](WHATSAPP.md). iCalendar download is available. A future Google integration should use a separate provider module, verified delegated authorization and explicit reconciliation of calendar conflicts.
 
 ## Release checks
 

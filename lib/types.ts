@@ -76,6 +76,8 @@ export type Booking = {
   created_at: string;
   quoted_price_min?: number | null;
   quoted_price_max?: number | null;
+  whatsapp_opt_in?: number;
+  whatsapp_opt_in_at?: string | null;
 };
 export type Block = { id: string; date: string; start_min: number; end_min: number; note: string };
 export type Inquiry = {

@@ -74,4 +74,4 @@ export function publicBooking(booking: Booking) {
   return { ...safe, canCancel: canCancel(booking) };
 }
 export const bookingColumns =
-  "id,customer_id,service_id,service_title,date,start_min,end_min,name,phone,email,status,lang,created_at,quoted_price_min,quoted_price_max";
+  "id,customer_id,service_id,service_title,date,start_min,end_min,name,phone,email,status,lang,created_at,quoted_price_min,quoted_price_max,whatsapp_opt_in,whatsapp_opt_in_at";

@@ -10,7 +10,7 @@ A Latvian, English and Russian cosmetology studio website for Valērija Razujeva
 - Smooth left/right scroll reveals, gentle hero-image parallax, reading progress and service-duration charts/counters driven by real service settings. Portrait frames retain their full arch and visible caption. Reduced-motion preferences are respected.
 - Self-hosted fonts, optimized WebP photography and an identity-reference portrait.
 - Appointment requests with a three-step service, date/time and contact flow.
-- Live availability, pending reservations, appointment confirmation, cancellations, visit history, private booking-code lookup and iCalendar download.
+- Live availability, automatic confirmation for new appointments, legacy pending requests, cancellations, visit history, private booking-code lookup and iCalendar download.
 - Server-side overlap checks inside SQLite immediate transactions, including configurable service duration and buffers.
 - Latvian-only admin for appointments, opening hours, time blocks, messages, content in all three languages, images, services, prices, article drafts/publication and password changes.
 - Contact forms requiring a name and at least one valid phone/email.
@@ -81,14 +81,14 @@ Runtime configuration:
 2. Add the exact studio address and business phone/email.
 3. Confirm legal data-controller name, company registration and legal address in Settings. The privacy policy uses these fields.
 4. Review the generated portrait and all Latvian/English/Russian copy with the owner.
-5. Keep requests in pending status until the studio personally confirms them.
+5. New bookings confirm automatically after the transactional availability check. Review any older pending requests separately.
 6. Set up and verify persistent-volume backups in the Railway dashboard before customer use. The application does not claim that a backup policy has been configured.
 
 ## Current integration boundaries
 
 - Google account login and Google Calendar synchronization are intentionally left for the next stage. iCalendar export already works.
-- The app saves bookings and inquiries in the admin. It does not yet send automatic email, SMS or push notifications.
-- The supplied Instagram says the studio is being established. Initial availability is an editable schedule template and appointments require personal confirmation. Prices remain “by agreement” until the owner sets them.
+- The app saves bookings and inquiries in the admin. Automatic WhatsApp confirmations and 24-hour reminders are implemented but require the owner's Meta Business Platform account, approved utility templates and runtime configuration before activation. See [WhatsApp setup](docs/WHATSAPP.md). Email, SMS and push delivery are not configured.
+- Current procedures, prices, studio address and hours follow owner-supplied materials. Introductory visits choose a listed procedure during the visit; their price depends on the chosen treatment. New bookings confirm automatically.
 - Customers see bookings created with their private browser cookie. On another device they can retrieve an individual booking with its random code and the original contact. Phone/email alone never exposes appointment history.
 - Booking details expire after 12 months; inquiries after 6 months. Cleanup runs on application requests, at most once per hour. Admin sessions expire in 12 hours.
 - Initial article content is studio news adapted from the supplied Instagram, without invented client reviews, treatment outcomes or unsupported certifications.
