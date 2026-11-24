@@ -555,7 +555,7 @@ export function BookingWidget({
               </label>
               {whatsappReady&&<label className="checkbox-label booking-whatsapp-choice">
                 <input type="checkbox" name="whatsappOptIn" checked={whatsappOptIn} onChange={event=>setWhatsappOptIn(event.target.checked)}/>
-                <span>{{lv:'Vēlos saņemt šīs vizītes apstiprinājumu un atgādinājumu WhatsApp uz norādīto tālruņa numuru. Atgādinājumu saņemšu 1 dienu pirms vizītes, ja pierakstīšos vairāk nekā 24 stundas iepriekš.',en:'Send me this appointment’s confirmation and reminder on WhatsApp at the phone number provided. I will receive a reminder 1 day before my visit if I book more than 24 hours ahead.',ru:'Хочу получить подтверждение этого визита и напоминание в WhatsApp на указанный номер. Напоминание придёт за 1 день до визита, если запись оформлена более чем за 24 часа.'}[lang]}</span>
+                <span>{{lv:'Piekrītu saņemt pieraksta apstiprinājumu, atgādinājumu un ar manu vizīti saistītus paziņojumus WhatsApp lietotnē.',en:'I agree to receive my appointment confirmation, reminder and notifications related to my visit via WhatsApp.',ru:'Даю согласие на получение подтверждения записи, напоминания и уведомлений, связанных с моим визитом, в WhatsApp.'}[lang]}</span>
               </label>}
               <label className="checkbox-label">
                 <input type="checkbox" name="consent" required />
