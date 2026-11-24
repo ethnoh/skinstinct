@@ -225,12 +225,6 @@ function CardFields({ data, change }: { data: ClientCard; change: (value: Client
             value={data.privacyNoticeDate}
             onChange={(v) => set("privacyNoticeDate", v)}
           />
-          <TextField
-            label="Kartes glabāšanas nepieciešamības pārskatīšanas datums"
-            type="date"
-            value={data.reviewDate}
-            onChange={(v) => set("reviewDate", v)}
-          />
         </div>
         <TextField
           label="Datu apstrādes pamats un saistītā dokumenta atsauce"
