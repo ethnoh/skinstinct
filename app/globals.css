@@ -3610,6 +3610,8 @@ main {
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    box-sizing: border-box;
     z-index: 60;
     min-height: 59px;
     background: var(--olive);
@@ -3619,6 +3621,9 @@ main {
     font-weight: 500;
     padding: 13px 20px calc(13px + env(safe-area-inset-bottom));
     box-shadow: 0 -3px 20px #333c2c14;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    pointer-events: auto;
   }
   .mobile-booking > svg:last-child {
     margin-left: 10px;

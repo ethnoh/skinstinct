@@ -342,11 +342,25 @@ export function CookieNotice({ lang }: { lang: Lang }) {
   );
 }
 export function MobileBooking({ lang }: { lang: Lang }) {
+  const href = `${basePath(lang)}/#pieraksts`;
   return (
-    <Link className="mobile-booking" href={`${basePath(lang)}/#pieraksts`}>
+    <a
+      className="mobile-booking"
+      href={href}
+      onClick={(event) => {
+        const target = document.getElementById("pieraksts");
+        const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+        const targetPath = href.split("#")[0].replace(/\/+$/, "") || "/";
+        if (target && currentPath === targetPath) {
+          event.preventDefault();
+          window.history.pushState(null, "", href);
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }}
+    >
       <CalendarDays size={19} />
       {tr(lang, "Pieteikt vizīti", "Записаться на визит")}
       <ArrowUpRight size={18} />
-    </Link>
+    </a>
   );
 }

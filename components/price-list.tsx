@@ -20,15 +20,21 @@ export function ChooseTreatment({
 }) {
   const base = basePath(lang);
   if (service.bookable === false) return <span className="small muted">{{lv:'Pieraksts vēl nav atvērts',en:'Booking not yet open',ru:'Запись пока закрыта'}[lang]}</span>;
+  const href = `${base || "/"}?service=${encodeURIComponent(service.id)}#pieraksts`;
   return (
     <a
       className={className}
-      href={`${base || "/"}?service=${encodeURIComponent(service.id)}#pieraksts`}
+      href={href}
       onClick={(event) => {
-        if (window.location.pathname === (base || "/")) {
+        const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+        const basePathValue = (base || "/").replace(/\/+$/, "") || "/";
+        if (currentPath === basePathValue) {
           event.preventDefault();
           window.dispatchEvent(new CustomEvent("choose-service", { detail: service.id }));
-          document.getElementById("pieraksts")?.scrollIntoView({ behavior: "smooth" });
+          window.history.pushState(null, "", href);
+          window.requestAnimationFrame(() =>
+            document.getElementById("pieraksts")?.scrollIntoView({ behavior: "smooth", block: "start" })
+          );
         }
       }}
     >
