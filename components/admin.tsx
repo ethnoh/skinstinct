@@ -342,64 +342,80 @@ export function Admin() {
   );
   function bookingRows(items: Booking[]) {
     return items.length ? (
-      <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>{"Datums un laiks"}</th>
-              <th>{"Klients"}</th>
-              <th>{"Pakalpojums"}</th>
-              <th>{"Statuss"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((b) => (
-              <tr key={b.id}>
-                <td>
-                  <strong>{dateLabel(b.date, "lv")}</strong>
-                  <span>
-                    {time(b.start_min)} - {time(b.end_min)}
-                  </span>
-                </td>
-                <td>
-                  <strong>{b.name}</strong>
-                  {b.phone && <a href={`tel:${b.phone.replace(/[^+\d]/g, "")}`}>{b.phone}</a>}
-                  {b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}
-                  {Boolean(b.whatsapp_opt_in)&&<button type="button" className="text-button" disabled={pending} onClick={()=>act(()=>api('/api/admin/whatsapp-opt-out',{id:b.id}),'WhatsApp paziņojumi šim pierakstam atcelti')}>Atteikt WhatsApp paziņojumus</button>}
-                </td>
-                <td>{addressCase(b.service_title, b.lang)}</td>
-                <td>
-                  <select
-                    aria-label={`Pieraksta statuss: ${b.name}`}
-                    className={`status-select status-${b.status}`}
-                    value={b.status}
-                    disabled={pending}
-                    onChange={(e) => {
-                      const next = e.target.value;
-                      if (
-                        next === "cancelled" &&
-                        !window.confirm(
-                          "Atcelt klienta pierakstu? Šis laiks kļūs pieejams jauniem pieteikumiem.",
-                        )
-                      )
-                        return;
-                      act(
-                        () => api("/api/admin/booking", { id: b.id, status: next }),
-                        "Pieraksta statuss atjaunināts",
-                      );
-                    }}
-                  >
-                    {Object.entries(labels).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="admin-booking-days">
+        {Array.from(new Set(items.map((b) => b.date)))
+          .sort()
+          .map((date) => (
+            <section className="admin-booking-day" key={date}>
+              <h3>{dateLabel(date, "lv")}</h3>
+              <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>{"Laiks"}</th>
+                      <th>{"Klients"}</th>
+                      <th>{"Pakalpojums"}</th>
+                      <th>{"Statuss"}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items
+                      .filter((b) => b.date === date)
+                      .sort((a, b) => a.start_min - b.start_min)
+                      .map((b) => (
+                        <tr key={b.id}>
+                          <td>
+                            <strong>{time(b.start_min)} - {time(b.end_min)}</strong>
+                          </td>
+                          <td>
+                            <strong>{b.name}</strong>
+                            {b.phone && <a href={`tel:${b.phone.replace(/[^+\d]/g, "")}`}>{b.phone}</a>}
+                            {b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}
+                            {Boolean(b.whatsapp_opt_in) && (
+                              <button
+                                type="button"
+                                className="text-button"
+                                disabled={pending}
+                                onClick={() => act(() => api("/api/admin/whatsapp-opt-out", { id: b.id }), "WhatsApp paziņojumi šim pierakstam atcelti")}
+                              >
+                                Atteikt WhatsApp paziņojumus
+                              </button>
+                            )}
+                          </td>
+                          <td>{addressCase(b.service_title, b.lang)}</td>
+                          <td>
+                            <select
+                              aria-label={`Pieraksta statuss: ${b.name}`}
+                              className={`status-select status-${b.status}`}
+                              value={b.status}
+                              disabled={pending}
+                              onChange={(e) => {
+                                const next = e.target.value;
+                                if (
+                                  next === "cancelled" &&
+                                  !window.confirm("Atcelt klienta pierakstu? Šis laiks kļūs pieejams jauniem pieteikumiem.")
+                                )
+                                  return;
+                                act(
+                                  () => api("/api/admin/booking", { id: b.id, status: next }),
+                                  "Pieraksta statuss atjaunināts",
+                                );
+                              }}
+                            >
+                              {Object.entries(labels).map(([value, label]) => (
+                                <option key={value} value={value}>
+                                  {label}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
       </div>
     ) : (
       <div className="admin-empty">

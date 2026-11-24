@@ -418,6 +418,14 @@ export function BookingWidget({
                     onClick={() => {
                       setDate(key);
                       setError("");
+                      window.requestAnimationFrame(() => {
+                        window.requestAnimationFrame(() => {
+                          document.querySelector(".time-picker")?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                          });
+                        });
+                      });
                     }}
                   >
                     {i + 1}
@@ -460,7 +468,17 @@ export function BookingWidget({
                           key={s.time}
                           disabled={!s.available}
                           aria-pressed={time === s.time}
-                          onClick={() => setTime(s.time)}
+                          onClick={() => {
+                            setTime(s.time);
+                            setStep(3);
+                            setError("");
+                            window.requestAnimationFrame(() => {
+                              document.getElementById("pieraksts")?.scrollIntoView({
+                                behavior: "auto",
+                                block: "start",
+                              });
+                            });
+                          }}
                         >
                           {s.time}
                         </button>

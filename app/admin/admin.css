@@ -231,6 +231,23 @@
   width: 100%;
   overflow: auto;
 }
+.admin-booking-days {
+  display: grid;
+  gap: 18px;
+}
+.admin-booking-day {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+}
+.admin-booking-day h3 {
+  margin: 0;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 14px;
+}
 .admin-table {
   border-collapse: collapse;
   width: 100%;

@@ -243,6 +243,16 @@ function CardFields({ data, change }: { data: ClientCard; change: (value: Client
           large
           onChange={(v) => set("consentNotes", v)}
         />
+        <label className="clinical-check">
+          <input
+            type="checkbox"
+            checked={data.imageConsent === "yes"}
+            onChange={(e) =>
+              set("imageConsent", e.target.checked ? "yes" : "no")
+            }
+          />
+          Piekrītu, ka mani attēli tiek izmantoti SKINSTINCT reklāmā
+        </label>
         <p className="clinical-help">
           Ieraksts kartē pats par sevi nav klienta paraksts. Saglabā vajadzīgo piekrišanas dokumentu
           PDF sadaļā.

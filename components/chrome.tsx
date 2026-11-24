@@ -91,11 +91,27 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
             className="desktop-nav"
             aria-label={tr(lang, "Galvenā navigācija", "Основная навигация")}
           >
-            <Link href={`${base}/#pieeja`}>{tr(lang, "Mana pieeja", "Мой подход")}</Link>
             <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
             <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
             <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>
             <Link href={`${base}/contacts`}>{{lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang]}</Link>
+            <Link
+              href={`${base}/?openBooking=1#pieraksts`}
+              onClick={(event) => {
+                const target = document.getElementById("pieraksts");
+                if (target && window.location.pathname.replace(/\/+$/, "") === (base || "/").replace(/\/+$/, "")) {
+                  event.preventDefault();
+                  window.dispatchEvent(new CustomEvent("open-booking"));
+                  window.history.pushState(null, "", `${base}/?openBooking=1#pieraksts`);
+                  window.requestAnimationFrame(() => {
+                    const calendar = document.getElementById("booking-calendar");
+                    (calendar || target).scrollIntoView({ behavior: "auto", block: "start" });
+                  });
+                }
+              }}
+            >
+              {tr(lang, "Pieteikt vizīti", "Записаться")}
+            </Link>
           </nav>
           <div className="header-actions">
             <div className="language-switch" aria-label={tr(lang, "Valoda", "Язык")}>
@@ -141,12 +157,29 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               aria-label={tr(lang, "Mobilā izvēlne", "Мобильное меню")}
             >
               {[
-                ["pieeja", tr(lang, "Mana pieeja", "Мой подход")],
                 ["pakalpojumi", tr(lang, "Pakalpojumi", "Услуги")],
                 ["par-mani", tr(lang, "Par mani", "Обо мне")],
                 ["pieraksts", tr(lang, "Pieteikt vizīti", "Записаться")],
               ].map(([id, text]) => (
-                <Link key={id} href={`${base}/#${id}`} onClick={() => setOpen(false)}>
+                <Link
+                  key={id}
+                  href={id === "pieraksts" ? `${base}/?openBooking=1#pieraksts` : `${base}/#${id}`}
+                  onClick={(event) => {
+                    setOpen(false);
+                    if (id === "pieraksts") {
+                      const target = document.getElementById("pieraksts");
+                      if (target && window.location.pathname.replace(/\/+$/, "") === (base || "/").replace(/\/+$/, "")) {
+                        event.preventDefault();
+                        window.dispatchEvent(new CustomEvent("open-booking"));
+                        window.history.pushState(null, "", `${base}/?openBooking=1#pieraksts`);
+                        window.requestAnimationFrame(() => {
+                          const calendar = document.getElementById("booking-calendar");
+                          (calendar || target).scrollIntoView({ behavior: "auto", block: "start" });
+                        });
+                      }
+                    }
+                  }}
+                >
                   {text}
                   <ArrowUpRight size={17} />
                 </Link>

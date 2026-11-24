@@ -17,7 +17,7 @@ export function ClinicalPrintForms({
     [section, setSection] = useState<"all" | "base" | "visit" | "aftercare">("all"),
     [printing, setPrinting] = useState(false),
     [error, setError] = useState("");
-  async function print() {
+  async function printDocument(action: "print" | "download") {
     setPrinting(true);
     setError("");
     const frame = document.createElement("iframe");
@@ -32,6 +32,12 @@ export function ClinicalPrintForms({
     frame.onload = async () => {
       try {
         await frame.contentDocument?.fonts.ready;
+        if (frame.contentDocument) {
+          frame.contentDocument.title =
+            action === "download"
+              ? "SKINSTINCT-klienta-dokumenti.pdf"
+              : "SKINSTINCT klienta dokumenti";
+        }
         frame.contentWindow?.addEventListener(
           "afterprint",
           () => {
@@ -95,9 +101,14 @@ export function ClinicalPrintForms({
         ierīču instrukcijām un savai kompetencei. Šī ir pielāgojama dokumentu sagatave; tā nav
         universāla piekrišana visām nākotnes procedūrām. Injekcijas — tikai pilngadīgajiem.
       </div>
-      <button type="button" className="button" disabled={printing} onClick={print}>
-        {printing ? "Sagatavo…" : "Drukāt / saglabāt PDF"}
-      </button>
+      <div className="clinical-actions">
+        <button type="button" className="button" disabled={printing} onClick={() => printDocument("download")}>
+          {printing ? "Sagatavo…" : "Lejupielādēt PDF"}
+        </button>
+        <button type="button" className="button button-outline" disabled={printing} onClick={() => printDocument("print")}>
+          {printing ? "Sagatavo…" : "Drukāt"}
+        </button>
+      </div>
       {error && (
         <p role="alert" className="form-error">
           {error}
