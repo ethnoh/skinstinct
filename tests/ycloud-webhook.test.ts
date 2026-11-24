@@ -1,0 +1,34 @@
+import {test,after,before} from 'node:test';
+import assert from 'node:assert/strict';
+import {createHmac} from 'node:crypto';
+import {mkdtempSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+process.env.DATA_DIR=mkdtempSync(path.join(tmpdir(),'sk-ycloud-'));
+let db:typeof import('../lib/db')['db'];
+let webhook:typeof import('../lib/ycloud-webhook');
+before(async()=>{({db}=await import('../lib/db'));webhook=await import('../lib/ycloud-webhook')});
+after(()=>db().close());
+test('YCloud verifies raw bytes, timestamp tolerance and multiple signing digests',()=>{
+ const raw=Buffer.from('{"id":"test"}'),secret='isolated-test-secret',now=Date.now(),timestamp=String(Math.floor(now/1000));
+ const digest=createHmac('sha256',secret).update(timestamp+'.').update(raw).digest('hex');
+ assert.equal(webhook.verifyYCloudSignature(raw,`t=${timestamp},s=${digest}`,secret,now),true);
+ assert.equal(webhook.verifyYCloudSignature(raw,`t=${timestamp},s=bad,s=${digest}`,secret,now),true);
+ assert.equal(webhook.verifyYCloudSignature(Buffer.from('{ "id":"test"}'),`t=${timestamp},s=${digest}`,secret,now),false);
+ assert.equal(webhook.verifyYCloudSignature(raw,`t=${timestamp},s=${digest}`,secret,now+301000),false);
+ assert.equal(webhook.verifyYCloudSignature(raw,`t=${timestamp},t=${timestamp},s=${digest}`,secret,now),false);
+ assert.equal(webhook.verifyYCloudSignature(raw,`t=${timestamp},s=${digest}`,'wrong',now),false);
+});
+test('Delivery updates match sender/account/message, tolerate retries and do not downgrade delivered status',()=>{
+ process.env.YCLOUD_WHATSAPP_FROM='+37120000000';process.env.YCLOUD_WABA_ID='test-waba';
+ db().prepare("INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,status,lang,created_at) VALUES ('ycloud-test','test','test','youth-facial','Test','2026-12-03',720,780,'Test','+37120000001','','confirmed','lv','2026-11-24T10:00:00Z')").run();
+ db().prepare("INSERT INTO booking_notifications(id,booking_id,kind,due_at,status,provider_id,updated_at) VALUES ('delivery-test','ycloud-test','confirmation',0,'accepted','provider-test',0)").run();
+ const event=(status:string,from='+37120000000',wabaId='test-waba')=>({id:'evt-test',type:'whatsapp.message.updated',whatsappMessage:{id:'provider-test',from,wabaId,status}});
+ const status=()=> (db().prepare("SELECT status FROM booking_notifications WHERE id='delivery-test'").get() as {status:string}).status;
+ webhook.applyYCloudStatus(event('read','+37120000002'));assert.equal(status(),'accepted');
+ webhook.applyYCloudStatus(event('read','+37120000000','wrong'));assert.equal(status(),'accepted');
+ webhook.applyYCloudStatus(event('delivered'));webhook.applyYCloudStatus(event('delivered'));assert.equal(status(),'delivered');
+ webhook.applyYCloudStatus(event('sent'));webhook.applyYCloudStatus(event('failed'));assert.equal(status(),'delivered');
+ webhook.applyYCloudStatus(event('read'));assert.equal(status(),'read');
+ webhook.applyYCloudStatus(null);webhook.applyYCloudStatus({type:'whatsapp.inbound_message.received'});
+});

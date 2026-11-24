@@ -38,6 +38,9 @@ async function start() {
       WHATSAPP_APP_SECRET: webhookSecret,
       WHATSAPP_VERIFY_TOKEN: webhookVerify,
       WHATSAPP_PHONE_NUMBER_ID: '123456',
+      YCLOUD_WEBHOOK_SECRET: webhookSecret,
+      YCLOUD_WHATSAPP_FROM: '+37120000000',
+      YCLOUD_WABA_ID: 'isolated-waba',
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -88,6 +91,17 @@ before(async () => {
 });
 after(async () => {
   await stop();
+});
+
+test('YCloud callback authenticates the raw request before accepting delivery receipts',async()=>{
+ const body=JSON.stringify({id:'isolated-event',type:'whatsapp.message.updated',whatsappMessage:{id:'unknown',from:'+37120000000',wabaId:'isolated-waba',status:'delivered'}});
+ assert.equal((await fetch(`${origin}/api/ycloud`,{method:'POST',body})).status,403);
+ const t=String(Math.floor(Date.now()/1000));
+ const signature=createHmac('sha256',webhookSecret).update(t+'.').update(body).digest('hex');
+ assert.equal((await fetch(`${origin}/api/ycloud`,{method:'POST',headers:{'YCloud-Signature':`t=${t},s=${signature}`},body})).status,204);
+ assert.equal((await fetch(`${origin}/api/ycloud`,{method:'POST',headers:{'YCloud-Signature':`t=${t},s=${signature}`},body:body+' '})).status,403);
+ const invalid='null',invalidSignature=createHmac('sha256',webhookSecret).update(t+'.').update(invalid).digest('hex');
+ assert.equal((await fetch(`${origin}/api/ycloud`,{method:'POST',headers:{'YCloud-Signature':`t=${t},s=${invalidSignature}`},body:invalid})).status,400);
 });
 function post(route: string, data: unknown, cookie = "", requestOrigin = origin) {
   return fetch(`${origin}${route}`, {

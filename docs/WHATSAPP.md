@@ -1,5 +1,15 @@
 # Automatic booking and optional WhatsApp delivery
 
+## YCloud coexistence setup
+
+The owner's existing Business app number is connected through YCloud coexistence. The API key is stored only in the owner service as `YCLOUD_API_KEY`. The direct Meta sending adapter below has not yet been replaced or activated for YCloud.
+
+Register `https://skinstinct.lv/api/ycloud` for only `whatsapp.message.updated`. After registration, store the endpoint signing secret as `YCLOUD_WEBHOOK_SECRET`, the exact sending number as `YCLOUD_WHATSAPP_FROM`, and the account ID as `YCLOUD_WABA_ID` in owner service variables. Do not paste secrets into chat or commit them. The receiver returns 503 until its secret is configured. It verifies timestamped HMAC-SHA256 over the raw bytes, rejects signatures older than five minutes, and commits only known outbound delivery statuses. Wrong account/sender and incoming chats are ignored. Repeated or out-of-order receipts cannot downgrade delivered/read statuses. Database failures return 503 for provider redelivery.
+
+Reference: https://docs.ycloud.com/en/api-reference/guides/api-fundamentals/implement-a-webhook-receiver.md
+
+This receiver does not enable outbound sending. Keep `WHATSAPP_ENABLED` disabled until the YCloud sending adapter, approved templates, privacy text and owner delivery test are complete.
+
 New bookings are inserted as `confirmed` in the same SQLite immediate transaction as the overlap check and quoted price. Existing pending bookings retain their status. WhatsApp delivery failure never cancels a confirmed appointment.
 
 WhatsApp is not active until the owner completes Meta onboarding and the required configuration is present. `/api/notifications/options` returns per-language availability without credentials. The optional, initially unchecked notification choice is shown only for a configured language. Opt-in requires a valid international phone number; Latvian eight-digit numbers are normalized with +371. Consent and its timestamp are stored for that booking only.
