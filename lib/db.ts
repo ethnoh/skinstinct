@@ -10,6 +10,7 @@ import { applyPriceRelease, introductoryTreatment, priceBookingNotice, priceCata
 import {localSearchDescription,previousSearchDescription,studioPhone,studioSchedule} from './studio-details';
 import {cleanJournalBody} from './journal-cleanup';
 import {procedureImages} from './procedure-images';
+import {bookingFollowup,bookingPriceNotice} from './booking-communication';
 
 export const dataDir = process.env.DATA_DIR || path.join(process.cwd(), ".data");
 let instance: Database.Database | undefined;
@@ -232,6 +233,16 @@ export function db() {
       service.description=updated.description;
       instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
     }
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
+    const marker='booking-communication-release-2026-11-24';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker))return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
+    const settings=JSON.parse(row.value) as SiteSettings;
+    settings.copy={...settings.copy,faq2Answer:bookingFollowup};
+    settings.bookingNotice=bookingPriceNotice;
+    instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
     insert.run(marker,'true');
   })();
   instance.transaction(() => {

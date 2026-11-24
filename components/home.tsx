@@ -36,6 +36,8 @@ import { TreatmentPrice } from './treatment-price';
 import { cataloguePriceDate } from '@/lib/opening-offer';
 import {studioMapsUrl} from '@/lib/studio-details';
 import {StudioHours} from './studio-hours';
+import {bookingFollowup} from '@/lib/booking-communication';
+import {PhoneText} from './phone-text';
 
 export function Botanical({ className = "" }: { className?: string }) {
   return (
@@ -435,7 +437,7 @@ export function Home({
                 ],
                 [
                   "Как подтверждается запись?",
-                  "После заявки выбранный час резервируется в системе. Я свяжусь с Тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
+                  bookingFollowup.ru,
                 ],
                 [
                   "Как посмотреть или отменить запись?",
@@ -470,7 +472,7 @@ export function Home({
                   ],
                   [
                     "Kā tiek apstiprināts pieraksts?",
-                    "Pēc pieteikuma izvēlētais laiks tiek rezervēts sistēmā. Es sazināšos pa norādīto tālruni vai e-pastu, lai apstiprinātu tikšanos un precizētu detaļas.",
+                    bookingFollowup.lv,
                   ],
                   [
                     "Kā apskatīt vai atcelt pierakstu?",
@@ -489,7 +491,7 @@ export function Home({
                 {t(`faq${i + 1}Question`, question)}
                 <Plus size={19} />
               </summary>
-              <p>{t(`faq${i + 1}Answer`, answer)}</p>
+              <p><PhoneText text={t(`faq${i + 1}Answer`, answer)} phone={settings.phone}/></p>
             </details>
           ))}
         </div>

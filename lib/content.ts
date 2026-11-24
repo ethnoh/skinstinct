@@ -1,5 +1,6 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
+import {bookingFollowup} from './booking-communication';
 import { journalTopicArticles } from './journal-topics';
 import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
 import { localSearchDescription, studioPhone, studioSchedule } from './studio-details';
@@ -134,11 +135,7 @@ export const initialCopy: SiteSettings["copy"] = {
     en: "How is my appointment confirmed?",
     ru: "Как подтверждается запись?",
   },
-  faq2Answer: {
-    lv: "Pēc pieteikuma izvēlētais laiks tiek rezervēts sistēmā. Es sazināšos pa norādīto tālruni vai e-pastu, lai apstiprinātu tikšanos un precizētu detaļas.",
-    en: "Your chosen time is reserved in the system after your request. I'll contact you by phone or email to confirm the appointment and discuss the details.",
-    ru: "После заявки выбранный час резервируется в системе. Я свяжусь с Тобой по указанному телефону или почте, чтобы подтвердить встречу и уточнить детали.",
-  },
+  faq2Answer: bookingFollowup,
   journalTitle: {
     lv: "Nedaudz tuvāk\nsavai ",
     en: "A little closer\nto your ",

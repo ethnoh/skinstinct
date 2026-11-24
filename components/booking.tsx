@@ -22,6 +22,8 @@ import type { Booking, Lang, Service, SiteSettings } from "@/lib/types";
 import { isPriceRange, serviceDuration, servicePrice } from "@/lib/service-display";
 import { BOOKING_START, OFFER_END } from '@/lib/opening-offer';
 import {OpeningOffer} from './opening-offer';
+import {bookingFollowup} from '@/lib/booking-communication';
+import {PhoneText} from './phone-text';
 import { TreatmentPrice } from './treatment-price';
 
 type Slots = { time: string; available: boolean }[];
@@ -167,7 +169,7 @@ export function BookingWidget({
       <div className="booking-paused">
         <Leaf size={32} />
         <h3>{tr(lang, "Drīz tiksimies", "Скоро увидимся")}</h3>
-        <p>{settings.bookingNotice[lang]}</p>
+        <p><PhoneText text={settings.bookingNotice[lang]} phone={settings.phone}/></p>
         <a className="button" href={settings.instagram} target="_blank" rel="noopener noreferrer">
           Instagram
           <ArrowRight size={18} />
@@ -185,11 +187,7 @@ export function BookingWidget({
         </span>
         <h3>{tr(lang, "Laiks sev\njau ieplānots.", "Время для себя\nуже в планах.")}</h3>
         <p>
-          {tr(
-            lang,
-            "Es sazināšos ar Tevi, lai apstiprinātu vizīti. Izvēlētais laiks jau rezervēts.",
-            "Я свяжусь с Тобой, чтобы подтвердить визит. Выбранное время уже зарезервировано.",
-          )}
+          <PhoneText text={bookingFollowup[lang]} phone={settings.phone}/>
         </p>
         <div className="success-details">
           <strong>{result.booking.service_title}</strong>
@@ -311,7 +309,7 @@ export function BookingWidget({
             </div>
             <p className="booking-notice">
               <ShieldCheck size={18} />
-              {settings.bookingNotice[lang]}
+              <span><PhoneText text={settings.bookingNotice[lang]} phone={settings.phone}/></span>
             </p>
             <button className="button booking-next" onClick={() => setStep(2)} disabled={!service}>
               {tr(lang, "Izvēlēties laiku", "Выбрать время")}

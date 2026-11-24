@@ -1080,6 +1080,7 @@ main {
   font-weight: 600;
   text-transform: none;
 }
+.phone-inline-link {color:var(--olive-dark);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;}
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));

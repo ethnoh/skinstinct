@@ -1,4 +1,5 @@
 import type { Localized, Service } from "./types";
+import {bookingPriceNotice} from './booking-communication';
 const text = (lv: string, en: string, ru: string): Localized => ({ lv, en, ru });
 export const priceGroups = {
   face: text("Sejas kopšanas procedūras", "Facial treatments", "Процедуры для лица"),
@@ -9,11 +10,7 @@ export const priceGroups = {
 };
 
 export const confirmedDurations = { diagnostics: 30, mesotherapy: 60, biorevitalisation: 60 };
-export const priceBookingNotice = text(
-  "Pierakstu apstiprināšu personīgi. Cena redzama pie katras procedūras; injekciju precīzo cenu saskaņosim pirms vizītes atbilstoši preparāta daudzumam un individuālajam plānam.",
-  "I will confirm your appointment personally. Each treatment shows its price; the exact price of injectable treatments will be agreed before your visit according to the product quantity and individual plan.",
-  "Подтвержу запись лично. Стоимость указана у каждой процедуры; точную стоимость инъекций согласуем до визита с учётом количества препарата и индивидуального плана.",
-);
+export const priceBookingNotice = bookingPriceNotice;
 
 function service(
   id: string,
