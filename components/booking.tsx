@@ -20,7 +20,8 @@ import { api, basePath, dateLabel, errorMessage, localeCode, money } from "@/lib
 import { tr } from "@/lib/i18n";
 import type { Booking, Lang, Service, SiteSettings } from "@/lib/types";
 import { isPriceRange, serviceDuration, servicePrice } from "@/lib/service-display";
-import { BOOKING_START, introductoryNotice, OFFER_END } from '@/lib/opening-offer';
+import { BOOKING_START, OFFER_END } from '@/lib/opening-offer';
+import {OpeningOffer} from './opening-offer';
 import { TreatmentPrice } from './treatment-price';
 
 type Slots = { time: string; available: boolean }[];
@@ -265,7 +266,7 @@ export function BookingWidget({
         ))}
       </div>
       <div className="booking-stage" key={step}>
-        {initialToday <= OFFER_END && <p className="price-offer-notice">{introductoryNotice[lang]}</p>}
+        {initialToday <= OFFER_END && <OpeningOffer lang={lang}/>}
         {step === 1 && (
           <>
             <div className="stage-heading">

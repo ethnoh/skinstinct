@@ -241,9 +241,6 @@ export function Home({
             ))}
         </div>
         <div className="home-price-heading">
-          <span className="eyebrow">
-            {{ lv: "SKAIDRI UN PĀRSKATĀMI", en: "CLEAR AND SIMPLE", ru: "ЯСНО И ПОНЯТНО" }[lang]}
-          </span>
           <h3>
             {
               { lv: "Procedūras un cenas", en: "Treatments and prices", ru: "Процедуры и цены" }[

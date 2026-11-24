@@ -1475,13 +1475,24 @@ main {
   font-size: 16px;
 }
 .price-offer-notice {
-  background: var(--cream);
-  border-left: 3px solid var(--olive);
-  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  background: var(--sage);
+  border: 1px solid var(--olive);
+  border-radius: 12px;
+  padding: 26px 28px;
   margin-block: 0 24px;
   line-height: 1.65;
   font-size: 15px;
 }
+.opening-offer-amount {display:flex;align-items:center;justify-content:center;min-width:108px;min-height:108px;padding:12px;border-radius:50%;background:var(--olive);color:var(--on-accent);font-family:var(--serif);font-size:39px;font-weight:600;white-space:nowrap;}
+.opening-offer-label {display:block;color:var(--olive-dark);font-size:10px;letter-spacing:1.8px;font-weight:700;}
+.opening-offer-title {display:block;font-family:var(--serif);font-size:34px;line-height:1.15;font-weight:600;margin:5px 0 9px;}
+.opening-offer-subtitle {display:block;font-size:16px;line-height:1.5;}
+.price-offer-notice p {margin:7px 0 0;font-size:14px;line-height:1.65;}
+@media(max-width:600px){.price-offer-notice{grid-template-columns:1fr;gap:16px;padding:22px;}.opening-offer-amount{min-width:0;min-height:0;width:max-content;padding:8px 20px;border-radius:40px;font-size:32px;}.opening-offer-title{font-size:30px;}}
 .journal-section {
   background: var(--cream);
 }

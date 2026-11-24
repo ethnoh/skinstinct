@@ -5,7 +5,8 @@ import { basePath } from "@/lib/client";
 import { priceGroups } from "@/lib/price-catalogue";
 import { isPriceRange, serviceDuration, servicePrice } from "@/lib/service-display";
 import type { Lang, Service } from "@/lib/types";
-import { cataloguePriceDate, diagnosticNotice, introductoryNotice, OFFER_END } from '@/lib/opening-offer';
+import { cataloguePriceDate, diagnosticNotice, OFFER_END } from '@/lib/opening-offer';
+import {OpeningOffer} from './opening-offer';
 import { TreatmentPrice } from './treatment-price';
 
 export function ChooseTreatment({
@@ -73,7 +74,7 @@ export function PriceList({
   const groups = Object.keys(priceGroups) as (keyof typeof priceGroups)[];
   return (
     <div className={`price-list${compact ? " price-list-compact" : ""}`}>
-      {today <= OFFER_END && <p className="price-offer-notice">{introductoryNotice[lang]}</p>}
+      {today <= OFFER_END && <OpeningOffer lang={lang}/>}
       <div className="price-groups">
         {groups.map((group) => {
           const entries = active.filter((s) => (s.group || "other") === group);
