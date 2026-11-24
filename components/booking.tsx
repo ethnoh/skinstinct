@@ -417,6 +417,13 @@ export function BookingWidget({
                 {tr(lang, "Aizņemts / nav pieņemšanas", "Занято / нет приёма")}
               </span>
             </div>
+            <p className="booking-time-help">
+              <PhoneText text={{
+                lv: 'Neatrodi sev ērtu laiku? Nosūti man SMS vai piezvani pa tālruni {phone}. Kopā mēģināsim piemeklēt Tev piemērotu vizītes laiku.',
+                en: 'Cannot find a convenient time? Send me an SMS or call me on {phone}. We will try to find an appointment time that works for you.',
+                ru: 'Не находишь удобного времени? Отправь мне SMS или позвони по телефону {phone}. Вместе постараемся подобрать подходящее для Тебя время визита.',
+              }[lang]} phone={settings.phone}/>
+            </p>
             {date && (
               <div className="time-picker">
                 <strong>{dateLabel(date, lang)}</strong>

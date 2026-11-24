@@ -4390,6 +4390,16 @@ html[data-theme="dark"] .status-cancelled {
   object-position: center;
 }
 
+.booking-time-help {
+  margin: 20px 0;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
 .about-photo.about-photo-pink {
   height: auto;
   min-height: 0;
