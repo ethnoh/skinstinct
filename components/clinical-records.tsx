@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { ClinicalPrintForms } from "./clinical-print-forms";
+import { SkinAssessmentOptions } from "./skin-assessment-options";
 import { api } from "@/lib/client";
 import {
   healthQuestions,
@@ -200,6 +201,10 @@ function CardFields({ data, change }: { data: ClientCard; change: (value: Client
       </fieldset>
       <fieldset>
         <legend>Ādas izvērtējums</legend>
+        <SkinAssessmentOptions
+          value={data.skinAssessment}
+          onChange={(v) => set("skinAssessment", v)}
+        />
         <TextField
           label="Ādas stāvoklis, jutīgums, novērojumi, procedūru zonas"
           value={data.skinAssessment}
@@ -326,9 +331,28 @@ function VisitFields({
           ["aftercare", "Ieteikumi pēc procedūras un mājas kopšana"],
           ["nextPlan", "Turpmākais plāns un nākamā izvērtēšana"],
         ] as const
-      ).map(([key, label]) => (
-        <TextField key={key} label={label} value={data[key]} large onChange={(v) => set(key, v)} />
-      ))}
+      ).map(([key, label]) =>
+        key === "assessment" ? (
+          <div className="clinical-visit-assessment" key={key}>
+            <h4>Ādas izvērtējums šajā vizītē</h4>
+            <SkinAssessmentOptions value={data.assessment} onChange={(v) => set("assessment", v)} />
+            <TextField
+              label={label}
+              value={data.assessment}
+              large
+              onChange={(v) => set("assessment", v)}
+            />
+          </div>
+        ) : (
+          <TextField
+            key={key}
+            label={label}
+            value={data[key]}
+            large
+            onChange={(v) => set(key, v)}
+          />
+        ),
+      )}
       <fieldset>
         <legend>Faktiskā cena</legend>
         <label>

@@ -281,6 +281,7 @@
 .clinical-today-procedure > h3 {font-family:var(--serif);font-size:30px;margin:0 0 12px;}
 .clinical-today-procedure > .clinical-form {margin-top:24px;}
 .clinical-today-procedure > h4 {font-size:18px;margin:28px 0 12px;}
+.skin-findings{display:grid;gap:16px;min-width:0}.skin-finding-group>strong{display:block;font-size:13px;margin-bottom:9px}.skin-finding-options{display:flex;flex-wrap:wrap;gap:8px}.skin-finding-options button{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px;text-align:left;line-height:1.5;white-space:normal;overflow-wrap:anywhere}.skin-finding-options button[aria-pressed=true]{border-color:var(--olive);background:var(--sage);font-weight:600}.skin-finding-options button:focus-visible{outline:2px solid var(--olive);outline-offset:3px}.skin-finding-options button>span{font-size:15px;flex-shrink:0}.clinical-visit-assessment{display:grid;gap:16px;border:1px solid var(--line);padding:18px;border-radius:10px;min-width:0}.clinical-visit-assessment h4{margin:0;font-size:16px}
 @media (max-width: 1100px) {
   .clinical-workspace {
     grid-template-columns: 210px minmax(0, 1fr);
