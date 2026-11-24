@@ -4390,6 +4390,15 @@ html[data-theme="dark"] .status-cancelled {
   object-position: center;
 }
 
+html { scroll-padding-top: 140px; }
+.appointment-access { border-top: 1px solid var(--line); background: var(--sage); }
+.appointment-access-link { display: flex; justify-content: center; align-items: center; gap: 12px; min-height: 46px; padding-block: 8px; color: var(--ink); font-size: 14px; }
+.appointment-access-link strong { font-weight: 700; }
+.appointment-access-link > span { font-size: 12px; }
+.appointment-access-link:hover strong { text-decoration: underline; text-underline-offset: 4px; }
+.appointment-access-link:focus-visible { outline: 2px solid var(--olive); outline-offset: -3px; }
+.site-header .mobile-menu { max-height: calc(100dvh - 140px); overflow-y: auto; }
+@media(max-width:600px) { .appointment-access-link > span { display: none; } }
 .contacts-page { padding-block: 72px 110px; }
 .contacts-intro { max-width: 740px; margin-bottom: 48px; }
 .contacts-intro h1 { margin: 20px 0 24px; font-size: clamp(48px, 6vw, 80px); line-height: 1.05; }

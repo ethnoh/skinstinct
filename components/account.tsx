@@ -7,6 +7,7 @@ import { api, basePath, dateLabel, errorMessage } from "@/lib/client";
 import { addressCase, tr } from "@/lib/i18n";
 import type { Booking, Lang, SiteSettings } from "@/lib/types";
 import { servicePrice } from '@/lib/service-display';
+import {PhoneText} from './phone-text';
 
 type Visit = Booking & { canCancel: boolean };
 const time = (n: number) =>
@@ -103,11 +104,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           <em>{tr(lang, "pieraksti.", "записи.")}</em>
         </h1>
         <p>
-          {tr(
-            lang,
-            "Tavi mazie rūpju mirkļi vienuviet. Šeit redzami šajā pārlūkā veiktie pieraksti.",
-            "Твои маленькие моменты заботы в одном месте. Здесь видны записи, сделанные в этом браузере.",
-          )}
+          {{lv:'Šeit atradīsi šajā pārlūkā veiktos pierakstus arī nākamreiz, kad ienāksi mājaslapā. Saiti «Mani pieraksti» vienmēr atradīsi lapas augšpusē. Ja pierakstu neredzi vai izmanto citu ierīci, atrodi to ar saglabāto kodu un pierakstā norādīto kontaktu.',en:'Appointments made in this browser will still appear here when you return. You can always find “My appointments” at the top of the website. If your appointment is missing or you use another device, look it up with your saved code and the contact details you provided.',ru:'Записи, сделанные в этом браузере, будут доступны и при следующем посещении сайта. Ссылка «Мои записи» всегда находится вверху страницы. Если запись не видна или Ты используешь другое устройство, найди её по сохранённому коду и указанному при записи контакту.'}[lang]}
         </p>
       </div>
       <div className="account-grid">
@@ -162,13 +159,12 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
                     {!b.canCancel && ["pending", "confirmed"].includes(b.status) && (
                       <a
                         className="text-button"
-                        href={settings.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`tel:${settings.phone.replace(/[^+\d]/g,'')}`}
                       >
                         {tr(lang, "Sazināties ar studiju", "Связаться со студией")}
                       </a>
                     )}
+                    {b.status==='cancelled'&&<Link className="text-button" href={`${basePath(lang)}/?service=${encodeURIComponent(b.service_id)}#pieraksts`}>{{lv:'Izvēlēties citu laiku',en:'Choose another time',ru:'Выбрать другое время'}[lang]}<ArrowRight size={16}/></Link>}
                   </div>
                 </article>
               ))}
@@ -191,11 +187,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
             </div>
           )}
           <p className="account-notice">
-            {ru
-              ? `Отмена на сайте доступна за ${settings.cancellationHours} ч до визита. Если планы изменились позже, напиши в Instagram.`
-              : lang === "en"
-                ? `Online cancellation is available until ${settings.cancellationHours} h before your visit. If your plans change later, message us on Instagram.`
-                : `Atcelšana vietnē pieejama ${settings.cancellationHours} h pirms vizītes. Ja plāni mainās vēlāk, uzraksti Instagram.`}
+            <PhoneText text={{lv:`Pierakstu vari atcelt ne vēlāk kā ${settings.cancellationHours} stundas pirms vizītes. Lai izvēlētos citu laiku, atcel esošo pierakstu un rezervē jaunu. Ja tas neizdodas vai atcelšanas termiņš beidzies, nosūti SMS vai piezvani pa tālruni {phone}.`,en:`You can cancel up to ${settings.cancellationHours} hours before your visit. To choose a different time, cancel your existing appointment and book a new one. If this does not work or the cancellation deadline has passed, send an SMS or call {phone}.`,ru:`Отменить запись можно не позднее чем за ${settings.cancellationHours} ч до визита. Чтобы выбрать другое время, отмени текущую запись и оформи новую. Если это не получается или срок отмены истёк, отправь SMS или позвони по телефону {phone}.`}[lang]} phone={settings.phone}/>
           </p>
         </div>
         <div className="account-lookup">
@@ -239,11 +231,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
             </button>
           </form>
           <p className="account-notice">
-            {tr(
-              lang,
-              "Pazaudēji kodu? Uzraksti studijai Instagram.",
-              "Потеряла код? Напиши студии в Instagram.",
-            )}
+            <PhoneText text={{lv:'Pazaudēji kodu vai neatrodi pierakstu? Nosūti SMS vai piezvani pa tālruni {phone}.',en:'Lost your code or cannot find your appointment? Send an SMS or call {phone}.',ru:'Код потерян или запись не найдена? Отправь SMS или позвони по телефону {phone}.'}[lang]} phone={settings.phone}/>
           </p>
         </div>
       </div>

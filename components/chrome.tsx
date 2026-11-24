@@ -113,13 +113,6 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               ))}
             </div>
             <ThemeToggle lang={lang} />
-            <Link
-              className="account-link"
-              href={`${base}/account`}
-              aria-label={tr(lang, "Mani pieraksti", "Мои записи")}
-            >
-              <UserRound size={19} />
-            </Link>
             <button
               className="icon-button menu-toggle"
               aria-expanded={open}
@@ -172,6 +165,14 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               </Link>
             </nav>
           )}
+        </div>
+        <div className="appointment-access">
+          <Link className="container appointment-access-link" href={`${base}/account`} aria-current={localPath==='/account'?'page':undefined} onClick={()=>setOpen(false)}>
+            <UserRound size={18} aria-hidden="true"/>
+            <strong>{{lv:'Mani pieraksti',en:'My appointments',ru:'Мои записи'}[lang]}</strong>
+            <span>{{lv:'Apskati un pārvaldi savu vizīti',en:'View and manage your visit',ru:'Просмотр и управление визитом'}[lang]}</span>
+            <ArrowUpRight size={17} aria-hidden="true"/>
+          </Link>
         </div>
       </header>
     </>
