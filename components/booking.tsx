@@ -22,7 +22,7 @@ import type { Booking, Lang, Service, SiteSettings } from "@/lib/types";
 import { isPriceRange, serviceDuration, servicePrice } from "@/lib/service-display";
 import { BOOKING_START, OFFER_END } from '@/lib/opening-offer';
 import {OpeningOffer} from './opening-offer';
-import {bookingFollowup} from '@/lib/booking-communication';
+import {bookingFollowup,bookingAccess} from '@/lib/booking-communication';
 import {PhoneText} from './phone-text';
 import { TreatmentPrice } from './treatment-price';
 
@@ -205,9 +205,11 @@ export function BookingWidget({
         </div>
         <div className="booking-code">
           <span>
-            {tr(lang, "Tavs pieraksta kods. Saglabā to:", "Твой код записи. Сохрани его:")}
+            {{lv:'Saglabā savu pieraksta kodu:',en:'Save your booking code:',ru:'Сохрани свой код записи:'}[lang]}
           </span>
           <button
+            type="button"
+            aria-label={{lv:'Nokopēt pieraksta kodu',en:'Copy booking code',ru:'Скопировать код записи'}[lang]}
             onClick={async () => {
               try {
                 await navigator.clipboard.writeText(result.code);
@@ -222,11 +224,7 @@ export function BookingWidget({
           </button>
         </div>
         <p className="small muted">
-          {tr(
-            lang,
-            "Piekļuvei no citas ierīces vajadzēs šo kodu un norādīto kontaktu.",
-            "Для входа с другого устройства понадобятся этот код и указанный контакт.",
-          )}
+          {bookingAccess[lang]}
         </p>
         {Boolean(result.booking.whatsapp_opt_in)&&<p className="booking-whatsapp-status">{{lv:'WhatsApp apstiprinājuma ziņa ir pieteikta nosūtīšanai. Ja līdz vizītei ir vairāk nekā 24 stundas, atgādinājumu saņemsi arī 1 dienu pirms vizītes.',en:'Your WhatsApp confirmation is queued for sending. If your visit is more than 24 hours away, you will also receive a reminder 1 day before it.',ru:'Подтверждение в WhatsApp поставлено в очередь на отправку. Если до визита больше 24 часов, напоминание придёт также за 1 день до него.'}[lang]}</p>}
         <div className="success-actions">

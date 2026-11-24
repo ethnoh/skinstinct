@@ -8,6 +8,7 @@ import { addressCase, tr } from "@/lib/i18n";
 import type { Booking, Lang, SiteSettings } from "@/lib/types";
 import { servicePrice } from '@/lib/service-display';
 import {PhoneText} from './phone-text';
+import {bookingAccess} from '@/lib/booking-communication';
 
 type Visit = Booking & { canCancel: boolean };
 const time = (n: number) =>
@@ -104,7 +105,7 @@ export function Account({ lang, settings }: { lang: Lang; settings: SiteSettings
           <em>{tr(lang, "pieraksti.", "записи.")}</em>
         </h1>
         <p>
-          {{lv:'Šeit atradīsi šajā pārlūkā veiktos pierakstus arī nākamreiz, kad ienāksi mājaslapā. Saiti «Mani pieraksti» vienmēr atradīsi lapas augšpusē. Ja pierakstu neredzi vai izmanto citu ierīci, atrodi to ar saglabāto kodu un pierakstā norādīto kontaktu.',en:'Appointments made in this browser will still appear here when you return. You can always find “My appointments” at the top of the website. If your appointment is missing or you use another device, look it up with your saved code and the contact details you provided.',ru:'Записи, сделанные в этом браузере, будут доступны и при следующем посещении сайта. Ссылка «Мои записи» всегда находится вверху страницы. Если запись не видна или Ты используешь другое устройство, найди её по сохранённому коду и указанному при записи контакту.'}[lang]}
+          {bookingAccess[lang]}
         </p>
       </div>
       <div className="account-grid">
