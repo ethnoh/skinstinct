@@ -342,7 +342,7 @@ export function CookieNotice({ lang }: { lang: Lang }) {
   );
 }
 export function MobileBooking({ lang }: { lang: Lang }) {
-  const href = `${basePath(lang)}/#pieraksts`;
+  const href = `${basePath(lang)}/?openBooking=1#pieraksts`;
   return (
     <a
       className="mobile-booking"
@@ -350,11 +350,16 @@ export function MobileBooking({ lang }: { lang: Lang }) {
       onClick={(event) => {
         const target = document.getElementById("pieraksts");
         const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
-        const targetPath = href.split("#")[0].replace(/\/+$/, "") || "/";
+        const targetPath =
+          href.split("#")[0].split("?")[0].replace(/\/+$/, "") || "/";
         if (target && currentPath === targetPath) {
           event.preventDefault();
+          window.dispatchEvent(new CustomEvent("open-booking"));
           window.history.pushState(null, "", href);
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.requestAnimationFrame(() => {
+            const calendar = document.getElementById("booking-calendar");
+            (calendar || document.getElementById("pieraksts"))?.scrollIntoView({ behavior: "auto", block: "start" });
+          });
         }
       }}
     >

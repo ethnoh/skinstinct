@@ -72,11 +72,23 @@ export function BookingWidget({
         setResult(null);
       }
     };
+    const open = () => {
+      setStep(2);
+      setDate("");
+      setTime("");
+      setResult(null);
+    };
     window.addEventListener("choose-service", choose);
+    window.addEventListener("open-booking", open);
     const requested = new URLSearchParams(window.location.search).get("service");
+    const shouldOpenCalendar = new URLSearchParams(window.location.search).get("openBooking") === "1";
     if (requested && active.some((item) => item.id === requested))
       choose(new CustomEvent("choose-service", { detail: requested }));
-    return () => window.removeEventListener("choose-service", choose);
+    else if (shouldOpenCalendar) open();
+    return () => {
+      window.removeEventListener("choose-service", choose);
+      window.removeEventListener("open-booking", open);
+    };
   }, [services]);
   useEffect(() => {
     if (!serviceId || !settings.bookingEnabled) return;
@@ -266,7 +278,11 @@ export function BookingWidget({
           </button>
         ))}
       </div>
-      <div className="booking-stage" key={step}>
+      <div
+        className="booking-stage"
+        id={step === 2 ? "booking-calendar" : undefined}
+        key={step}
+      >
         {initialToday <= OFFER_END && <OpeningOffer lang={lang}/>}
         {step === 1 && (
           <>
