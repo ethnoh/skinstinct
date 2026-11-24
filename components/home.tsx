@@ -36,7 +36,7 @@ import { TreatmentPrice } from './treatment-price';
 import { cataloguePriceDate } from '@/lib/opening-offer';
 import {studioMapsUrl} from '@/lib/studio-details';
 import {StudioHours} from './studio-hours';
-import {bookingFollowup} from '@/lib/booking-communication';
+import {bookingFollowup,bookingCancellation} from '@/lib/booking-communication';
 import {PhoneText} from './phone-text';
 
 export function Botanical({ className = "" }: { className?: string }) {
@@ -441,7 +441,7 @@ export function Home({
                 ],
                 [
                   "Как посмотреть или отменить запись?",
-                  `Раздел «Мои записи» показывает визиты, оформленные в этом браузере. С другого устройства можно войти по коду записи и своему контакту. Отмена на сайте доступна не позднее чем за ${settings.cancellationHours} ч до визита. Напиши мне в Instagram.`,
+                  bookingCancellation.ru,
                 ],
                 [
                   "Где находится студия?",
@@ -456,7 +456,7 @@ export function Home({
                   [settings.copy.faq2Question.en, settings.copy.faq2Answer.en],
                   [
                     "How can I view or cancel an appointment?",
-                    `My appointments shows visits booked in this browser. On another device, use your booking code and the contact you provided. Online cancellation is available until ${settings.cancellationHours} h before your visit. Message me on Instagram.`,
+                    bookingCancellation.en,
                   ],
                   [
                     "Where is the studio?",
@@ -476,7 +476,7 @@ export function Home({
                   ],
                   [
                     "Kā apskatīt vai atcelt pierakstu?",
-                    `Sadaļā «Mani pieraksti» redzēsi šajā pārlūkā veiktos pierakstus. No citas ierīces vari izmantot pieraksta kodu un savu kontaktu. Atcelšana vietnē pieejama vismaz ${settings.cancellationHours} h pirms vizītes. Uzraksti man Instagram.`,
+                    bookingCancellation.lv,
                   ],
                   [
                     "Kur atrodas studija?",
@@ -491,7 +491,7 @@ export function Home({
                 {t(`faq${i + 1}Question`, question)}
                 <Plus size={19} />
               </summary>
-              <p><PhoneText text={t(`faq${i + 1}Answer`, answer)} phone={settings.phone}/></p>
+              <p><PhoneText text={t(`faq${i + 1}Answer`, answer).replaceAll('{hours}',String(settings.cancellationHours))} phone={settings.phone}/></p>
             </details>
           ))}
         </div>

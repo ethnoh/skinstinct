@@ -1,6 +1,6 @@
 import type { Article, Service, SiteSettings } from "./types";
 import { journalArticles } from "./journal-content";
-import {bookingFollowup} from './booking-communication';
+import {bookingFollowup,bookingCancellation} from './booking-communication';
 import { journalTopicArticles } from './journal-topics';
 import { bookingCatalogue, priceBookingNotice } from "./price-catalogue";
 import { localSearchDescription, studioPhone, studioSchedule } from './studio-details';
@@ -136,6 +136,7 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Как подтверждается запись?",
   },
   faq2Answer: bookingFollowup,
+  faq3Answer: bookingCancellation,
   journalTitle: {
     lv: "Nedaudz tuvāk\nsavai ",
     en: "A little closer\nto your ",
