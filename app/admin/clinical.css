@@ -277,6 +277,10 @@
   padding: 30px 0;
   line-height: 1.8;
 }
+.clinical-today-procedure {margin-top:32px;padding-top:24px;border-top:1px solid var(--line);scroll-margin-top:24px;}
+.clinical-today-procedure > h3 {font-family:var(--serif);font-size:30px;margin:0 0 12px;}
+.clinical-today-procedure > .clinical-form {margin-top:24px;}
+.clinical-today-procedure > h4 {font-size:18px;margin:28px 0 12px;}
 @media (max-width: 1100px) {
   .clinical-workspace {
     grid-template-columns: 210px minmax(0, 1fr);

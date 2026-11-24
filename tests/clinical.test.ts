@@ -83,6 +83,11 @@ test("clinical records encrypt health data, retain revisions and diagnostic PDFs
       store.listClinicalVisits(client.id)[0].data.anamnesisSnapshot?.health.allergies.answer,
       "yes",
     );
+    const laterVisit=store.saveClinicalVisit(client.id,null,0,{...emptyClinicalVisit('2026-12-20'),service:'TEST — atkārtota kopšana',price:60},'test-session');
+    const timeline=store.listClinicalVisits(client.id);
+    assert.equal(timeline.length,2,'Each new appointment must remain a separate entry on the same client card');
+    assert.equal(timeline[0].id,laterVisit.id);
+    assert.equal(timeline.find(v=>v.id===visit.id)?.data.aftercare,'TEST — mitrināšana');
     const pdf = Buffer.from("%PDF-1.4\nTEST ONLY\n%%EOF");
     const id = store.addClinicalDocument(
       client.id,

@@ -242,12 +242,20 @@ function CardFields({ data, change }: { data: ClientCard; change: (value: Client
           Ieraksts kartē pats par sevi nav klienta paraksts. Saglabā vajadzīgo piekrišanas dokumentu
           PDF sadaļā.
         </p>
-        <TextField
-          label="Citas speciālista piezīmes"
-          value={data.notes}
-          large
-          onChange={(v) => set("notes", v)}
-        />
+        {data.notes && (
+          <details>
+            <summary>Iepriekš saglabātās piezīmes</summary>
+            <TextField
+              label="Saglabātās piezīmes"
+              value={data.notes}
+              large
+              onChange={(v) => set("notes", v)}
+            />
+            <p className="clinical-help">
+              Jaunu procedūru pievieno atsevišķajā sadaļā zem anamnēzes.
+            </p>
+          </details>
+        )}
         <label className="clinical-check">
           <input
             type="checkbox"
@@ -698,6 +706,7 @@ function Workspace({
       await refresh();
       setMessage("Klienta karte saglabāta.");
       setDirty(false);
+      return result.client;
     } catch (e) {
       handleError(e);
     } finally {
@@ -726,6 +735,118 @@ function Workspace({
     } finally {
       setPending(false);
     }
+  }
+  async function beginVisit() {
+    if (visit && !canLeave()) return;
+    if (!visit && mode === "card" && (!detail || dirty)) {
+      if (!(await saveCard())) return;
+    } else if (!visit && !canLeave()) return;
+    setVisit(emptyClinicalVisit(today()));
+    setVisitId(null);
+    setVisitVersion(0);
+    setDirty(false);
+    setMessage("");
+    setError("");
+    requestAnimationFrame(() =>
+      document
+        .querySelector(".clinical-today-procedure")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
+  }
+  function editVisit(record: SavedVisit) {
+    if (!canLeave()) return;
+    setDraft(detail?.client.data || draft);
+    setMode("visits");
+    setVisit({ ...record.data, correctionReason: "" });
+    setVisitId(record.id);
+    setVisitVersion(record.version);
+    setDirty(false);
+    setMessage("");
+  }
+  function visitEditor() {
+    if (!visit || !detail) return null;
+    return (
+      <form
+        className="clinical-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          saveVisit();
+        }}
+      >
+        <h4>{visitId ? "Papildināt procedūras ierakstu" : "Jauna procedūra"}</h4>
+        <fieldset disabled={pending}>
+          <VisitFields
+            data={visit}
+            change={(v) => {
+              setVisit(v);
+              setDirty(true);
+            }}
+            editing={!!visitId}
+          />
+        </fieldset>
+        <div className="clinical-actions">
+          <button
+            className="button"
+            disabled={
+              pending ||
+              visit.service.trim().length < 2 ||
+              (!!visitId && !visit.correctionReason.trim())
+            }
+          >
+            {pending ? "Saglabā…" : "Saglabāt procedūru"}
+          </button>
+          <button
+            type="button"
+            className="button button-outline"
+            disabled={pending}
+            onClick={() => {
+              if (canLeave()) {
+                setVisit(null);
+                setDirty(false);
+              }
+            }}
+          >
+            Aizvērt
+          </button>
+        </div>
+      </form>
+    );
+  }
+  function procedureHistory() {
+    if (!detail) return null;
+    return (
+      <div className="clinical-visits">
+        {detail.visits.length === 0 ? (
+          <p>Procedūru ierakstu vēl nav. Pievieno pirmo procedūru šai klienta kartei.</p>
+        ) : (
+          detail.visits.map((record) => (
+            <details key={record.id}>
+              <summary>
+                {record.data.date} · {record.data.service} ·{" "}
+                {record.data.price === null ? "Cena nav norādīta" : money(record.data.price)}
+              </summary>
+              <p>
+                {record.data.area}
+                {record.data.duration ? ` · ${record.data.duration} min` : ""} · versija{" "}
+                {record.version}
+              </p>
+              {!record.data.healthReviewed && (
+                <p className="clinical-help">Veselības izmaiņu pārrunāšana nav atzīmēta.</p>
+              )}
+              <Snapshot value={record.data} />
+              <button
+                type="button"
+                className="button button-outline button-small"
+                disabled={pending}
+                onClick={() => editVisit(record)}
+              >
+                Papildināt / labot ierakstu
+              </button>
+            </details>
+          ))
+        )}
+      </div>
+    );
   }
   async function upload(file: File) {
     if (!detail) return;
@@ -927,123 +1048,57 @@ function Workspace({
               ))}
             </nav>
             {mode === "card" && (
-              <form
-                className="clinical-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  saveCard();
-                }}
-              >
-                <fieldset disabled={pending}>
-                  <CardFields
-                    data={draft}
-                    change={(v) => {
-                      setDraft(v);
-                      setDirty(true);
-                    }}
-                  />
-                </fieldset>
-                <button className="button" disabled={pending || draft.name.trim().length < 2}>
-                  {pending ? "Saglabā…" : "Saglabāt anamnēzes karti"}
-                  {dirty ? " *" : ""}
-                </button>
-              </form>
-            )}
-            {mode === "visits" && detail && (
               <>
-                <button
-                  type="button"
-                  className="button"
-                  disabled={pending}
-                  onClick={() => {
-                    if (!canLeave()) return;
-                    setVisit(emptyClinicalVisit(today()));
-                    setVisitId(null);
-                    setVisitVersion(0);
-                    setDirty(false);
-                  }}
-                >
-                  Pievienot procedūru
-                </button>
-                {visit ? (
+                <div className="clinical-card-anamnesis">
                   <form
                     className="clinical-form"
                     onSubmit={(e) => {
                       e.preventDefault();
-                      saveVisit();
+                      saveCard();
                     }}
                   >
-                    <h4>{visitId ? "Papildināt procedūras ierakstu" : "Jauna procedūra"}</h4>
-                    <fieldset disabled={pending}>
-                      <VisitFields
-                        data={visit}
+                    <fieldset disabled={pending || !!visit}>
+                      <CardFields
+                        data={draft}
                         change={(v) => {
-                          setVisit(v);
+                          setDraft(v);
                           setDirty(true);
                         }}
-                        editing={!!visitId}
                       />
                     </fieldset>
-                    <div className="clinical-actions">
-                      <button
-                        className="button"
-                        disabled={
-                          pending ||
-                          visit.service.trim().length < 2 ||
-                          (!!visitId && !visit.correctionReason.trim())
-                        }
-                      >
-                        {pending ? "Saglabā…" : "Saglabāt procedūru"}
-                      </button>
-                      <button
-                        type="button"
-                        className="button button-outline"
-                        disabled={pending}
-                        onClick={() => {
-                          if (canLeave()) {
-                            setVisit(null);
-                            setDirty(false);
-                          }
-                        }}
-                      >
-                        Aizvērt
-                      </button>
-                    </div>
+                    <button
+                      className="button"
+                      disabled={pending || !!visit || draft.name.trim().length < 2}
+                    >
+                      {pending ? "Saglabā…" : "Saglabāt anamnēzes karti"}
+                      {dirty ? " *" : ""}
+                    </button>
                   </form>
-                ) : (
-                  <div className="clinical-visits">
-                    {detail.visits.length === 0 && <p>Procedūru ierakstu vēl nav.</p>}
-                    {detail.visits.map((v) => (
-                      <details key={v.id}>
-                        <summary>
-                          {v.data.date} · {v.data.service} ·{" "}
-                          {v.data.price === null ? "Cena nav norādīta" : money(v.data.price)}
-                        </summary>
-                        <p>
-                          {v.data.area}
-                          {v.data.duration ? ` · ${v.data.duration} min` : ""} · versija {v.version}
-                        </p>
-                        {!v.data.healthReviewed && (
-                          <p className="clinical-help">
-                            Veselības izmaiņu pārrunāšana nav atzīmēta.
-                          </p>
-                        )}
-                        <Snapshot value={v.data} />
-                        <button
-                          className="button button-outline button-small"
-                          onClick={() => {
-                            setVisit({ ...v.data, correctionReason: "" });
-                            setVisitId(v.id);
-                            setVisitVersion(v.version);
-                            setDirty(false);
-                          }}
-                        >
-                          Papildināt / labot ierakstu
-                        </button>
-                      </details>
-                    ))}
-                  </div>
-                )}
+                </div>
+                <section className="clinical-today-procedure">
+                  <h3>Šodien veiktā procedūra</h3>
+                  <p className="clinical-help">
+                    Katrai vizītei pievieno jaunu ierakstu. Tas saglabāsies šajā pašā klienta kartē
+                    kopā ar anamnēzi un agrākajām procedūrām.
+                  </p>
+                  <button type="button" className="button" disabled={pending} onClick={beginVisit}>
+                    {!detail || (dirty && !visit)
+                      ? "Saglabāt anamnēzi un pievienot procedūru"
+                      : "Pievienot šodienas procedūru"}
+                  </button>
+                  {visitEditor()}
+                  <h4>Veikto procedūru vēsture {detail ? `(${detail.visits.length})` : ""}</h4>
+                  {procedureHistory()}
+                </section>
+              </>
+            )}
+            {mode === "visits" && detail && (
+              <>
+                <h3>Veikto procedūru vēsture</h3>
+                <button type="button" className="button" disabled={pending} onClick={beginVisit}>
+                  Pievienot procedūru
+                </button>
+                {visit ? visitEditor() : procedureHistory()}
               </>
             )}
             {mode === "documents" && detail && (
