@@ -4390,6 +4390,40 @@ html[data-theme="dark"] .status-cancelled {
   object-position: center;
 }
 
+.contacts-page { padding-block: 72px 110px; }
+.contacts-intro { max-width: 740px; margin-bottom: 48px; }
+.contacts-intro h1 { margin: 20px 0 24px; font-size: clamp(48px, 6vw, 80px); line-height: 1.05; }
+.contacts-intro > p { max-width: 620px; line-height: 1.9; color: var(--muted); }
+.contacts-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; align-items: start; }
+.contact-card { min-width: 0; border: 1px solid var(--line); padding: 36px; border-radius: 8px; overflow-wrap: anywhere; }
+.contact-card h2 { font-size: 34px; margin: 0 0 22px; }
+.contact-card p { line-height: 1.8; }
+.contact-location { background: var(--peach); }
+.contact-location > svg { margin-bottom: 24px; }
+.contact-location .eyebrow { display: block; margin-bottom: 16px; }
+.contact-location h2 { margin-bottom: 6px; }
+.contact-location .button { margin: 18px 0; }
+.contact-location > .text-button { display: flex; width: fit-content; }
+.contacts-phone, .contact-email, .contact-socials a { display: flex; align-items: center; gap: 12px; }
+.contacts-phone { font-size: 22px; }
+.contact-email { margin-block: 24px; width: fit-content; max-width: 100%; }
+.contact-email svg { flex-shrink: 0; }
+.contact-socials { display: flex; flex-wrap: wrap; gap: 18px 24px; }
+.contact-socials a { gap: 8px; }
+.contact-company dl { margin: 0; }
+.contact-company dl > div { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.contact-company dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.contact-company dt { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.contact-company dd { margin: 0; line-height: 1.6; }
+.contact-card .studio-hours { margin: 0; }
+.contact-card .studio-hours > strong { font-size: 28px; }
+@media(max-width:760px) {
+  .contacts-page { padding-block: 44px 90px; }
+  .contacts-grid { grid-template-columns: minmax(0,1fr); gap: 20px; }
+  .contact-card { padding: 26px 22px; }
+  .contact-card h2 { font-size: 30px; }
+}
+
 .booking-time-help {
   margin: 20px 0;
   padding: 16px 18px;

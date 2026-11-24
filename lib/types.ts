@@ -48,6 +48,10 @@ export type SiteSettings = {
   legalName: string;
   legalRegistration: string;
   legalAddress: string;
+  vatNumber?: string;
+  bankName?: string;
+  bankSwift?: string;
+  bankIban?: string;
   privacyEmail: string;
   seoDescription: Localized;
   bookingEnabled: boolean;

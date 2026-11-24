@@ -294,6 +294,15 @@ export function db() {
     insert.run(marker,'true');
   })();
   instance.transaction(() => {
+    const marker='company-contacts-release-2026-11-24';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker))return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='settings'").get() as {value:string};
+    const settings=JSON.parse(row.value) as SiteSettings;
+    for(const key of ['legalName','legalRegistration','legalAddress','vatNumber','bankName','bankSwift','bankIban','email'] as const) settings[key]=initialSettings[key] || '';
+    instance!.prepare("UPDATE content SET value=? WHERE key='settings'").run(JSON.stringify(settings));
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
     const marker='owner-december-closures-release-2026-11-23';
     if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
     const block=instance!.prepare('INSERT INTO blocks(id,date,start_min,end_min,note) VALUES (?,?,?,?,?)');

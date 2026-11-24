@@ -1401,6 +1401,10 @@ export function Admin() {
                           ["legalName", "Juridiskais nosaukums / datu pārzinis"],
                           ["legalRegistration", "Uzņēmuma reģistrācijas numurs"],
                           ["legalAddress", "Juridiskā adrese"],
+                          ["vatNumber", "PVN maksātāja numurs"],
+                          ["bankName", "Banka"],
+                          ["bankSwift", "SWIFT / BIC"],
+                          ["bankIban", "IBAN"],
                           ["privacyEmail", "E-pasts jautājumiem par datiem"],
                         ] as [keyof SiteSettings, string][]
                       ).map(([key, label]) => (
@@ -1414,7 +1418,7 @@ export function Admin() {
                       ))}
                       <p className="admin-hint">
                         {
-                          "Rekvizīti automātiski tiek attēloti privātuma politikā. Tukši kontakti vietnē netiek rādīti."
+                          "Rekvizīti tiek attēloti kontaktu lapā, juridiskā informācija arī privātuma politikā. Tukši lauki vietnē netiek rādīti."
                         }
                       </p>
                     </div>

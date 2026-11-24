@@ -95,6 +95,7 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <Link href={`${base}/#pakalpojumi`}>{tr(lang, "Pakalpojumi", "Услуги")}</Link>
             <Link href={`${base}/#par-mani`}>{tr(lang, "Par mani", "Обо мне")}</Link>
             <Link href={`${base}/articles`}>{tr(lang, "Dienasgrāmata", "Журнал")}</Link>
+            <Link href={`${base}/contacts`}>{{lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang]}</Link>
           </nav>
           <div className="header-actions">
             <div className="language-switch" aria-label={tr(lang, "Valoda", "Язык")}>
@@ -151,7 +152,6 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
                 ["pakalpojumi", tr(lang, "Pakalpojumi", "Услуги")],
                 ["par-mani", tr(lang, "Par mani", "Обо мне")],
                 ["pieraksts", tr(lang, "Pieteikt vizīti", "Записаться")],
-                ["kontakti", tr(lang, "Kontakti", "Контакты")],
               ].map(([id, text]) => (
                 <Link key={id} href={`${base}/#${id}`} onClick={() => setOpen(false)}>
                   {text}
@@ -160,6 +160,9 @@ export function Header({ lang, settings }: { lang: Lang; settings: SiteSettings 
               ))}
               <Link href={`${base}/articles`} onClick={() => setOpen(false)}>
                 {tr(lang, "Dienasgrāmata", "Журнал")}
+              </Link>
+              <Link href={`${base}/contacts`} onClick={() => setOpen(false)}>
+                {{lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang]}
               </Link>
               <Link href={`${base}/account`} onClick={() => setOpen(false)}>
                 {tr(lang, "Mani pieraksti", "Мои записи")}
@@ -187,6 +190,7 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <p>{settings.copy.footerDescription[lang]}</p>
           </div>
           <div className="footer-links">
+            <Link href={`${base}/contacts`}>{{lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang]}</Link>
             <Link href={`${base}/prices`}>
               {{ lv: "Cenrādis", en: "Prices", ru: "Прайс-лист" }[lang]}
             </Link>

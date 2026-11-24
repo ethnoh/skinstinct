@@ -18,6 +18,7 @@ import { instagramIntroduction, journalArticles } from "@/lib/journal-content";
 import { journalTopicArticles } from '@/lib/journal-topics';
 import { PriceList, PrintPriceList } from "@/components/price-list";
 import { studioMapsUrl } from '@/lib/studio-details';
+import {Contacts} from '@/components/contacts';
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug?: string[] }> };
@@ -35,6 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : null;
   const title = article
     ? article.title[lang]
+    : parts[0] === "contacts"
+      ? {lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang]
     : parts[0] === "account"
       ? tr(lang, "Mani pieraksti", "Мои записи")
       : parts[0] === "privacy"
@@ -167,6 +170,10 @@ export default async function Page({ params }: Props) {
     };
   } else if (parts.length === 1 && parts[0] === "account")
     content = <Account lang={lang} settings={s} />;
+  else if (parts.length === 1 && parts[0] === 'contacts') {
+    content=<Contacts lang={lang} settings={s}/>;
+    structured={'@context':'https://schema.org','@type':'ContactPage',url:`${siteUrl()}${base}/contacts`,name:{lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang],about:{'@type':'Organization',name:s.legalName,identifier:s.legalRegistration,vatID:s.vatNumber,telephone:s.phone,email:s.email,address:{'@type':'PostalAddress',streetAddress:s.legalAddress,addressCountry:'LV'}}};
+  }
   else if (parts.length === 1 && ["privacy", "cookies"].includes(parts[0]))
     content = <Privacy lang={lang} settings={s} />;
   else if (parts.length === 1 && parts[0] === "prices")

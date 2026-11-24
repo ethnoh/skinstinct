@@ -51,6 +51,8 @@ test("price release retires old entries without deleting them, preserves uploads
   };
   const connection = new Database(path.join(directory, "skinstinct.db"));
   connection.exec("CREATE TABLE content (key TEXT PRIMARY KEY,value TEXT NOT NULL)");
+  // Isolate the price migration from the later, explicitly requested booking-copy replacement.
+  connection.prepare("INSERT INTO content VALUES (?,?)").run('booking-communication-release-2026-11-24','true');
   connection
     .prepare("INSERT INTO content VALUES ('services',?)")
     .run(

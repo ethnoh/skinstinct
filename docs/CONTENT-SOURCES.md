@@ -1,5 +1,11 @@
 # Content provenance
 
+## Company contact details, 2026-11-24
+
+Company name, registration and VAT numbers, registered address, bank details and email are transcribed from the owner's `Izdruka ar logo,cenulapa,vizītkarte/VR_SKINSTINCT_rekviziti.docx`. The studio address and Google Maps destination remain distinct from the registered address. All details are editable under Contacts and company details in administration.
+
+Contact-page layout references: https://www.skaistumabars.lv/pages/kontakti and https://lavie.clinic/lv/contacts/ . Used only to compare common address, contact, hours and company-detail sections; no other business's details or copy were reused.
+
 Checked on 2026-10-17 through public Instagram pages without signing in.
 
 ## Official profile
