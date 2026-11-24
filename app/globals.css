@@ -4390,6 +4390,16 @@ html[data-theme="dark"] .status-cancelled {
   object-position: center;
 }
 
+.about-photo.about-photo-pink {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+}
+.about-photo-pink .portrait-image-frame > img {
+  object-fit: contain;
+  object-position: center;
+}
+
 /* Give the enlarged identity its own row while navigation stays compact and sticky. */
 .site-identity {
   background: var(--header-surface);

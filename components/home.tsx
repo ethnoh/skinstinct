@@ -274,7 +274,7 @@ export function Home({
       <section className="about-section" id="par-mani">
         <div className="container about-grid">
           <div
-            className={`about-photo${["/images/valerija-original-white.jpeg", "/images/valerija-botanical-background.webp"].includes(settings.aboutImage) ? " about-photo-original" : ""}`}
+            className={`about-photo${["/images/valerija-original-white.jpeg", "/images/valerija-botanical-background.webp"].includes(settings.aboutImage) ? " about-photo-original" : ""}${settings.aboutImage === "/images/valerija-pink-uniform-shelves-v4.webp" ? " about-photo-pink" : ""}`}
           >
             <div className="portrait-image-frame">
               <Image
