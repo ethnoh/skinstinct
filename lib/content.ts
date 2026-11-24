@@ -25,9 +25,9 @@ export const initialCopy: SiteSettings["copy"] = {
     ru: "Ритм Твоего визита",
   },
   rhythmChartNote: {
-    lv: "Plānotais pakalpojumu ilgums. Detaļas pārrunāsim, apstiprinot vizīti.",
-    en: "Planned service duration. We'll discuss the details when confirming your visit.",
-    ru: "Плановая длительность услуг. Детали обсудим при подтверждении визита.",
+    lv: "Plānotais pakalpojumu ilgums.",
+    en: "Planned service duration.",
+    ru: "Плановая длительность услуг.",
   },
   servicesTitle: { lv: "Mazi rituāli.", en: "Small rituals.", ru: "Маленькие ритуалы." },
   servicesAccent: {
