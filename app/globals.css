@@ -4410,11 +4410,8 @@ html[data-theme="dark"] .status-cancelled {
 .contact-email svg { flex-shrink: 0; }
 .contact-socials { display: flex; flex-wrap: wrap; gap: 18px 24px; }
 .contact-socials a { gap: 8px; }
-.contact-company dl { margin: 0; }
-.contact-company dl > div { padding: 14px 0; border-bottom: 1px solid var(--line); }
-.contact-company dl > div:last-child { border-bottom: 0; padding-bottom: 0; }
-.contact-company dt { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-.contact-company dd { margin: 0; line-height: 1.6; }
+.contact-hours { grid-column: 1 / -1; }
+.contact-hours .studio-hours { max-width: 600px; }
 .contact-card .studio-hours { margin: 0; }
 .contact-card .studio-hours > strong { font-size: 28px; }
 @media(max-width:760px) {

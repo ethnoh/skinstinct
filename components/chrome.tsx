@@ -190,7 +190,7 @@ export function Footer({ lang, settings }: { lang: Lang; settings: SiteSettings 
             <p>{settings.copy.footerDescription[lang]}</p>
           </div>
           <div className="footer-links">
-            <Link href={`${base}/contacts`}>{{lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang]}</Link>
+            <Link href={`${base}/contacts`}>{{lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang]}</Link>
             <Link href={`${base}/prices`}>
               {{ lv: "Cenrādis", en: "Prices", ru: "Прайс-лист" }[lang]}
             </Link>

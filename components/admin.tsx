@@ -1418,7 +1418,7 @@ export function Admin() {
                       ))}
                       <p className="admin-hint">
                         {
-                          "Rekvizīti tiek attēloti kontaktu lapā, juridiskā informācija arī privātuma politikā. Tukši lauki vietnē netiek rādīti."
+                          "Kontaktu lapā redzama studijas adrese un saziņas informācija. Juridiskā informācija tiek izmantota privātuma politikā. Tukši lauki vietnē netiek rādīti."
                         }
                       </p>
                     </div>

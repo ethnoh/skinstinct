@@ -169,7 +169,8 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       const contacts=await fetch(`${origin}${prefix}/contacts`);
       assert.equal(contacts.status,200);
       const markup=(await contacts.text()).replace(/<script\b[^>]*>[\s\S]*?<\/script>/g,'');
-      for(const detail of ['40203790715','LV40203790715','Ceriņi','LV-5214','Pļaviņu iela 51','HABALV22','LV73 HABA 0551 0667 7350 3','mailto:vrskinstinct@gmail.com','tel:+37126054744','sms:+37126054744']) assert.ok(markup.includes(detail),`${prefix} contacts missing ${detail}`);
+      for(const detail of ['Pļaviņu iela 51','mailto:vrskinstinct@gmail.com','tel:+37126054744','sms:+37126054744']) assert.ok(markup.includes(detail),`${prefix} contacts missing ${detail}`);
+      for(const detail of ['Ceriņi','LV-5214','HABALV22','LV73 HABA 0551 0667 7350 3']) assert.ok(!markup.includes(detail),`${prefix} contacts should omit ${detail}`);
       assert.ok(markup.includes('https://www.google.com/maps?cid=14328165829266811010'));
       assert.ok(sitemap.includes(`${prefix}/contacts`));
     }
@@ -304,7 +305,8 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       );
       assert.ok((await (await fetch(origin)).text()).includes("QA content update"));
       assert.ok((await (await fetch(`${origin}/en`)).text()).includes("QA English update"));
-      assert.ok((await (await fetch(`${origin}/contacts`)).text()).includes('LV12345678901'));
+      const updatedState=await(await fetch(`${origin}/api/admin`,{headers:{Cookie:admin}})).json();
+      assert.equal(updatedState.settings.vatNumber,'LV12345678901');
       assert.equal(
         (await post("/api/admin/content", { type: "settings", data: state.settings }, admin))
           .status,

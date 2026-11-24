@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = article
     ? article.title[lang]
     : parts[0] === "contacts"
-      ? {lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang]
+      ? {lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang]
     : parts[0] === "account"
       ? tr(lang, "Mani pieraksti", "Мои записи")
       : parts[0] === "privacy"
@@ -172,7 +172,7 @@ export default async function Page({ params }: Props) {
     content = <Account lang={lang} settings={s} />;
   else if (parts.length === 1 && parts[0] === 'contacts') {
     content=<Contacts lang={lang} settings={s}/>;
-    structured={'@context':'https://schema.org','@type':'ContactPage',url:`${siteUrl()}${base}/contacts`,name:{lv:'Kontakti un rekvizīti',en:'Contact and company details',ru:'Контакты и реквизиты'}[lang],about:{'@type':'Organization',name:s.legalName,identifier:s.legalRegistration,vatID:s.vatNumber,telephone:s.phone,email:s.email,address:{'@type':'PostalAddress',streetAddress:s.legalAddress,addressCountry:'LV'}}};
+    structured={'@context':'https://schema.org','@type':'ContactPage',url:`${siteUrl()}${base}/contacts`,name:{lv:'Kontakti',en:'Contact',ru:'Контакты'}[lang],about:{'@type':'BeautySalon',name:'SKINSTINCT',telephone:s.phone,email:s.email,hasMap:studioMapsUrl,address:{'@type':'PostalAddress',streetAddress:s.address,addressLocality:s.city,addressCountry:'LV'}}};
   }
   else if (parts.length === 1 && ["privacy", "cookies"].includes(parts[0]))
     content = <Privacy lang={lang} settings={s} />;

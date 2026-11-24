@@ -8,22 +8,11 @@ import {PhoneText} from './phone-text';
 
 export function Contacts({lang,settings:s}:{lang:Lang;settings:SiteSettings}) {
  const label=(lv:string,en:string,ru:string)=>({lv,en,ru})[lang];
- const address=[s.address,s.city].filter(Boolean).join(', ');
- const details=[
-  [label('Uzņēmums','Company','Компания'),s.legalName],
-  [label('Reģistrācijas numurs','Registration number','Регистрационный номер'),s.legalRegistration],
-  [label('PVN maksātāja numurs','VAT number','Номер НДС'),s.vatNumber],
-  [label('Juridiskā adrese','Registered address','Юридический адрес'),s.legalAddress],
-  [label('Faktiskā adrese','Studio address','Фактический адрес'),address],
-  [label('Banka','Bank','Банк'),s.bankName],
-  ['SWIFT / BIC',s.bankSwift],
-  ['IBAN',s.bankIban],
- ].filter((row):row is [string,string]=>Boolean(row[1]));
  return <main id="main-content" className="contacts-page container">
   <header className="contacts-intro">
    <span className="eyebrow">SKINSTINCT / {label('KONTAKTI','CONTACT','КОНТАКТЫ')}</span>
    <h1>{label('Satiekamies','See you','До встречи')}<br/><em>{label('Jēkabpilī.','in Jēkabpils.','в Екабпилсе.')}</em></h1>
-   <p>{label('Vizītes pie Valērijas Razujevas pēc iepriekšēja pieraksta. Šeit atradīsi studijas adresi, darba laiku, saziņas iespējas un uzņēmuma rekvizītus.','Visits with Valērija Razujeva by appointment. Find the studio address, opening hours, contact information and company details here.','Приём у Валерии Разуевой по предварительной записи. Здесь Ты найдёшь адрес студии, время работы, контакты и реквизиты компании.')}</p>
+   <p>{label('Vizītes pie Valērijas Razujevas pēc iepriekšēja pieraksta. Šeit atradīsi studijas adresi, darba laiku un saziņas iespējas.','Visits with Valērija Razujeva by appointment. Find the studio address, opening hours and contact information here.','Приём у Валерии Разуевой по предварительной записи. Здесь Ты найдёшь адрес студии, время работы и контакты.')}</p>
   </header>
   <div className="contacts-grid">
    <section className="contact-card contact-location">
@@ -43,11 +32,7 @@ export function Contacts({lang,settings:s}:{lang:Lang;settings:SiteSettings}) {
      {s.facebook&&<a href={s.facebook} target="_blank" rel="noopener noreferrer"><Facebook size={18} aria-hidden/>Facebook<ArrowUpRight size={15}/></a>}
     </div>
    </section>
-   <section className="contact-card"><StudioHours lang={lang} settings={s}/></section>
-   <section className="contact-card contact-company">
-    <h2>{label('Uzņēmuma rekvizīti','Company details','Реквизиты компании')}</h2>
-    <dl>{details.map(([title,value])=><div key={title}><dt>{title}</dt><dd>{value}</dd></div>)}</dl>
-   </section>
+   <section className="contact-card contact-hours"><StudioHours lang={lang} settings={s}/></section>
   </div>
  </main>;
 }
