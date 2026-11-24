@@ -54,7 +54,7 @@ const stamp = (value: string) =>
 const money = (value: number) =>
   new Intl.NumberFormat("lv-LV", { style: "currency", currency: "EUR" }).format(value);
 const errors: Record<string, string> = {
-  CLINICAL_LOCKED: "Kartotēka ir aizslēgta. Atver to vēlreiz ar administratora paroli.",
+  CLINICAL_LOCKED: "Pieslēdzies administrācijai vēlreiz.",
   AUTH_REQUIRED: "Pieslēdzies administrācijai vēlreiz.",
   CLINICAL_CONFLICT:
     "Šis ieraksts jau ir mainīts citā logā. Pārlasi karti pirms izmaiņu saglabāšanas.",
@@ -1241,67 +1241,25 @@ function Workspace({
   );
 }
 export function ClinicalRecords({ onDirtyChange }: { onDirtyChange: (dirty: boolean) => void }) {
-  const [expiresAt, setExpiresAt] = useState<number | null>(null),
-    [configured, setConfigured] = useState<boolean | null>(null),
-    [password, setPassword] = useState(""),
-    [error, setError] = useState(""),
-    [pending, setPending] = useState(false),
-    [seconds, setSeconds] = useState(0);
+  const [configured, setConfigured] = useState<boolean | null>(null);
+  const [error, setError] = useState("");
+  const [accessDenied, setAccessDenied] = useState(false);
   useEffect(() => {
     let alive = true;
-    api<{ configured: boolean; unlocked: boolean; expiresAt: number | null }>(
-      "/api/clinical/status",
-    )
-      .then((s) => {
-        if (alive) {
-          setConfigured(s.configured);
-          setExpiresAt(s.unlocked ? s.expiresAt : null);
-        }
+    api<{ configured: boolean }>("/api/clinical/status")
+      .then((result) => {
+        if (alive) setConfigured(result.configured);
       })
       .catch((e) => {
-        if (alive) setError(errorText(e));
+        if (alive) {
+          setError(errorText(e));
+          setAccessDenied(true);
+        }
       });
     return () => {
       alive = false;
     };
   }, []);
-  useEffect(() => {
-    if (!expiresAt) return;
-    const tick = () => {
-      const remaining = Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
-      setSeconds(remaining);
-      if (!remaining) {
-        setExpiresAt(null);
-        setError("Kartotēka automātiski aizslēgta. Lai turpinātu, ievadi paroli vēlreiz.");
-      }
-    };
-    tick();
-    const interval = setInterval(tick, 1000);
-    return () => clearInterval(interval);
-  }, [expiresAt]);
-  async function unlock(e: React.FormEvent) {
-    e.preventDefault();
-    setPending(true);
-    setError("");
-    try {
-      const s = await api<{ expiresAt: number }>("/api/clinical/unlock", { password });
-      setPassword("");
-      setExpiresAt(s.expiresAt);
-    } catch (e) {
-      setError(errorText(e));
-    } finally {
-      setPending(false);
-    }
-  }
-  async function lock() {
-    if (!window.confirm("Aizslēgt kartotēku? Nesaglabātās izmaiņas tiks atmestas.")) return;
-    setExpiresAt(null);
-    try {
-      await api("/api/clinical/lock", {});
-    } catch (e) {
-      setError(errorText(e));
-    }
-  }
   return (
     <section className="clinical-section">
       <div className="clinical-title">
@@ -1309,59 +1267,29 @@ export function ClinicalRecords({ onDirtyChange }: { onDirtyChange: (dirty: bool
           <span className="eyebrow">PRIVĀTI / TIKAI ADMINISTRATOREI</span>
           <h2>Klientu kartes</h2>
         </div>
-        {expiresAt && (
-          <div>
-            <small>
-              {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, "0")} līdz aizslēgšanai
-            </small>
-            <button className="button button-outline button-small" onClick={lock}>
-              Aizslēgt kartotēku
-            </button>
-          </div>
-        )}
       </div>
-      {expiresAt && seconds < 120 && (
-        <p role="alert" className="clinical-help">
-          Kartotēka drīz aizslēgsies. Saglabā izmaiņas.
-        </p>
-      )}
       {error && (
         <p role="alert" className="form-error">
           {error}
         </p>
       )}
-      {!expiresAt ? (
-        <div className="clinical-unlock">
-          <p>
-            Anamnēzes, procedūras un diagnostikas dokumenti ir privāti. Lai atvērtu kartotēku uz 30
-            minūtēm, atkārtoti ievadi administratora paroli.
-          </p>
-          {configured === false ? (
-            <p>Privātā glabātuve vēl nav sagatavota. Šeit pagaidām neievadi klientu datus.</p>
-          ) : (
-            <form className="form" onSubmit={unlock}>
-              <label>
-                Administratora parole
-                <input
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  maxLength={200}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
-              <button className="button" disabled={pending || configured === null}>
-                {pending ? "Atver…" : "Atvērt klientu kartes"}
-              </button>
-            </form>
-          )}
-        </div>
+      {accessDenied ? (
+        <p>
+          <a className="button button-outline" href="/admin">
+            Atjaunot administrācijas pieslēgumu
+          </a>
+        </p>
+      ) : configured === null ? (
+        <p role="status">Ielādē klientu kartes…</p>
+      ) : configured === false ? (
+        <p>Privātā glabātuve vēl nav sagatavota. Šeit pagaidām neievadi klientu datus.</p>
       ) : (
         <Workspace
-          key={expiresAt}
-          expired={() => setExpiresAt(null)}
           onDirtyChange={onDirtyChange}
+          expired={() => {
+            setAccessDenied(true);
+            setError("Administrācijas sesija ir beigusies. Pieslēdzies administrācijai vēlreiz.");
+          }}
         />
       )}
     </section>

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+
 import { z } from "zod";
-import { clinicalSession, requireClinical, CLINICAL_SESSION_MS } from "@/lib/clinical-auth";
+import { requireClinical } from "@/lib/clinical-auth";
 import {
   clinicalAudit,
   clinicalBackup,
   clinicalConfigured,
-  clinicalDb,
   listClinicalClients,
   getClinicalClient,
   listClinicalVisits,
@@ -19,19 +18,7 @@ import {
   clinicalRevision,
 } from "@/lib/clinical-store";
 import { clientCardSchema, clinicalVisitSchema } from "@/lib/clinical-schema";
-import {
-  fail,
-  hash,
-  HttpError,
-  jsonBody,
-  limitedBody,
-  rateLimit,
-  requireAdmin,
-  sameOrigin,
-  secret,
-  sessionOptions,
-  verifyPassword,
-} from "@/lib/security";
+import { fail, HttpError, jsonBody, limitedBody, requireAdmin, sameOrigin } from "@/lib/security";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -54,12 +41,7 @@ export async function GET(request: NextRequest, context: Context) {
     const parts = (await context.params).path;
     await requireAdmin();
     if (parts.join("/") === "status") {
-      const session = await clinicalSession();
-      return ok({
-        configured: clinicalConfigured(),
-        unlocked: !!session,
-        expiresAt: session?.expiresAt || null,
-      });
+      return ok({ configured: clinicalConfigured() });
     }
     const session = await requireClinical();
     if (parts.join("/") === "clients") {
@@ -115,43 +97,6 @@ export async function POST(request: NextRequest, context: Context) {
     sameOrigin(request);
     await requireAdmin();
     const parts = (await context.params).path;
-    if (parts.join("/") === "unlock") {
-      rateLimit(request, "clinical-unlock", 5);
-      const { password } = z
-        .object({ password: z.string().min(1).max(200) })
-        .parse(await jsonBody(request, 1000));
-      if (!verifyPassword(password)) throw new HttpError(401, "INVALID_PASSWORD");
-      if (!clinicalConfigured()) throw new HttpError(503, "CLINICAL_NOT_CONFIGURED");
-      const c = await cookies(),
-        admin = c.get("sk_admin")!.value,
-        old = c.get("sk_clinical")?.value,
-        token = secret(),
-        expiresAt = Date.now() + CLINICAL_SESSION_MS,
-        connection = clinicalDb();
-      if (old)
-        connection.prepare("DELETE FROM clinical_sessions WHERE token_hash=?").run(hash(old));
-      connection.prepare("DELETE FROM clinical_sessions WHERE expires_at<?").run(Date.now());
-      connection
-        .prepare("INSERT INTO clinical_sessions VALUES (?,?,?)")
-        .run(hash(token), hash(admin), expiresAt);
-      c.set("sk_clinical", token, {
-        ...sessionOptions,
-        sameSite: "strict",
-        maxAge: CLINICAL_SESSION_MS / 1000,
-      });
-      clinicalAudit("vault.unlock", hash(token));
-      return ok({ expiresAt });
-    }
-    if (parts.join("/") === "lock") {
-      const c = await cookies(),
-        token = c.get("sk_clinical")?.value;
-      if (token) {
-        clinicalDb().prepare("DELETE FROM clinical_sessions WHERE token_hash=?").run(hash(token));
-        clinicalAudit("vault.lock", hash(token));
-      }
-      c.delete("sk_clinical");
-      return ok({ ok: true });
-    }
     const session = await requireClinical();
     if (parts.join("/") === "clients") {
       const input = z
