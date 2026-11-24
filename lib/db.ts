@@ -255,6 +255,18 @@ export function db() {
     insert.run(marker,'true');
   })();
   instance.transaction(() => {
+    const marker='introductory-description-release-2026-11-24';
+    if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker))return;
+    const row=instance!.prepare("SELECT value FROM content WHERE key='services'").get() as {value:string};
+    const services=JSON.parse(row.value) as Service[];
+    const introductory=services.find(service=>service.id===introductoryTreatment.id);
+    if(introductory) {
+      introductory.description=introductoryTreatment.description;
+      instance!.prepare("UPDATE content SET value=? WHERE key='services'").run(JSON.stringify(services));
+    }
+    insert.run(marker,'true');
+  })();
+  instance.transaction(() => {
     const marker='owner-december-closures-release-2026-11-23';
     if(instance!.prepare('SELECT 1 FROM content WHERE key=?').get(marker)) return;
     const block=instance!.prepare('INSERT INTO blocks(id,date,start_min,end_min,note) VALUES (?,?,?,?,?)');

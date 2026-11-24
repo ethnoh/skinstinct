@@ -2,6 +2,11 @@ import type { Lang, Service } from "./types";
 import { money } from "./client";
 
 export function servicePrice(service: Pick<Service, "price" | "priceMax">, lang: Lang) {
+  if (service.price === null) return {
+    lv: "Cena atkarīga no izvēlētās procedūras",
+    en: "Price depends on the chosen treatment",
+    ru: "Стоимость зависит от выбранной процедуры",
+  }[lang];
   if (service.price !== null && service.priceMax != null && service.priceMax > service.price) {
     const format = (value: number) =>
       new Intl.NumberFormat(lang === "lv" ? "lv-LV" : lang === "ru" ? "ru-RU" : "en-GB", {

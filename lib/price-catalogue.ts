@@ -207,9 +207,9 @@ export const introductoryTreatment: Service = service(
   'introductory-treatment',
   text('Iepazīšanās procedūra', 'Introductory treatment', 'Ознакомительная процедура'),
   text(
-    'Uz vietas veiksim ādas diagnostiku un kopā izvēlēsimies piemērotāko procedūru no cenrāža. Cena atbilstoši izvēlētajai procedūrai — to saskaņosim pirms veikšanas. Rezervējam 90 minūtes.',
-    'We will assess your skin during the visit and choose a suitable treatment from the price list together. The price follows the chosen treatment and is agreed before we begin. We reserve 90 minutes.',
-    'На месте проведём диагностику кожи и вместе выберем подходящую процедуру из прайс-листа. Стоимость зависит от выбранной процедуры и согласуется до её проведения. Резервируем 90 минут.',
+    'Piemērota pirmajai vizītei, ja nezini, kuru no piedāvātajām procedūrām izvēlēties. Vizītes laikā izvērtēsim Tavas ādas vajadzības, veiksim diagnostiku un kopā izvēlēsimies un veiksim kādu no šeit aprakstītajām procedūrām. Cena būs atkarīga no izvēlētās procedūras atbilstoši cenrādim. Vizītes ilgums 60–90 minūtes; pierakstā rezervējam 90 minūtes.',
+    'A suitable first visit if you are unsure which of the available treatments to choose. During your visit, we will assess your skin, carry out diagnostics, and choose and perform one of the treatments described here together. The price depends on the chosen treatment, as listed in the price list. The visit takes 60–90 minutes; we reserve 90 minutes when booking.',
+    'Подходит для первого визита, если Ты не знаешь, какую из предлагаемых процедур выбрать. На встрече оценим потребности Твоей кожи, проведём диагностику и вместе выберем и выполним одну из описанных здесь процедур. Стоимость зависит от выбранной процедуры согласно прайс-листу. Визит длится 60–90 минут; при записи резервируем 90 минут.',
   ),
   'face', 90, 0, '/images/valerija-studio-care-v4.webp',
   {price:null,durationMin:60},
