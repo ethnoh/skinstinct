@@ -21,6 +21,12 @@
   --surface-hover: #edf0e6;
   --error-ink: #a13c30;
   --error-surface: #fbefeb;
+  --calendar-free: #526142;
+  --calendar-free-bg: #edf3e7;
+  --calendar-free-border: #b8c9a8;
+  --calendar-busy: #984f5b;
+  --calendar-busy-bg: #f7eaed;
+  --calendar-busy-border: #dbb7bf;
 }
 html[data-theme="dark"] {
   --paper: #171d18;
@@ -40,6 +46,12 @@ html[data-theme="dark"] {
   --surface-hover: #323e2e;
   --error-ink: #ffc0ae;
   --error-surface: #452b27;
+  --calendar-free: #b1ce9e;
+  --calendar-free-bg: #273723;
+  --calendar-free-border: #5b7650;
+  --calendar-busy: #e1a8b1;
+  --calendar-busy-bg: #39282d;
+  --calendar-busy-border: #805760;
   color-scheme: dark;
 }
 * {
@@ -1095,8 +1107,9 @@ main {
   transition: background 0.15s;
 }
 .calendar-day.available {
-  background: var(--cream);
-  color: var(--olive);
+  background: var(--calendar-free-bg);
+  color: var(--calendar-free);
+  border-color: var(--calendar-free-border);
 }
 .calendar-day.available:hover {
   background: var(--sage);
@@ -1105,6 +1118,7 @@ main {
 .calendar-day.selected {
   background: var(--olive);
   color: var(--on-accent);
+  border-color: var(--olive);
 }
 .calendar-day.selected:hover {
   background: var(--olive-dark);
@@ -1112,21 +1126,26 @@ main {
 }
 .calendar-day > span {
   position: absolute;
-  width: 3px;
-  height: 3px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--olive);
-  left: calc(50% - 1.5px);
-  bottom: 7px;
+  background: var(--calendar-free);
+  left: calc(50% - 3.5px);
+  bottom: 5px;
 }
 .calendar-day.unavailable > span {
-  display: none;
+  display: block;
+  background: transparent;
+  border: 1.5px solid var(--calendar-busy);
 }
 .calendar-day.selected > span {
-  background: var(--paper);
+  background: var(--on-accent);
 }
 .calendar-day.unavailable {
-  opacity: 0.34;
+  opacity: 1;
+  color: var(--calendar-busy);
+  background: var(--calendar-busy-bg);
+  border-color: var(--calendar-busy-border);
 }
 .calendar-legend {
   display: flex;
@@ -1142,13 +1161,15 @@ main {
   gap: 6px;
 }
 .calendar-legend i {
-  width: 6px;
-  height: 6px;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: var(--olive);
+  background: var(--calendar-free);
 }
 .calendar-legend > span:nth-child(2) i {
-  background: #c8ccbf;
+  background: transparent;
+  border: 1.5px solid var(--calendar-busy);
 }
 .time-picker {
   margin-top: 23px;
@@ -4099,7 +4120,7 @@ html[data-theme="dark"] .theme-moon {
   font-size: 12px;
 }
 .calendar-day.unavailable {
-  opacity: 0.5;
+  opacity: 1;
 }
 .calendar-day {
   min-height: 44px;

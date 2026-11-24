@@ -411,11 +411,11 @@ export function BookingWidget({
             </div>
             <div className="calendar-legend">
               <span>
-                <i />
+                <i aria-hidden="true" />
                 {tr(lang, "Ir brīvi laiki", "Есть свободное время")}
               </span>
               <span>
-                <i />
+                <i aria-hidden="true" />
                 {tr(lang, "Aizņemts / nav pieņemšanas", "Занято / нет приёма")}
               </span>
             </div>
