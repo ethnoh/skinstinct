@@ -60,10 +60,6 @@ export function ClinicalPrintForms({
   return (
     <div className="clinical-form">
       <h3>Izdrukājamie klienta dokumenti</h3>
-      <p>
-        Pamatanketu aizpilda sākumā; konkrētās vizītes lapu pārrunā un paraksta pirms izvēlētās
-        procedūras. Parakstīto dokumentu vari noskenēt un pievienot PDF sadaļā.
-      </p>
       <label>
         Ko drukāt
         <select value={section} onChange={(e) => setSection(e.target.value as typeof section)}>
@@ -96,10 +92,8 @@ export function ClinicalPrintForms({
         </label>
       )}
       <div className="clinical-help">
-        Pirms pirmās izmantošanas aizpildi pakalpojuma sniedzēja juridiskos rekvizītus un privātuma
-        informāciju, pārbaudi dokumentu atbilstību faktiskajām metodēm, aktuālajām preparātu /
-        ierīču instrukcijām un savai kompetencei. Šī ir pielāgojama dokumentu sagatave; tā nav
-        universāla piekrišana visām nākotnes procedūrām. Injekcijas — tikai pilngadīgajiem.
+        Pārbaudi, vai izvēlētā veidlapa atbilst konkrētajai procedūrai un savai profesionālajai
+        kompetencei. Injekcijas veic tikai pilngadīgajiem.
       </div>
       <div className="clinical-actions">
         <button type="button" className="button" disabled={printing} onClick={() => printDocument("download")}>

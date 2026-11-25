@@ -357,7 +357,6 @@
 .admin-calendar-header h2 {
   margin: 0;
   font-size: 30px;
-  text-transform: capitalize;
 }
 .admin-calendar {
   display: grid;

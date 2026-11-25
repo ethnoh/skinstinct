@@ -706,8 +706,8 @@ export function Admin() {
                         act(()=>api('/api/admin/open-day',{date:form.get('date'),start:form.get('start'),end:form.get('end')}),'Diena atvērta pierakstiem');
                       }}>
                         <label>Datums<input type="date" name="date" required min={today<BOOKING_START?BOOKING_START:today} defaultValue={selectedDay|| (today<BOOKING_START?BOOKING_START:today)} /></label>
-                        <label>No<input type="time" name="start" required defaultValue="09:00" /></label>
-                        <label>Līdz<input type="time" name="end" required defaultValue="15:00" /></label>
+                        <label>No<input type="time" lang="lv" name="start" required defaultValue="09:00" /></label>
+                        <label>Līdz<input type="time" lang="lv" name="end" required defaultValue="15:00" /></label>
                         <button className="button button-small" disabled={pending}>Atvērt šo dienu</button>
                       </form>
                       <div className="blocks-list">{(state.openDays||[]).map(day=><div key={day.date}>
@@ -748,11 +748,11 @@ export function Admin() {
                       </label>
                       <label>
                         {"No"}
-                        <input type="time" name="start" required defaultValue="00:00" />
+                        <input type="time" lang="lv" name="start" required defaultValue="00:00" />
                       </label>
                       <label>
                         {"Līdz"}
-                        <input type="time" name="end" required defaultValue="23:59" />
+                        <input type="time" lang="lv" name="end" required defaultValue="23:59" />
                       </label>
                       <label>
                         {"Piezīme sev"}
@@ -1374,6 +1374,7 @@ export function Admin() {
                           </label>
                           <input
                             type="time"
+                            lang="lv"
                             aria-label={`Darba sākums: ${i}`}
                             value={day.start}
                             disabled={!day.enabled}
@@ -1389,6 +1390,7 @@ export function Admin() {
                           <span>{"līdz"}</span>
                           <input
                             type="time"
+                            lang="lv"
                             aria-label={`Darba beigas: ${i}`}
                             value={day.end}
                             disabled={!day.enabled}
