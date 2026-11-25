@@ -67,7 +67,7 @@ export function BookingWidget({
     };
   }, [started, step]);
   useEffect(() => {
-    if (window.innerWidth > 760) return;
+    if (!started || window.innerWidth > 760) return;
     if (step === 1) {
       window.requestAnimationFrame(() =>
         document.querySelector(".booking-stage")?.scrollIntoView({
@@ -92,7 +92,7 @@ export function BookingWidget({
         }),
       );
     }
-  }, [step]);
+  }, [started, step]);
   useEffect(() => {
     if (
       window.innerWidth <= 760 &&
