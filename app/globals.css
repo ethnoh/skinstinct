@@ -3014,6 +3014,39 @@ main {
   html {
     scroll-padding-top: 90px;
   }
+  .booking-widget {
+    border-radius: 8px;
+  }
+  .booking-progress {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: var(--white);
+  }
+  .booking-stage {
+    scroll-margin-top: 58px;
+  }
+  .calendar-day {
+    min-height: 48px;
+  }
+  .time-picker {
+    scroll-margin-block: 110px 75px;
+  }
+  .time-slots button {
+    min-height: 48px;
+  }
+  .form input:not([type="checkbox"]),
+  .form select,
+  .form textarea {
+    min-height: 48px;
+  }
+  .stage-actions {
+    position: sticky;
+    bottom: 64px;
+    z-index: 2;
+    background: var(--white);
+    padding: 10px 0;
+  }
   .container {
     width: calc(100% - 40px);
   }

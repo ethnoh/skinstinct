@@ -57,6 +57,40 @@ export function BookingWidget({
   const [email, setEmail] = useState("");
   const [whatsappReady,setWhatsappReady]=useState(false);
   const [whatsappOptIn,setWhatsappOptIn]=useState(false);
+  useEffect(() => {
+    if (window.innerWidth > 760) return;
+    if (step === 2) {
+      window.requestAnimationFrame(() =>
+        document.getElementById("booking-calendar")?.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        }),
+      );
+    }
+    if (step === 3) {
+      window.requestAnimationFrame(() =>
+        document.querySelector(".booking-stage")?.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        }),
+      );
+    }
+  }, [step]);
+  useEffect(() => {
+    if (
+      window.innerWidth <= 760 &&
+      step === 2 &&
+      date &&
+      !slotsLoading
+    ) {
+      window.requestAnimationFrame(() =>
+        document.querySelector(".time-picker")?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        }),
+      );
+    }
+  }, [date, slotsLoading, step]);
   useEffect(()=>{let active=true;setWhatsappReady(false);setWhatsappOptIn(false);api<{whatsapp:Record<Lang,boolean>}>('/api/notifications/options').then(data=>{if(active)setWhatsappReady(data.whatsapp[lang])}).catch(()=>{});return()=>{active=false}},[lang]);
   const [result, setResult] = useState<{ booking: Booking; code: string } | null>(null);
   const [copied, setCopied] = useState(false);
