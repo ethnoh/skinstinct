@@ -12,7 +12,7 @@ A Latvian, English and Russian cosmetology studio website for Valērija Razujeva
 - Appointment requests with a three-step service, date/time and contact flow.
 - Live availability, automatic confirmation for new appointments, legacy pending requests, cancellations, visit history, private booking-code lookup and iCalendar download.
 - Server-side overlap checks inside SQLite immediate transactions, including configurable service duration and buffers.
-- Latvian-only admin for appointments, opening hours, time blocks, messages, content in all three languages, images, services, prices, article drafts/publication and password changes.
+- Latvian-only admin for appointments, including phone bookings, opening hours, time blocks, messages, content in all three languages, images, services, prices, article drafts/publication and password changes.
 - Contact forms requiring a name and at least one valid phone/email.
 - Server rendering, canonical URLs, language alternatives, social cards, structured data, dynamic sitemap, robots and `llms.txt`.
 - Privacy notice, essential-cookie notice and settings. No advertising or analytics integrations.

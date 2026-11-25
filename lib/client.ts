@@ -23,12 +23,22 @@ export function errorMessage(error: unknown, lang: Lang) {
       "Проверь данные. Укажи имя и корректный телефон или почту.",
       "Check your details. Enter your name and a valid phone or email.",
     ],
+    INVALID_DATE: [
+      "Izvēlies datumu no šodienas līdz nākamajām 90 dienām.",
+      "Выбери дату от сегодняшнего дня до следующих 90 дней.",
+      "Choose a date from today through the next 90 days.",
+    ],
+    SERVICE_NOT_FOUND: [
+      "Izvēlētais pakalpojums vairs nav pieejams.",
+      "Выбранная услуга больше недоступна.",
+      "The selected service is no longer available.",
+    ],
     WHATSAPP_UNAVAILABLE: ['WhatsApp ziņas pašlaik nav pieejamas. Noņem WhatsApp atzīmi un apstiprini pierakstu.','Сообщения WhatsApp сейчас недоступны. Сними отметку WhatsApp и подтверди запись.','WhatsApp messages are currently unavailable. Uncheck WhatsApp and confirm your booking.'],
     INVALID_PHONE: ['WhatsApp ziņām norādi derīgu tālruņa numuru ar valsts kodu, piemēram, +371 26054744.','Для WhatsApp укажи действующий номер с кодом страны, например +371 26054744.','For WhatsApp, enter a valid phone number with its country code, for example +371 26054744.'],
     SLOT_UNAVAILABLE: [
-      "Šo laiku tikko rezervēja. Lūdzu, izvēlies citu.",
-      "Это время уже заняли. Выбери другое.",
-      "This time has just been booked. Please choose another.",
+      "Izvēlētais laiks ir aizņemts vai ārpus darba laika. Izvēlies citu.",
+      "Выбранное время занято или находится вне рабочего графика. Выбери другое.",
+      "The selected time is occupied or outside business hours. Please choose another.",
     ],
     TOO_MANY_REQUESTS: [
       "Pārāk daudz mēģinājumu. Lūdzu, mēģini pēc 15 minūtēm.",

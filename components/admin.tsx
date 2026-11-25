@@ -260,6 +260,7 @@ export function Admin() {
   const [filter, setFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [phoneBookingOpen, setPhoneBookingOpen] = useState(false);
   const [month, setMonth] = useState(
     new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Riga" }).slice(0, 7),
   );
@@ -331,6 +332,15 @@ export function Admin() {
     day: "2-digit",
   }).format(new Date());
   const bookings = state?.bookings || [];
+  const phoneBookingServices = services.filter((service) => service.active);
+  const bookingDateMin = today < BOOKING_START ? BOOKING_START : today;
+  const bookingDateMaxValue = new Date(`${today}T12:00:00Z`);
+  bookingDateMaxValue.setUTCDate(bookingDateMaxValue.getUTCDate() + 90);
+  const bookingDateMax = bookingDateMaxValue.toISOString().slice(0, 10);
+  const phoneBookingDate =
+    selectedDay >= bookingDateMin && selectedDay <= bookingDateMax
+      ? selectedDay
+      : bookingDateMin;
   const upcoming = bookings
     .filter((b) => b.date >= today && ["pending", "confirmed"].includes(b.status))
     .sort((a, b) => a.date.localeCompare(b.date) || a.start_min - b.start_min);
@@ -575,6 +585,113 @@ export function Admin() {
               )}
               {tab === "bookings" && (
                 <section className="admin-panel">
+                  <div className="admin-panel-heading phone-booking-heading">
+                    <h2>{"Pieraksts pa tālruni"}</h2>
+                    <button
+                      type="button"
+                      className="button button-outline button-small"
+                      aria-expanded={phoneBookingOpen}
+                      disabled={!phoneBookingServices.length}
+                      onClick={() => setPhoneBookingOpen((open) => !open)}
+                    >
+                      <Plus size={16} />
+                      {phoneBookingOpen ? "Aizvērt veidlapu" : "Izveidot pierakstu"}
+                    </button>
+                  </div>
+                  {phoneBookingOpen && (
+                    <>
+                      <p className="admin-hint">
+                        {"Pieraksts uzreiz tiek apstiprināts. E-pasta un WhatsApp paziņojumi netiek sūtīti."}
+                      </p>
+                      <form
+                        className="form admin-manual-booking-form"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          const formElement = event.currentTarget;
+                          const form = new FormData(formElement);
+                          void act(
+                            async () => {
+                              await api("/api/admin/booking/create", {
+                                name: form.get("name"),
+                                phone: form.get("phone"),
+                                email: form.get("email"),
+                                serviceId: form.get("serviceId"),
+                                date: form.get("date"),
+                                time: form.get("time"),
+                              });
+                              formElement.reset();
+                              setPhoneBookingOpen(false);
+                            },
+                            "Pieraksts izveidots un apstiprināts",
+                          );
+                        }}
+                      >
+                        <label>
+                          {"Klienta vārds"}
+                          <input name="name" autoComplete="name" required maxLength={100} />
+                        </label>
+                        <label>
+                          {"Tālrunis"}
+                          <input
+                            name="phone"
+                            type="tel"
+                            autoComplete="tel"
+                            required
+                            maxLength={30}
+                          />
+                        </label>
+                        <label>
+                          {"E-pasts (nav obligāts)"}
+                          <input
+                            name="email"
+                            type="email"
+                            autoComplete="email"
+                            maxLength={200}
+                          />
+                        </label>
+                        <label>
+                          {"Pakalpojums"}
+                          <select
+                            name="serviceId"
+                            required
+                            defaultValue={phoneBookingServices[0]?.id || ""}
+                          >
+                            {phoneBookingServices.map((service) => (
+                              <option key={service.id} value={service.id}>
+                                {addressCase(service.title.lv, "lv")} ({service.duration} min)
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <label>
+                          {"Datums"}
+                          <input
+                            name="date"
+                            type="date"
+                            min={bookingDateMin}
+                            max={bookingDateMax}
+                            defaultValue={phoneBookingDate}
+                            required
+                          />
+                        </label>
+                        <label>
+                          {"Sākuma laiks"}
+                          <input
+                            name="time"
+                            type="time"
+                            lang="lv"
+                            step={900}
+                            defaultValue="09:00"
+                            required
+                          />
+                        </label>
+                        <button className="button" disabled={pending}>
+                          <Check size={17} />
+                          {"Apstiprināt pierakstu"}
+                        </button>
+                      </form>
+                    </>
+                  )}
                   <div className="admin-filters">
                     <input
                       placeholder="Meklēt pēc vārda vai kontaktinformācijas"

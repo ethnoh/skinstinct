@@ -407,6 +407,14 @@
   grid-column: 1/-1;
   justify-self: start;
 }
+.admin-manual-booking-form {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+}
+.admin-manual-booking-form > .button {
+  grid-column: 1/-1;
+  justify-self: start;
+}
 .blocks-list {
   margin-top: 25px;
   display: grid;
@@ -841,6 +849,9 @@
   .block-form {
     grid-template-columns: 1fr 1fr;
   }
+  .admin-manual-booking-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .localized-grid {
     gap: 12px;
   }
@@ -929,6 +940,13 @@
   }
 }
 @media (max-width: 650px) {
+  .admin-manual-booking-form {
+    grid-template-columns: 1fr;
+  }
+  .phone-booking-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
   .admin-sidebar nav {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

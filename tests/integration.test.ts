@@ -147,6 +147,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
   let customer = "";
   let code = "";
   let bookingId = "";
+  let phoneBookingId = "";
   let date = "";
   let time = "";
   await t.test("public pages are server rendered and private state is protected", async () => {
@@ -327,6 +328,7 @@ test("Booking lifecycle, isolation, content management and restart persistence",
         ...state.settings,
         heroTitle: { lv: "QA content update", en: "QA English update", ru: "QA translation" },
         vatNumber: 'LV12345678901',
+        bookingEnabled: false,
       };
       assert.equal(
         (await post("/api/admin/content", { type: "settings", data: edited }, admin)).status,
@@ -336,6 +338,44 @@ test("Booking lifecycle, isolation, content management and restart persistence",
       assert.ok((await (await fetch(`${origin}/en`)).text()).includes("QA English update"));
       const updatedState=await(await fetch(`${origin}/api/admin`,{headers:{Cookie:admin}})).json();
       assert.equal(updatedState.settings.vatNumber,'LV12345678901');
+      const manualInput = {
+        serviceId: "youth-facial",
+        date: "2026-12-02",
+        time: "11:00",
+        name: "QA Phone Booking",
+        phone: "+37120000008",
+        email: "",
+      };
+      assert.equal(
+        (await post("/api/admin/booking/create", manualInput)).status,
+        401,
+      );
+      const manualResponse = await post("/api/admin/booking/create", manualInput, admin);
+      assert.equal(manualResponse.status, 200);
+      const manualResult = await manualResponse.json();
+      const manualBooking = manualResult.booking;
+      phoneBookingId = manualBooking.id;
+      assert.equal(manualBooking.status, "confirmed");
+      assert.equal(manualBooking.lang, "lv");
+      assert.equal(manualBooking.service_id, "youth-facial");
+      assert.equal(manualBooking.date, manualInput.date);
+      assert.equal(manualBooking.start_min, 11 * 60);
+      assert.equal(manualBooking.end_min - manualBooking.start_min, 60);
+      assert.equal(manualBooking.quoted_price_min, 50);
+      assert.equal(manualBooking.whatsapp_opt_in, 0);
+      assert.ok(!("customer_id" in manualBooking));
+      assert.ok(!("code" in manualResult));
+      assert.equal((await post("/api/admin/booking/create", manualInput, admin)).status, 409);
+      const anonymousBookings = await (await fetch(`${origin}/api/account`)).json();
+      assert.ok(!anonymousBookings.bookings.some((booking: { id: string }) => booking.id === manualBooking.id));
+      const manualConnection = new Database(path.join(directory, "skinstinct.db"));
+      assert.equal(
+        (manualConnection
+          .prepare("SELECT COUNT(*) AS count FROM booking_notifications WHERE booking_id=?")
+          .get(manualBooking.id) as { count: number }).count,
+        0,
+      );
+      manualConnection.close();
       assert.equal(
         (await post("/api/admin/content", { type: "settings", data: state.settings }, admin))
           .status,
@@ -459,8 +499,9 @@ test("Booking lifecycle, isolation, content management and restart persistence",
     await start();
     const state = await (await fetch(`${origin}/api/admin`, { headers: { Cookie: admin } })).json();
     assert.equal(state.inquiries.length, 2);
-    assert.equal(state.bookings.length, 1);
-    assert.equal(state.bookings[0].status, "cancelled");
+    assert.equal(state.bookings.length, 2);
+    assert.equal(state.bookings.find((booking: { id: string }) => booking.id === bookingId).status, "cancelled");
+    assert.equal(state.bookings.find((booking: { id: string }) => booking.id === phoneBookingId).status, "confirmed");
     assert.equal((await post("/api/auth/logout", {}, admin)).status, 200);
     assert.equal((await fetch(`${origin}/api/admin`, { headers: { Cookie: admin } })).status, 401);
   });

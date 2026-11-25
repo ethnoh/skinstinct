@@ -346,6 +346,73 @@ export async function POST(request: NextRequest, context: Context) {
         }).immediate();
         return ok({ok:true});
       }
+      if (route === "admin/booking/create") {
+        const input = z
+          .object({
+            serviceId: z.string().max(80),
+            date: dateSchema,
+            time: timeSchema,
+            name: z.string().trim().min(2).max(100),
+            phone: z
+              .string()
+              .trim()
+              .min(1)
+              .max(30)
+              .regex(/^[+()\d\s-]+$/)
+              .refine((value) => value.replace(/\D/g, "").length >= 7),
+            email: z
+              .string()
+              .trim()
+              .max(200)
+              .refine((value) => !value || z.email().safeParse(value).success)
+              .default(""),
+          })
+          .parse(await jsonBody(request, 3000));
+        if (!validHorizon(input.date) || input.date < BOOKING_START)
+          throw new HttpError(400, "INVALID_DATE");
+        const id = randomUUID();
+        const rawCustomer = secret();
+        const code = randomBytes(8).toString("hex").toUpperCase();
+        const booking = db()
+          .transaction(() => {
+            const service = getServices().find((item) => item.id === input.serviceId && item.active);
+            if (!service) throw new HttpError(404, "SERVICE_NOT_FOUND");
+            if (
+              !getSlots(input.date, service.id, { admin: true }).some(
+                (slot) => slot.time === input.time && slot.available,
+              )
+            )
+              throw new HttpError(409, "SLOT_UNAVAILABLE");
+            const start = timeMinute(input.time);
+            const quote = priceForDate(service, input.date);
+            db()
+              .prepare(
+                "INSERT INTO bookings(id,customer_id,code_hash,service_id,service_title,date,start_min,end_min,name,phone,email,lang,created_at,quoted_price_min,quoted_price_max,status,whatsapp_opt_in,whatsapp_opt_in_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'confirmed',0,NULL)",
+              )
+              .run(
+                id,
+                hash(rawCustomer),
+                hash(code),
+                service.id,
+                service.title.lv,
+                input.date,
+                start,
+                start + service.duration,
+                input.name,
+                input.phone,
+                input.email.toLowerCase(),
+                "lv",
+                new Date().toISOString(),
+                quote.price,
+                quote.priceMax ?? quote.price,
+              );
+            return db()
+              .prepare(`SELECT ${bookingColumns} FROM bookings WHERE id=?`)
+              .get(id) as Booking;
+          })
+          .immediate();
+        return ok({ booking: publicBooking(booking) });
+      }
       if (route === "admin/upload") {
         const bytes = await limitedBody(request, 8_500_000);
         const form = await new Response(bytes, {

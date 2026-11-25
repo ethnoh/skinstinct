@@ -26,11 +26,14 @@ export function validHorizon(date: string) {
   const days = (Date.parse(date) - Date.parse(today())) / 86_400_000;
   return days >= 0 && days <= 90;
 }
-export function getSlots(date: string, serviceId: string) {
+export function getSlots(date: string, serviceId: string, options: { admin?: boolean } = {}) {
   const settings = getSettings();
-  const service = getServices().find((s) => s.id === serviceId && s.active && s.bookable !== false);
+  const admin = options.admin === true;
+  const service = getServices().find(
+    (s) => s.id === serviceId && s.active && (admin || s.bookable !== false),
+  );
   if (!service) throw new HttpError(404, "SERVICE_NOT_FOUND");
-  if (!settings.bookingEnabled || !validHorizon(date) || date < BOOKING_START || isPublicHoliday(date) || service.duration < 15) return [];
+  if ((!admin && !settings.bookingEnabled) || !validHorizon(date) || date < BOOKING_START || isPublicHoliday(date) || service.duration < 15) return [];
   const opening=db().prepare('SELECT start_min,end_min FROM opening_days WHERE date=?').get(date) as {start_min:number;end_min:number}|undefined;
   const day = opening ? {enabled:true,start:minuteTime(opening.start_min),end:minuteTime(opening.end_min)} : settings.schedule[new Date(`${date}T12:00:00Z`).getUTCDay()];
   if (!day?.enabled) return [];
@@ -51,7 +54,7 @@ export function getSlots(date: string, serviceId: string) {
   }
   for (const minute of [...candidates].sort((a,b) => a-b)) {
     if (minute < timeMinute(day.start) || minute + service.duration > timeMinute(day.end)) continue;
-    if (startDate(date, minute).getTime() < Date.now() + 60 * 60 * 1000) continue;
+    if (startDate(date, minute).getTime() < Date.now() + (admin ? 0 : 60 * 60 * 1000)) continue;
     const end = minute + service.duration;
     const occupied =
       bookings.some(
