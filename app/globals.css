@@ -4603,6 +4603,85 @@ html { scroll-padding-top: 140px; }
   .mobile-menu {
     max-height: calc(100dvh - 80px);
   }
+  html[data-booking-active="true"] .mobile-booking {
+    display: none !important;
+  }
+  html[data-booking-step="3"] .booking-stage#booking-details {
+    padding-bottom: 105px;
+    scroll-margin-top: 12px;
+  }
+  html[data-booking-step="3"] .booking-stage#booking-details .stage-actions {
+    position: fixed;
+    z-index: 30;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 10px 18px calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+    background: var(--white);
+    box-shadow: 0 -4px 18px #333c2c14;
+  }
+  .booking-offer-compact .price-offer-notice {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .booking-offer-compact .opening-offer-amount {
+    min-width: 54px;
+    min-height: 54px;
+    padding: 8px;
+    font-size: 19px;
+  }
+  .booking-offer-compact .opening-offer-label {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .booking-offer-compact .opening-offer-title {
+    margin: 2px 0 4px;
+    font-size: 20px;
+  }
+  .booking-offer-compact .opening-offer-subtitle {
+    font-size: 12px;
+  }
+  .booking-offer-compact .price-offer-notice p {
+    margin-top: 3px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+}
+@media (max-width: 600px) {
+  .booking-offer-compact .price-offer-notice {
+    padding: 10px;
+  }
+  .booking-offer-compact .opening-offer-amount {
+    min-width: 46px;
+    min-height: 46px;
+    font-size: 17px;
+  }
+  html[data-booking-step="3"] .booking-stage#booking-details {
+    padding-inline: 16px;
+  }
+  html[data-booking-step="3"] .booking-stage#booking-details .stage-heading h3 {
+    margin: 4px 0;
+    font-size: 27px;
+  }
+  html[data-booking-step="3"] .booking-summary {
+    margin: 8px 0 12px;
+    padding: 10px;
+  }
+  html[data-booking-step="3"] .booking-widget .form {
+    gap: 10px;
+  }
+  html[data-booking-step="3"] .booking-widget .form input:not([type="checkbox"]) {
+    font-size: 16px;
+  }
+  html[data-booking-step="3"] .booking-widget .form .field-hint {
+    margin-top: -6px;
+  }
 }
 @media (max-width: 370px) {
   .site-identity .brand img,

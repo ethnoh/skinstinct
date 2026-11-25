@@ -43,6 +43,7 @@ export function BookingWidget({
   const firstDate = initialToday < BOOKING_START ? BOOKING_START : initialToday;
   const [serviceId, setService] = useState(active[0]?.id || "");
   const [step, setStep] = useState(1);
+  const [started, setStarted] = useState(false);
   const [month, setMonth] = useState(firstDate.slice(0, 7));
   const [date, setDate] = useState("");
   const priceDate = date || `${month}-01`;
@@ -58,7 +59,23 @@ export function BookingWidget({
   const [whatsappReady,setWhatsappReady]=useState(false);
   const [whatsappOptIn,setWhatsappOptIn]=useState(false);
   useEffect(() => {
+    document.documentElement.dataset.bookingActive = started ? "true" : "false";
+    document.documentElement.dataset.bookingStep = String(step);
+    return () => {
+      delete document.documentElement.dataset.bookingActive;
+      delete document.documentElement.dataset.bookingStep;
+    };
+  }, [started, step]);
+  useEffect(() => {
     if (window.innerWidth > 760) return;
+    if (step === 1) {
+      window.requestAnimationFrame(() =>
+        document.querySelector(".booking-stage")?.scrollIntoView({
+          behavior: "auto",
+          block: "start",
+        }),
+      );
+    }
     if (step === 2) {
       window.requestAnimationFrame(() =>
         document.getElementById("booking-calendar")?.scrollIntoView({
@@ -99,6 +116,7 @@ export function BookingWidget({
     const choose = (event: Event) => {
       const id = (event as CustomEvent<string>).detail;
       if (active.some((s) => s.id === id)) {
+        setStarted(true);
         setService(id);
         setStep(2);
         setDate("");
@@ -107,7 +125,8 @@ export function BookingWidget({
       }
     };
     const open = () => {
-      setStep(2);
+      setStarted(true);
+      setStep(1);
       setDate("");
       setTime("");
       setResult(null);
@@ -278,10 +297,6 @@ export function BookingWidget({
             {tr(lang, "Mani pieraksti", "Мои записи")}
             <ArrowRight size={18} />
           </Link>
-          <a className="button button-outline" href={`/api/calendar?id=${result.booking.id}`}>
-            <CalendarDays size={17} />
-            {tr(lang, "Kalendārā", "В календарь")}
-          </a>
         </div>
         {error && <p className="form-error">{error}</p>}
       </div>
@@ -314,10 +329,9 @@ export function BookingWidget({
       </div>
       <div
         className="booking-stage"
-        id={step === 2 ? "booking-calendar" : undefined}
+        id={step === 1 ? "booking-service" : step === 2 ? "booking-calendar" : "booking-details"}
         key={step}
       >
-        {initialToday <= OFFER_END && <OpeningOffer lang={lang}/>}
         {step === 1 && (
           <>
             <div className="stage-heading">
@@ -342,9 +356,11 @@ export function BookingWidget({
                   key={s.id}
                   data-service-id={s.id}
                   onClick={() => {
+                    setStarted(true);
                     setService(s.id);
                     setDate("");
                     setTime("");
+                    setStep(2);
                   }}
                 >
                   <span className="radio-mark">{s.id === serviceId && <span />}</span>
@@ -364,10 +380,6 @@ export function BookingWidget({
               <ShieldCheck size={18} />
               <span><PhoneText text={settings.bookingNotice[lang]} phone={settings.phone}/></span>
             </p>
-            <button className="button booking-next" onClick={() => setStep(2)} disabled={!service}>
-              {tr(lang, "Izvēlēties laiku", "Выбрать время")}
-              <ArrowRight size={18} />
-            </button>
           </>
         )}
         {step === 2 && (
@@ -530,21 +542,10 @@ export function BookingWidget({
                 )}
               </div>
             )}
-            <div className="stage-actions">
+            <div className="stage-actions booking-calendar-actions">
               <button className="text-button" onClick={() => setStep(1)}>
                 <ArrowLeft size={16} />
-                {tr(lang, "Atpakaļ", "Назад")}
-              </button>
-              <button
-                className="button"
-                disabled={!date || !time || slotsLoading}
-                onClick={() => {
-                  setStep(3);
-                  setError("");
-                }}
-              >
-                {tr(lang, "Turpināt", "Продолжить")}
-                <ArrowRight size={17} />
+                {tr(lang, "Mainīt procedūru", "Изменить процедуру")}
               </button>
             </div>
           </>
@@ -571,15 +572,15 @@ export function BookingWidget({
             </div>
             <form onSubmit={submit} className="form">
               <label>
-                {tr(lang, "Tavs vārds", "Твоё имя")}
+                {tr(lang, "Vārds, uzvārds", "Имя и фамилия")}
                 <span aria-hidden> *</span>
                 <input
                   name="name"
-                  autoComplete="given-name"
+                  autoComplete="name"
                   required
                   minLength={2}
                   maxLength={100}
-                  placeholder={tr(lang, "Kā Tevi uzrunāt?", "Как к Тебе обращаться?")}
+                  placeholder={tr(lang, "Vārds un uzvārds", "Имя и фамилия")}
                 />
               </label>
               <div className="form-row">
@@ -651,6 +652,11 @@ export function BookingWidget({
                     : ({lv:"Apstiprināt pierakstu",en:"Confirm appointment",ru:"Подтвердить запись"}[lang])}
                 </button>
               </div>
+              {initialToday <= OFFER_END && (
+                <div className="booking-offer-compact">
+                  <OpeningOffer lang={lang} />
+                </div>
+              )}
               <p className="small muted">
                 {tr(
                   lang,
