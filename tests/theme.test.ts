@@ -27,6 +27,16 @@ test("automatic theme follows actual sunrise and sunset across Latvia's seasons 
   assert.ok((winter.sunset - winter.sunrise) / 3600_000 < 8);
 });
 
+test('administration first paint stays light without overwriting the public theme preference',()=>{
+ const timestamp=Date.parse('2026-11-26T22:00:00Z');
+ for(const pathname of ['/admin','/admin/clients','/'])for(const stored of ['dark','auto','light']){
+  const document={documentElement:{dataset:{} as Record<string,string>,style:{} as Record<string,string>}};
+  runInNewContext(themeBootstrap(new Date(timestamp)),{document,location:{pathname},Date:{now:()=>timestamp},localStorage:{getItem:()=>stored,setItem:()=>{throw Error('Must preserve public preference')}}});
+  assert.equal(document.documentElement.dataset.theme,pathname.startsWith('/admin')?'light':resolveTheme(parseThemeMode(stored),new Date(timestamp)));
+  assert.equal(document.documentElement.dataset.themeMode,stored);
+ }
+});
+
 test("solar day uses Latvia's date rather than the visitor or UTC date", () => {
   assert.equal(getLatviaSunTimes(new Date("2026-10-16T22:30:00Z")).date, "2026-10-17");
   assert.equal(getLatviaSunTimes(new Date("2026-10-24T21:30:00Z")).date, "2026-10-25");

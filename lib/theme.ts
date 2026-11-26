@@ -35,5 +35,5 @@ export function parseThemeMode(value: string | null): ThemeMode {
 
 export function themeBootstrap(now = new Date()) {
   const { sunrise, sunset } = getLatviaSunTimes(now);
-  return `(()=>{var m='auto';try{var s=localStorage.getItem('${THEME_STORAGE_KEY}');if(s==='light'||s==='dark')m=s}catch(e){}var n=Date.now(),t=m==='auto'?(n>=${sunrise}&&n<${sunset}?'light':'dark'):m;document.documentElement.dataset.theme=t;document.documentElement.dataset.themeMode=m;document.documentElement.style.colorScheme=t})()`;
+  return `(()=>{var m='auto';try{var s=localStorage.getItem('${THEME_STORAGE_KEY}');if(s==='light'||s==='dark')m=s}catch(e){}var p=typeof location==='undefined'?'':location.pathname,a=p==='/admin'||p.indexOf('/admin/')===0;var n=Date.now(),t=a?'light':m==='auto'?(n>=${sunrise}&&n<${sunset}?'light':'dark'):m;document.documentElement.dataset.theme=t;document.documentElement.dataset.themeMode=m;document.documentElement.style.colorScheme=t})()`;
 }

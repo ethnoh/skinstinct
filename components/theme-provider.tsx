@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {usePathname} from 'next/navigation';
 import {
   getLatviaSunTimes,
   parseThemeMode,
@@ -16,6 +17,7 @@ const ThemeContext = createContext<(ThemeState & { choose: (mode: ThemeMode) => 
 );
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const pathname=usePathname();
   const [state, setState] = useState<ThemeState | null>(null);
   const modeRef = useRef<ThemeMode>("auto");
   const refreshRef = useRef<(() => void) | null>(null);
@@ -29,7 +31,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const now = new Date();
       const mode = modeRef.current;
       const times = getLatviaSunTimes(now);
-      const theme = resolveTheme(mode, now);
+      const theme = pathname==='/admin'||pathname.startsWith('/admin/')?'light':resolveTheme(mode, now);
       document.documentElement.dataset.theme = theme;
       document.documentElement.dataset.themeMode = mode;
       document.documentElement.style.colorScheme = theme;
@@ -65,7 +67,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener("focus", refresh);
       window.removeEventListener("storage", onStorage);
     };
-  }, []);
+  }, [pathname]);
   const choose = (mode: ThemeMode) => {
     modeRef.current = mode;
     try {
