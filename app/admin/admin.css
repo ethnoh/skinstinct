@@ -237,15 +237,16 @@
 }
 .admin-booking-day {
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: 1px solid #56614b;
   border-radius: 12px;
-  background: #fff;
+  background: var(--deep-surface);
+  color: var(--inverse);
 }
 .admin-booking-day h3 {
   margin: 0;
   padding: 14px 12px;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
+  border-bottom: 1px solid #56614b;
+  color: var(--inverse);
   font-size: 14px;
 }
 .admin-table {
@@ -253,18 +254,19 @@
   width: 100%;
   font-size: 13px;
   text-align: left;
+  color: var(--inverse);
 }
 .admin-table th {
   font-weight: 500;
-  color: var(--muted);
+  color: #c2cab6;
   font-size: 12px;
   padding: 15px 12px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #56614b;
 }
 .admin-table td {
   padding: 20px 12px;
   vertical-align: middle;
-  border-bottom: 1px solid #e8eadd;
+  border-bottom: 1px solid #56614b;
   min-width: 110px;
 }
 .admin-table tr:last-child td {
@@ -279,7 +281,7 @@
 .admin-table td > a {
   display: block;
   font-size: 12px;
-  color: var(--muted);
+  color: #c2cab6;
   margin-top: 4px;
   overflow-wrap: anywhere;
 }
@@ -440,6 +442,21 @@
   font-size: 12px;
   display: block;
   color: var(--muted);
+}
+.block-edit-form {
+  display: grid;
+  grid-template-columns: 1fr 0.7fr 0.7fr 1.3fr auto auto;
+  gap: 8px;
+  align-items: center;
+  flex: 1;
+}
+.block-edit-form input,
+.block-edit-form select {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 3px;
+  padding: 8px;
 }
 .inquiry-list {
   display: grid;

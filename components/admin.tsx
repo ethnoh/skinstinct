@@ -19,6 +19,7 @@ import {
   Leaf,
   LoaderCircle,
   LogOut,
+  Pencil,
   Plus,
   RefreshCw,
   Save,
@@ -65,6 +66,7 @@ type Tab =
 const emptyText = (): Localized => ({ lv: "", en: "", ru: "" });
 const time = (n: number) =>
   `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
+const timeOptions = Array.from({ length: 48 }, (_, i) => time(i * 30));
 const labels = {
   pending: "Gaida apstiprinājumu",
   confirmed: "Apstiprināts",
@@ -261,6 +263,7 @@ export function Admin() {
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [phoneBookingOpen, setPhoneBookingOpen] = useState(false);
+  const [editingBlockId, setEditingBlockId] = useState("");
   const [month, setMonth] = useState(
     new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Riga" }).slice(0, 7),
   );
@@ -371,7 +374,13 @@ export function Admin() {
                   <tbody>
                     {items
                       .filter((b) => b.date === date)
-                      .sort((a, b) => a.start_min - b.start_min)
+                      .sort((a, b) =>
+                        a.status === "cancelled" && b.status !== "cancelled"
+                          ? 1
+                          : b.status === "cancelled" && a.status !== "cancelled"
+                            ? -1
+                            : a.start_min - b.start_min,
+                      )
                       .map((b) => (
                         <tr key={b.id}>
                           <td>
@@ -676,14 +685,11 @@ export function Admin() {
                         </label>
                         <label>
                           {"Sākuma laiks"}
-                          <input
-                            name="time"
-                            type="time"
-                            lang="lv"
-                            step={900}
-                            defaultValue="09:00"
-                            required
-                          />
+                          <select name="time" defaultValue="09:00" required>
+                            {timeOptions.map((value) => (
+                              <option key={value} value={value}>{value}</option>
+                            ))}
+                          </select>
                         </label>
                         <button className="button" disabled={pending}>
                           <Check size={17} />
@@ -823,8 +829,8 @@ export function Admin() {
                         act(()=>api('/api/admin/open-day',{date:form.get('date'),start:form.get('start'),end:form.get('end')}),'Diena atvērta pierakstiem');
                       }}>
                         <label>Datums<input type="date" name="date" required min={today<BOOKING_START?BOOKING_START:today} defaultValue={selectedDay|| (today<BOOKING_START?BOOKING_START:today)} /></label>
-                        <label>No<input type="time" lang="lv" name="start" required defaultValue="09:00" /></label>
-                        <label>Līdz<input type="time" lang="lv" name="end" required defaultValue="15:00" /></label>
+                        <label>No<select name="start" defaultValue="09:00" required>{timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}</select></label>
+                        <label>Līdz<select name="end" defaultValue="15:00" required>{timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}</select></label>
                         <button className="button button-small" disabled={pending}>Atvērt šo dienu</button>
                       </form>
                       <div className="blocks-list">{(state.openDays||[]).map(day=><div key={day.date}>
@@ -865,11 +871,15 @@ export function Admin() {
                       </label>
                       <label>
                         {"No"}
-                        <input type="time" lang="lv" name="start" required defaultValue="00:00" />
+                        <select name="start" defaultValue="00:00" required>
+                          {timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}
+                        </select>
                       </label>
                       <label>
                         {"Līdz"}
-                        <input type="time" lang="lv" name="end" required defaultValue="23:59" />
+                        <select name="end" defaultValue="23:30" required>
+                          {timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}
+                        </select>
                       </label>
                       <label>
                         {"Piezīme sev"}
@@ -883,12 +893,49 @@ export function Admin() {
                       {state.blocks.map((b) => (
                         <div key={b.id}>
                           <CalendarDays size={17} />
-                          <span>
-                            <strong>
-                              {dateLabel(b.date, "lv")} · {time(b.start_min)} - {time(b.end_min)}
-                            </strong>
-                            <small>{b.note || "Slēgtais laiks"}</small>
-                          </span>
+                          {editingBlockId === b.id ? (
+                            <form
+                              className="form block-edit-form"
+                              onSubmit={(event) => {
+                                event.preventDefault();
+                                const f = new FormData(event.currentTarget);
+                                act(
+                                  () => api("/api/admin/block/update", {
+                                    id: b.id,
+                                    date: f.get("date"),
+                                    start: f.get("start"),
+                                    end: f.get("end"),
+                                    note: f.get("note"),
+                                  }),
+                                  "Bloķētais laiks atjaunināts",
+                                );
+                                setEditingBlockId("");
+                              }}
+                            >
+                              <input type="date" name="date" defaultValue={b.date} required />
+                              <select name="start" defaultValue={time(b.start_min)} required>
+                                {timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}
+                              </select>
+                              <select name="end" defaultValue={time(b.end_min)} required>
+                                {timeOptions.map((value)=><option key={value} value={value}>{value}</option>)}
+                              </select>
+                              <input name="note" defaultValue={b.note || ""} maxLength={200} />
+                              <button className="button button-small" disabled={pending}>Saglabāt</button>
+                              <button type="button" className="button button-outline button-small" onClick={() => setEditingBlockId("")}>Atcelt</button>
+                            </form>
+                          ) : (
+                            <span>
+                              <strong>
+                                {dateLabel(b.date, "lv")} · {time(b.start_min)} - {time(b.end_min)}
+                              </strong>
+                              <small>{b.note || "Slēgtais laiks"}</small>
+                            </span>
+                          )}
+                          {editingBlockId !== b.id && (
+                            <button className="icon-button" aria-label="Rediģēt bloķējumu" onClick={() => setEditingBlockId(b.id)}>
+                              <Pencil size={17} />
+                            </button>
+                          )}
                           <button
                             className="icon-button"
                             aria-label="Noņemt bloķējumu"

@@ -542,6 +542,22 @@ export async function POST(request: NextRequest, context: Context) {
         db().prepare("DELETE FROM blocks WHERE id=?").run(id);
         return ok({ ok: true });
       }
+      if (route === "admin/block/update") {
+        const input = z
+          .object({
+            id: z.uuid(),
+            date: dateSchema,
+            start: timeSchema,
+            end: timeSchema,
+            note: z.string().max(200),
+          })
+          .parse(await jsonBody(request, 1000));
+        if (input.start >= input.end) throw new HttpError(400, "INVALID_DATA");
+        db()
+          .prepare("UPDATE blocks SET date=?,start_min=?,end_min=?,note=? WHERE id=?")
+          .run(input.date, timeMinute(input.start), timeMinute(input.end), input.note, input.id);
+        return ok({ ok: true });
+      }
       if (route === "admin/password") {
         rateLimit(request, "password", 5);
         const input = z

@@ -18,6 +18,23 @@ export function ClinicalPrintForms({
     [printing, setPrinting] = useState(false),
     [error, setError] = useState("");
   async function printDocument(action: "print" | "download") {
+    if (action === "download") {
+      const html = renderClinicalForms({
+        client: fill ? client?.data : undefined,
+        visit: fill ? visits.find((v) => v.id === visit)?.data : undefined,
+        section,
+      });
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "SKINSTINCT-klienta-dokumenti.html";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      return;
+    }
     setPrinting(true);
     setError("");
     const frame = document.createElement("iframe");
@@ -97,7 +114,7 @@ export function ClinicalPrintForms({
       </div>
       <div className="clinical-actions">
         <button type="button" className="button" disabled={printing} onClick={() => printDocument("download")}>
-          {printing ? "Sagatavo…" : "Lejupielādēt PDF"}
+          {printing ? "Sagatavo…" : "Lejupielādēt veidni"}
         </button>
         <button type="button" className="button button-outline" disabled={printing} onClick={() => printDocument("print")}>
           {printing ? "Sagatavo…" : "Drukāt"}
