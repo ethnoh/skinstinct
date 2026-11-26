@@ -50,10 +50,7 @@ export function ClinicalPrintForms({
       try {
         await frame.contentDocument?.fonts.ready;
         if (frame.contentDocument) {
-          frame.contentDocument.title =
-            action === "download"
-              ? "SKINSTINCT-klienta-dokumenti.pdf"
-              : "SKINSTINCT klienta dokumenti";
+          frame.contentDocument.title = "SKINSTINCT klienta dokumenti";
         }
         frame.contentWindow?.addEventListener(
           "afterprint",
