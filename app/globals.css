@@ -4458,6 +4458,13 @@ html { scroll-padding-top: 140px; }
 .contact-socials { display: flex; flex-wrap: wrap; gap: 18px 24px; }
 .contact-socials a { gap: 8px; }
 .contact-hours { grid-column: 1 / -1; }
+.contact-company { grid-column: 1 / -1; }
+.company-details { margin: 0; }
+.company-details > div { display: grid; grid-template-columns: minmax(140px, 1fr) minmax(0, 2fr); gap: 12px 24px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.company-details > div:last-child { border-bottom: 0; }
+.company-details dt { color: var(--muted); }
+.company-details dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .company-details > div { grid-template-columns: minmax(0, 1fr); gap: 5px; } }
 .contact-hours .studio-hours { max-width: 600px; }
 .contact-card .studio-hours { margin: 0; }
 .contact-card .studio-hours > strong { font-size: 28px; }
