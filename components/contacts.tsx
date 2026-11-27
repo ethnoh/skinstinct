@@ -44,7 +44,6 @@ export function Contacts({lang,settings:s}:{lang:Lang;settings:SiteSettings}) {
       [label('Studijas adrese','Studio address','Адрес студии'),[s.address,s.city,'LV-5201',label('Latvija','Latvia','Латвия')].filter(Boolean).join(', ')],
      ].filter(([,value])=>Boolean(value)).map(([name,value])=><div key={name}><dt>{name}</dt><dd>{value}</dd></div>)}
     </dl>
-    <p><strong>{label('Tālrunis','Telephone','Телефон')}: </strong><PhoneText text="{phone}" phone={s.phone}/></p>
    </section>
   </div>
  </main>;
